@@ -74,7 +74,7 @@ func CreateRecipe(recipe Recipe) (r Recipe, err error) {
 	}
 
 	entry := Recipe{Name: recipe.Name}
-	result := db.Create(&recipe)
+	result := db.Create(&entry)
 
 	if result.Error != nil {
 		return Recipe{}, result.Error
