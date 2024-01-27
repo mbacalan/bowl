@@ -54,8 +54,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Print(recipe)
-	h.ViewRecipe(w, r)
+	pages.RecipeDetail(recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +68,7 @@ func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pages.Recipe(recipe).Render(r.Context(), w)
+	pages.RecipeDetail(recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
