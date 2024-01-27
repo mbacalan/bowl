@@ -33,7 +33,7 @@ templ RecipeList(recipes []db.Recipe) {
 			<ul>
 				for _, recipe := range recipes {
 					<li>
-						<a href={ templ.URL(strconv.FormatUint(uint64(recipe.ID), 10)) }>
+						<a href={ "/recipes/" + templ.URL(strconv.FormatUint(uint64(recipe.ID), 10)) }>
 							{ recipe.Name }
 						</a>
 					</li>

@@ -95,7 +95,7 @@ func RecipeList(recipes []db.Recipe) templ.Component {
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var5 templ.SafeURL = templ.URL(strconv.FormatUint(uint64(recipe.ID), 10))
+					var templ_7745c5c3_Var5 templ.SafeURL = "/recipes/" + templ.URL(strconv.FormatUint(uint64(recipe.ID), 10))
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var5)))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
