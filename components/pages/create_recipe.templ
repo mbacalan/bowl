@@ -4,7 +4,7 @@ import "github.com/mbacalan/bowl/components/shared"
 
 templ CreateRecipe() {
 	@shared.Page() {
-		<form id="recipe-form" action="/recipes" method="post" hx-post="/recipes/create" hx-swap="outerHTML">
+		<form id="recipe-form" action="/recipes" method="post" hx-post="/recipes/create" hx-swap="outerHTML" hx-select="[data-swap='recipe']">
 			<label>
 				Name
 				<input type="text" id="name" name="name"></input>

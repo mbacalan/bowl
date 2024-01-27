@@ -54,6 +54,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
 	pages.RecipeDetail(recipe).Render(r.Context(), w)
 }
 

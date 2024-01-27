@@ -31,7 +31,7 @@ func CreateRecipe() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\"><label>Name <input type=\"text\" id=\"name\" name=\"name\"></label> <button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label>Name <input type=\"text\" id=\"name\" name=\"name\"></label> <button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
