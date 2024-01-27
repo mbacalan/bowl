@@ -5,5 +5,10 @@ import (
 )
 
 templ Home() {
-	@shared.Page()
+	@shared.Page() {
+		<main>
+			<h2>A database of your own recipes</h2>
+			<a href="/recipes">Browse</a>
+		</main>
+	}
 }
