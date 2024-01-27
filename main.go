@@ -12,6 +12,9 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/mbacalan/bowl/assets"
 	"github.com/mbacalan/bowl/components/pages"
+	"github.com/mbacalan/bowl/db"
+	"github.com/mbacalan/bowl/handlers"
+	"github.com/mbacalan/bowl/services"
 )
 
 func main() {
@@ -19,9 +22,13 @@ func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	r.Get("/", templ.Handler(pages.Home()).ServeHTTP)
-	r.Get("/recipe", templ.Handler(pages.Recipe()).ServeHTTP)
+	
+	database := db.Init()
+	recipeStore := db.NewRecipeStore(database, "recipes")
 
 	assets.Mount(r)
+	services.New(log, recipeStore)
+	handlers.Mount(r, handlers.New(services.New(log, recipeStore)))
 
 	server := &http.Server{
 		Addr:    ":3000",

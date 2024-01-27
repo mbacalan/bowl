@@ -2,12 +2,13 @@ package pages
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
+	"github.com/mbacalan/bowl/db"
 )
 
-templ Recipe() {
+templ Recipe(recipe db.Recipe) {
 	@shared.Page() {
 		<article>
-			<h2>Lentil Soup</h2>
+			<h2>{recipe.Name}</h2>
 
 			<h3>Ingredients</h3>
 
@@ -22,11 +23,13 @@ templ Recipe() {
 				<li>Lorem ipsum</li>
 				<li>Lorem ipsum</li>
 				<li>Lorem ipsum</li>
-				<li>Lorem ipsum</li>
-				<li>Lorem ipsum</li>
-				<li>Lorem ipsum</li>
 			</ol>
 		</article>
 	}
 }
 
+templ RecipeList(recipes []db.Recipe) {
+	for _, recipe := range recipes {
+		@Recipe(recipe)
+	}
+}
