@@ -77,7 +77,7 @@ func CreateRecipe(recipe Recipe) (r Recipe, err error) {
 	result := db.Create(&recipe)
 
 	if result.Error != nil {
-		return entry, result.Error
+		return Recipe{}, result.Error
 	}
 
 	return entry, nil
@@ -88,7 +88,7 @@ func (s RecipeStore) Get(id int) (r Recipe, err error) {
 	result := s.db.Find(&recipe, id)
 
 	if result.Error != nil {
-		return recipe, result.Error
+		return Recipe{}, result.Error
 	}
 
 	return recipe, nil
@@ -99,7 +99,7 @@ func (s RecipeStore) GetAll() (r []Recipe, err error) {
 	result := s.db.Find(&recipes)
 
 	if result.Error != nil {
-		return recipes, result.Error
+		return []Recipe{}, result.Error
 	}
 
 	return recipes, nil
