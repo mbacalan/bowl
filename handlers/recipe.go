@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"log"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -55,7 +54,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	recipe, err := db.CreateRecipe(db.Recipe{Name: r.Form.Get("name")})
 
 	if err != nil {
-		log.Fatal(err)
+		h.Log.Error("", err)
 		return
 	}
 
