@@ -28,7 +28,8 @@ func main() {
 	s := services.New(log, rs)
 	h := handlers.New(log, s)
 
-	r.Get("/", templ.Handler(pages.Home()).ServeHTTP)
+	recent, _ := s.GetRecent(5)
+	r.Get("/", templ.Handler(pages.Home(recent)).ServeHTTP)
 	r.Mount("/assets", assets.Routes())
 	r.Mount("/recipes", h.Routes())
 

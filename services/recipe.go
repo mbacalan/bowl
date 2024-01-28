@@ -42,3 +42,14 @@ func (s *Service) GetAll() (recipes []db.Recipe, error error) {
 
 	return result, nil
 }
+
+func (s *Service) GetRecent(limit int) (recipes []db.Recipe, error error) {
+	result, err := s.RecipeStore.GetRecent(limit)
+
+	if err != nil {
+		s.Log.Error("Error getting recent recipes", err)
+		return result, err
+	}
+
+	return result, nil
+}

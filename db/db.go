@@ -104,3 +104,14 @@ func (s RecipeStore) GetAll() (r []Recipe, err error) {
 
 	return recipes, nil
 }
+
+func (s RecipeStore) GetRecent(limit int) (r []Recipe, err error) {
+	var recipes []Recipe
+	result := s.db.Order("id DESC").Limit(limit).Find(&recipes)
+
+	if result.Error != nil {
+		return []Recipe{}, result.Error
+	}
+
+	return recipes, nil
+}

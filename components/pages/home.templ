@@ -2,13 +2,15 @@ package pages
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
+	"github.com/mbacalan/bowl/db"
 )
 
-templ Home() {
+templ Home(recipes []db.Recipe) {
 	@shared.Page() {
-		<main>
-			<h2>A database of your own recipes</h2>
-			<a href="/recipes">Browse</a>
-		</main>
+		<h2>A database of your own recipes</h2>
+		<hr/>
+		<h3><a href="/recipes">Browse</a></h3>
+		<h4>...or take a look at the recently created recipes</h4>
+		@RecipeList(recipes)
 	}
 }

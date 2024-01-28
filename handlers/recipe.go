@@ -60,7 +60,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
-	pages.RecipeDetail(recipe).Render(r.Context(), w)
+	pages.RecipeDetailPage(recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
@@ -74,7 +74,7 @@ func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pages.RecipeDetail(recipe).Render(r.Context(), w)
+	pages.RecipeDetailPage(recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
@@ -83,5 +83,5 @@ func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 		h.Log.Error("Error listing recipes", err)
 	}
 
-	pages.RecipeList(recipes).Render(r.Context(), w)
+	pages.RecipeListPage(recipes).Render(r.Context(), w)
 }

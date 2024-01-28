@@ -25,25 +25,29 @@ templ Recipe(recipe db.Recipe) {
 }
 
 templ RecipeList(recipes []db.Recipe) {
+	<ul>
+		for _, recipe := range recipes {
+			<li>
+				<a href={ "/recipes/" + templ.URL(strconv.FormatUint(uint64(recipe.ID), 10)) }>
+					{ recipe.Name }
+				</a>
+			</li>
+		}
+	</ul>
+}
+
+templ RecipeListPage(recipes []db.Recipe) {
 	@shared.Page() {
 		if len(recipes) == 0 {
 			<h2>No recipes found :(</h2>
 			<p>Why don't you <a href="/recipes/create">create one</a>?</p>
 		} else {
-			<ul>
-				for _, recipe := range recipes {
-					<li>
-						<a href={ "/recipes/" + templ.URL(strconv.FormatUint(uint64(recipe.ID), 10)) }>
-							{ recipe.Name }
-						</a>
-					</li>
-				}
-			</ul>
+			@RecipeList(recipes)
 		}
 	}
 }
 
-templ RecipeDetail(recipe db.Recipe) {
+templ RecipeDetailPage(recipe db.Recipe) {
 	@shared.Page() {
 		@Recipe(recipe)
 	}
