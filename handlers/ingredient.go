@@ -13,10 +13,10 @@ import (
 
 type IngredientHandler struct {
 	Log               *slog.Logger
-	IngredientService services.IngredientServiceImpl
+	IngredientService services.IngredientService
 }
 
-func NewIngredientHandler(log *slog.Logger, service services.IngredientServiceImpl) *IngredientHandler {
+func NewIngredientHandler(log *slog.Logger, service services.IngredientService) *IngredientHandler {
 	return &IngredientHandler{
 		Log:               log,
 		IngredientService: service,
