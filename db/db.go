@@ -44,16 +44,16 @@ type RecipeStore struct {
 	tableName string
 }
 
-func NewRecipeStore(db *gorm.DB, tableName string) (s *RecipeStore) {
-	s = &RecipeStore{
+func NewRecipeStore(db *gorm.DB, tableName string) *RecipeStore {
+	store := &RecipeStore{
 		tableName: tableName,
 		db:        db,
 	}
 
-	return s
+	return store
 }
 
-func Init() *gorm.DB {
+func New() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("./db.sqlite"), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")

@@ -17,8 +17,22 @@ type RecipeHandler struct {
 	RecipeService services.Service
 }
 
-func New(service services.Service) RecipeHandler {
-	return RecipeHandler{RecipeService: service}
+func New(log *slog.Logger, service services.Service) *RecipeHandler {
+	return &RecipeHandler{
+		Log:           log,
+		RecipeService: service,
+	}
+}
+
+func (h *RecipeHandler) Routes() chi.Router {
+	r := chi.NewRouter()
+
+	r.Get("/", h.ViewList)
+	r.Get("/{id}", h.ViewRecipe)
+	r.Get("/create", h.Create)
+	r.Post("/create", h.Create)
+
+	return r
 }
 
 func (h *RecipeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -28,15 +42,6 @@ func (h *RecipeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	h.ViewList(w, r)
-}
-
-func Mount(r chi.Router, h RecipeHandler) {
-	r.Route("/recipes", func(r chi.Router) {
-		r.Get("/", h.ViewList)
-		r.Get("/{id}", h.ViewRecipe)
-		r.Get("/create", h.Create)
-		r.Post("/create", h.Create)
-	})
 }
 
 func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
