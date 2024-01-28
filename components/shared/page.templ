@@ -10,15 +10,17 @@ templ Page() {
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-			<title>Bowl</title>
+			<title>🥗 Bowl</title>
 			<link rel="stylesheet" href="/assets/modern-normalize.css"/>
 			<link rel="stylesheet" href="/assets/sakura.css"/>
+			<link rel="stylesheet" href="/assets/style.css"/>
 			<script src="/assets/htmx.min.js"></script>
 		</head>
 		<body>
 			@partials.Header()
-			<h1><a href="/">Bowl</a></h1>
-			{ children... }
+			<main>
+				{ children... }
+			</main>
 			@partials.Footer()
 		</body>
 	</html>
