@@ -1,0 +1,42 @@
+package pages
+
+import (
+	"github.com/mbacalan/bowl/components/shared"
+	"github.com/mbacalan/bowl/db"
+	"strconv"
+)
+
+templ Ingredient(ingredient db.Ingredient) {
+	<article data-swap="ingredient" id={ strconv.FormatUint(uint64(ingredient.ID), 10) }>
+		<h2>{ ingredient.Name }</h2>
+	</article>
+}
+
+templ IngredientList(ingredients []db.Ingredient) {
+	<ul>
+		for _, ingredient := range ingredients {
+			<li>
+				<a href={ "/ingredients/" + templ.URL(strconv.FormatUint(uint64(ingredient.ID), 10)) }>
+					{ ingredient.Name }
+				</a>
+			</li>
+		}
+	</ul>
+}
+
+templ IngredientListPage(ingredients []db.Ingredient) {
+	@shared.Page() {
+		if len(ingredients) == 0 {
+			<h2>No ingredients found :(</h2>
+			<p>Why don't you <a href="/ingredients/create">create one</a>?</p>
+		} else {
+			@IngredientList(ingredients)
+		}
+	}
+}
+
+templ IngredientDetailPage(ingredient db.Ingredient) {
+	@shared.Page() {
+		@Ingredient(ingredient)
+	}
+}

@@ -12,17 +12,17 @@ type RecipeService interface {
 	GetAll(ctx context.Context) (recipes []db.Recipe)
 }
 
-type Service struct {
+type RecipeServiceImpl struct {
 	Log         *slog.Logger
 	RecipeStore *db.RecipeStore
 }
 
-func New(log *slog.Logger, rs *db.RecipeStore) Service {
-	return Service{Log: log, RecipeStore: rs}
+func NewRecipeService(log *slog.Logger, rs *db.RecipeStore) RecipeServiceImpl {
+	return RecipeServiceImpl{Log: log, RecipeStore: rs}
 }
 
-func (s *Service) Get(id int) (recipe db.Recipe, error error) {
-	result, err := s.RecipeStore.Get(id)
+func (s *RecipeServiceImpl) Get(id int) (recipe db.Recipe, error error) {
+	result, err := s.RecipeStore.GetRecipe(id)
 
 	if err != nil {
 		s.Log.Error("Error getting recipe", err)
@@ -32,8 +32,8 @@ func (s *Service) Get(id int) (recipe db.Recipe, error error) {
 	return result, nil
 }
 
-func (s *Service) GetAll() (recipes []db.Recipe, error error) {
-	result, err := s.RecipeStore.GetAll()
+func (s *RecipeServiceImpl) GetAll() (recipes []db.Recipe, error error) {
+	result, err := s.RecipeStore.GetAllRecipes()
 
 	if err != nil {
 		s.Log.Error("Error getting all recipes", err)
@@ -43,11 +43,22 @@ func (s *Service) GetAll() (recipes []db.Recipe, error error) {
 	return result, nil
 }
 
-func (s *Service) GetRecent(limit int) (recipes []db.Recipe, error error) {
-	result, err := s.RecipeStore.GetRecent(limit)
+func (s *RecipeServiceImpl) GetRecent(limit int) (recipes []db.Recipe, error error) {
+	result, err := s.RecipeStore.GetRecentRecipes(limit)
 
 	if err != nil {
 		s.Log.Error("Error getting recent recipes", err)
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (s *RecipeServiceImpl) Create(r db.Recipe) (recipe db.Recipe, error error) {
+	result, err := s.RecipeStore.CreateRecipe(r)
+
+	if err != nil {
+		s.Log.Error("Error creating recipe", err)
 		return result, err
 	}
 

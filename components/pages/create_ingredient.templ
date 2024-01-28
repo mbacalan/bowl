@@ -1,0 +1,15 @@
+package pages
+
+import "github.com/mbacalan/bowl/components/shared"
+
+templ CreateIngredient() {
+	@shared.Page() {
+		<form id="ingredient-form" action="/ingredients" method="post" hx-post="/ingredients/create" hx-swap="outerHTML" hx-select="[data-swap='ingredient']">
+			<label>
+				Name
+				<input type="text" id="name" name="name"/>
+			</label>
+			<button type="submit">Submit</button>
+		</form>
+	}
+}

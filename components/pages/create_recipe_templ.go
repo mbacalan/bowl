@@ -31,7 +31,7 @@ func CreateRecipe() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label>Name <input type=\"text\" id=\"name\" name=\"name\"></label> <button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label>Name <input type=\"text\" id=\"name\" name=\"name\"></label> <label>Ingredients <input class=\"form-control\" type=\"search\" name=\"search\" placeholder=\"Begin Typing To Search Ingredients...\" hx-post=\"/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\" hx-indicator=\".htmx-indicator\"></label><table class=\"table\"><thead><tr><th>Name</th></tr></thead> <tbody id=\"search-results\"></tbody></table><button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

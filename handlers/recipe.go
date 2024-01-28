@@ -13,10 +13,10 @@ import (
 
 type RecipeHandler struct {
 	Log           *slog.Logger
-	RecipeService services.Service
+	RecipeService services.RecipeServiceImpl
 }
 
-func New(log *slog.Logger, service services.Service) *RecipeHandler {
+func NewRecipeHandler(log *slog.Logger, service services.RecipeServiceImpl) *RecipeHandler {
 	return &RecipeHandler{
 		Log:           log,
 		RecipeService: service,
@@ -51,7 +51,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	recipe, err := db.CreateRecipe(db.Recipe{Name: r.Form.Get("name")})
+	recipe, err := h.RecipeService.Create(db.Recipe{Name: r.Form.Get("name")})
 
 	if err != nil {
 		h.Log.Error("", err)

@@ -22,16 +22,20 @@ func main() {
 	r.Use(middleware.Logger)
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	database := db.New()
-	rs := db.NewRecipeStore(database, "recipes")
+	database := db.NewConnection()
+	rds := db.NewRecipeStore(database, "recipes")
+	ids := db.NewIngredientStore(database, "ingredients")
 
-	s := services.New(log, rs)
-	h := handlers.New(log, s)
+	rs := services.NewRecipeService(log, rds)
+	rh := handlers.NewRecipeHandler(log, rs)
+	is := services.NewIngredientService(log, ids)
+	ih := handlers.NewIngredientHandler(log, is)
 
-	recent, _ := s.GetRecent(5)
+	recent, _ := rs.GetRecent(5)
 	r.Get("/", templ.Handler(pages.Home(recent)).ServeHTTP)
 	r.Mount("/assets", assets.Routes())
-	r.Mount("/recipes", h.Routes())
+	r.Mount("/recipes", rh.Routes())
+	r.Mount("/ingredients", ih.Routes())
 
 	server := &http.Server{
 		Addr:         ":3000",

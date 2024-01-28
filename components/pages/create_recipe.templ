@@ -7,8 +7,29 @@ templ CreateRecipe() {
 		<form id="recipe-form" action="/recipes" method="post" hx-post="/recipes/create" hx-swap="outerHTML" hx-select="[data-swap='recipe']">
 			<label>
 				Name
-				<input type="text" id="name" name="name"></input>
+				<input type="text" id="name" name="name"/>
 			</label>
+			<label>
+				Ingredients
+				<input
+					class="form-control"
+					type="search"
+					name="search"
+					placeholder="Begin Typing To Search Ingredients..."
+					hx-post="/search"
+					hx-trigger="input changed delay:500ms, search"
+					hx-target="#search-results"
+					hx-indicator=".htmx-indicator"
+				/>
+			</label>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody id="search-results"></tbody>
+			</table>
 			<button type="submit">Submit</button>
 		</form>
 	}

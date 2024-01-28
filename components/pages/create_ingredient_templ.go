@@ -10,12 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-import (
-	"github.com/mbacalan/bowl/components/shared"
-	"github.com/mbacalan/bowl/db"
-)
+import "github.com/mbacalan/bowl/components/shared"
 
-func Home(recipes []db.Recipe) templ.Component {
+func CreateIngredient() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -34,11 +31,7 @@ func Home(recipes []db.Recipe) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>A database of your own recipes</h2><hr><h3><a href=\"/recipes\">Browse Recipes</a></h3><h3><a href=\"/ingredients\">Browse Ingredients</a></h3><h4>...or take a look at the recently created recipes</h4>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = RecipeList(recipes).Render(ctx, templ_7745c5c3_Buffer)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"ingredient-form\" action=\"/ingredients\" method=\"post\" hx-post=\"/ingredients/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;ingredient&#39;]\"><label>Name <input type=\"text\" id=\"name\" name=\"name\"></label> <button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
