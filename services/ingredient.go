@@ -47,3 +47,18 @@ func (s *IngredientService) Create(i db.Ingredient) (ingredient db.Ingredient, e
 
 	return result, nil
 }
+
+func (s *IngredientService) Search(name string) (ingredients []db.Ingredient, error error) {
+	if len(name) == 0 {
+		return []db.Ingredient{}, error
+	}
+
+	result, err := s.IngredientStore.SearchIngredient(name)
+
+	if err != nil {
+		s.Log.Error("Error searching ingredients", err)
+		return result, err
+	}
+
+	return result, nil
+}

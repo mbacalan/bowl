@@ -14,3 +14,9 @@ main {
   align-items: center;
   justify-content: space-between;
 }
+
+.bordered {
+  border: 1px solid var(--fbc-gray-20);
+  border-radius: 8px;
+  padding: 8px;
+}

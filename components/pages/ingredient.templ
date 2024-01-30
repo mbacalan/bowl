@@ -24,6 +24,44 @@ templ IngredientList(ingredients []db.Ingredient) {
 	</ul>
 }
 
+templ IngredientSearchList(ingredients []db.Ingredient) {
+	if len(ingredients) == 0 {
+		<tr>
+			<td>
+				No ingredient found :(
+			</td>
+		</tr>
+	} else {
+		for _, ingredient := range ingredients {
+			<tr>
+				<td>
+					<p id="select-ingredient">
+						{ ingredient.Name }
+						<div data-ingredient={ingredient.Name}>+</div>
+					</p>
+				</td>
+			</tr>
+		}
+	}
+}
+
+templ InredientListForRecipe() {
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Ingredient
+				</th>
+				<th>
+					Quantity
+				</th>
+			</tr>
+		</thead>
+
+		<tbody id="ingredient-list"></tbody>
+	</table>
+}
+
 templ IngredientListPage(ingredients []db.Ingredient) {
 	@shared.Page() {
 		if len(ingredients) == 0 {

@@ -5,12 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Category struct {
-	gorm.Model
-	Name     string
-	RecipeID uint
-}
-
 func NewConnection() *gorm.DB {
 	db, err := gorm.Open(sqlite.Open("./db.sqlite"), &gorm.Config{})
 	if err != nil {

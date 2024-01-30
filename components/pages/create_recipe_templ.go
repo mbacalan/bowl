@@ -31,7 +31,15 @@ func CreateRecipe() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label>Name <input type=\"text\" id=\"name\" name=\"name\"></label> <label>Ingredients <input class=\"form-control\" type=\"search\" name=\"search\" placeholder=\"Begin Typing To Search Ingredients...\" hx-post=\"/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\" hx-indicator=\".htmx-indicator\"></label><table class=\"table\"><thead><tr><th>Name</th></tr></thead> <tbody id=\"search-results\"></tbody></table><button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label for=\"name\">Name</label> <input type=\"text\" id=\"name\" name=\"name\"><div hx-disinherit=\"*\" class=\"bordered\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = InredientListForRecipe().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"ingredient-form\"><h4>Add Ingredient</h4><input form=\"ingredient-form\" class=\"form-control\" type=\"search\" name=\"search\" id=\"search\" placeholder=\"Ingredient\" hx-post=\"/ingredients/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\"><table class=\"table\"><tbody id=\"search-results\"></tbody></table><input form=\"ingredient-form\" type=\"text\" name=\"quantity\" id=\"quantity\" placeholder=\"Quantity\"> <button type=\"submit\" form=\"ingredient-form\">Add</button></form></div><button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
