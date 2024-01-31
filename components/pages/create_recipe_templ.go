@@ -39,7 +39,7 @@ func CreateRecipe() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"ingredient-form\"><h4>Add Ingredient</h4><input form=\"ingredient-form\" class=\"form-control\" type=\"search\" name=\"search\" id=\"search\" placeholder=\"Ingredient\" hx-post=\"/ingredients/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\"><table class=\"table\"><tbody id=\"search-results\"></tbody></table><input form=\"ingredient-form\" type=\"text\" name=\"quantity\" id=\"quantity\" placeholder=\"Quantity\"> <button type=\"submit\" form=\"ingredient-form\">Add</button></form></div><button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"ingredient-form\"><h4>Add Ingredient</h4><input form=\"ingredient-form\" class=\"form-control\" type=\"search\" name=\"search\" id=\"search\" placeholder=\"Ingredient\" hx-post=\"/ingredients/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\"><table class=\"table\"><tbody id=\"search-results\"></tbody></table><input form=\"ingredient-form\" type=\"text\" name=\"quantity\" id=\"quantity\" placeholder=\"Quantity\"> <select form=\"ingredient-form\" id=\"quantity-unit\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <button type=\"submit\" form=\"ingredient-form\">Add</button></form></div><button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

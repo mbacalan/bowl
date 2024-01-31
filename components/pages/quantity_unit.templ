@@ -1,0 +1,11 @@
+package pages
+
+import "github.com/mbacalan/bowl/db"
+
+templ QuantityUnits(units []db.QuantityUnit) {
+	for _, unit := range units {
+		<option>
+			{ unit.Unit }
+		</option>
+	}
+}

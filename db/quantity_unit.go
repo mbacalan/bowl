@@ -6,7 +6,7 @@ import (
 
 type QuantityUnit struct {
 	gorm.Model
-	Quantity     string
+	Unit     string
 }
 
 type QuantityUnitStore struct {
@@ -24,7 +24,7 @@ func NewQuantityUnitStore(db *gorm.DB, tableName string) *QuantityUnitStore {
 }
 
 func (s QuantityUnitStore) Create(unit string) (i QuantityUnit, err error) {
-	entry := QuantityUnit{Quantity: unit}
+	entry := QuantityUnit{Unit: unit}
 	result := s.db.Create(&entry)
 
 	if result.Error != nil {

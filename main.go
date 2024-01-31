@@ -25,17 +25,21 @@ func main() {
 	database := db.NewConnection()
 	rds := db.NewRecipeStore(database, "recipes")
 	ids := db.NewIngredientStore(database, "ingredients")
+	qds := db.NewQuantityUnitStore(database, "quantity_units")
 
 	rs := services.NewRecipeService(log, rds)
 	rh := handlers.NewRecipeHandler(log, rs)
 	is := services.NewIngredientService(log, ids)
 	ih := handlers.NewIngredientHandler(log, is)
+	qs := services.NewQuantityUnitService(log, qds)
+	qh := handlers.NewQuantityUnitHandler(log, qs)
 
 	recent, _ := rs.GetRecent(5)
 	r.Get("/", templ.Handler(pages.Home(recent)).ServeHTTP)
 	r.Mount("/assets", assets.Routes())
 	r.Mount("/recipes", rh.Routes())
 	r.Mount("/ingredients", ih.Routes())
+	r.Mount("/quantity-units", qh.Routes())
 
 	server := &http.Server{
 		Addr:         ":3000",

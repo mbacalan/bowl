@@ -47,6 +47,13 @@ templ CreateRecipe() {
 					placeholder="Quantity"
 				/>
 
+				<select
+					form="ingredient-form"
+					id="quantity-unit"
+					hx-get="/quantity-units"
+					hx-trigger="load"
+				/>
+
 				<button type="submit" form="ingredient-form">Add</button>
 			</form>
 
