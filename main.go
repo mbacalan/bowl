@@ -20,6 +20,7 @@ import (
 func main() {
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	r.Use(middleware.Compress(5))
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	database := db.NewConnection()
