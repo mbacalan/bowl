@@ -37,7 +37,7 @@ templ IngredientSearchList(ingredients []db.Ingredient) {
 				<td>
 					<p id="select-ingredient">
 						{ ingredient.Name }
-						<div data-ingredient={ingredient.Name}>+</div>
+						<div data-ingredient={ingredient.Name} onclick="handleSelectIngredient(this)">+</div>
 					</p>
 				</td>
 			</tr>

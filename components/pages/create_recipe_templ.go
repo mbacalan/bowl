@@ -10,7 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/mbacalan/bowl/components/shared"
+import (
+	"github.com/mbacalan/bowl/components/partials"
+)
 
 func CreateRecipe() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -25,21 +27,17 @@ func CreateRecipe() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<!doctype html><html lang=\"en\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		templ_7745c5c3_Var2 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 			if !templ_7745c5c3_IsBuffer {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label for=\"name\">Name</label> <input type=\"text\" id=\"name\" name=\"name\"><div hx-disinherit=\"*\" class=\"bordered\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = InredientListForRecipe().Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"ingredient-form\"><h4>Add Ingredient</h4><input form=\"ingredient-form\" class=\"form-control\" type=\"search\" name=\"search\" id=\"search\" placeholder=\"Ingredient\" hx-post=\"/ingredients/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\"><table class=\"table\"><tbody id=\"search-results\"></tbody></table><input form=\"ingredient-form\" type=\"text\" name=\"quantity\" id=\"quantity\" placeholder=\"Quantity\"> <select form=\"ingredient-form\" id=\"quantity-unit\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <button type=\"submit\" form=\"ingredient-form\">Add</button></form></div><button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script src=\"/assets/create-recipe.js\"></script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -48,7 +46,38 @@ func CreateRecipe() templ.Component {
 			}
 			return templ_7745c5c3_Err
 		})
-		templ_7745c5c3_Err = shared.Page().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = partials.Head().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var3 := templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+			if !templ_7745c5c3_IsBuffer {
+				templ_7745c5c3_Buffer = templ.GetBuffer()
+				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Create Recipe</h2><form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><label for=\"name\">Name</label> <input type=\"text\" id=\"name\" name=\"name\"><div hx-disinherit=\"*\" class=\"bordered\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = InredientListForRecipe().Render(ctx, templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h4>Add Ingredient</h4><div><input class=\"form-control\" type=\"search\" name=\"search\" id=\"search\" placeholder=\"Search Ingredient\" required hx-post=\"/ingredients/search\" hx-trigger=\"input changed delay:500ms, search\" hx-target=\"#search-results\"> <input type=\"text\" name=\"quantity\" id=\"quantity\" placeholder=\"Quantity\" required> <select id=\"quantity-unit\" name=\"quantity-unit\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <button type=\"button\" id=\"add-ingredient\" onclick=\"handleAddIngredient()\">Add</button></div><table class=\"table\"><tbody id=\"search-results\"></tbody></table></div><button type=\"submit\">Submit</button></form>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if !templ_7745c5c3_IsBuffer {
+				_, templ_7745c5c3_Err = io.Copy(templ_7745c5c3_W, templ_7745c5c3_Buffer)
+			}
+			return templ_7745c5c3_Err
+		})
+		templ_7745c5c3_Err = partials.Body().Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

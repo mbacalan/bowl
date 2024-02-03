@@ -1,64 +1,69 @@
 package pages
 
-import "github.com/mbacalan/bowl/components/shared"
+import (
+	"github.com/mbacalan/bowl/components/partials"
+)
 
 templ CreateRecipe() {
-	@shared.Page() {
-		<form
-			id="recipe-form"
-			action="/recipes"
-			method="post"
-			hx-post="/recipes/create"
-			hx-swap="outerHTML"
-			hx-select="[data-swap='recipe']"
-		>
-			<label for="name">
-				Name
-			</label>
-			<input type="text" id="name" name="name"/>
+	<!DOCTYPE html>
+	<html lang="en">
+		@partials.Head() {
+			<script src="/assets/create-recipe.js"></script>
+		}
+		@partials.Body() {
+			<h2>Create Recipe</h2>
+			<form
+				id="recipe-form"
+				action="/recipes"
+				method="post"
+				hx-post="/recipes/create"
+				hx-swap="outerHTML"
+				hx-select="[data-swap='recipe']"
+			>
+				<label for="name">Name</label>
+				<input type="text" id="name" name="name"/>
 
-			<div hx-disinherit="*" class="bordered">
-				@InredientListForRecipe()
-				<form id="ingredient-form">
-				<h4>
-					Add Ingredient
-				</h4>
-				<input
-					form="ingredient-form"
-					class="form-control"
-					type="search"
-					name="search"
-					id="search"
-					placeholder="Ingredient"
-					hx-post="/ingredients/search"
-					hx-trigger="input changed delay:500ms, search"
-					hx-target="#search-results"
-				/>
+				<div hx-disinherit="*" class="bordered">
+					@InredientListForRecipe()
+					<h4>Add Ingredient</h4>
+					<div>
+						<input
+							class="form-control"
+							type="search"
+							name="search"
+							id="search"
+							placeholder="Search Ingredient"
+							required
+							hx-post="/ingredients/search"
+							hx-trigger="input changed delay:500ms, search"
+							hx-target="#search-results"
+						/>
 
-				<table class="table">
-					<tbody id="search-results"></tbody>
-				</table>
+						<input
+							type="text"
+							name="quantity"
+							id="quantity"
+							placeholder="Quantity"
+							required
+						/>
 
-				<input
-					form="ingredient-form"
-					type="text"
-					name="quantity"
-					id="quantity"
-					placeholder="Quantity"
-				/>
+						<select
+							id="quantity-unit"
+							name="quantity-unit"
+							hx-get="/quantity-units"
+							hx-trigger="load"
+						/>
 
-				<select
-					form="ingredient-form"
-					id="quantity-unit"
-					hx-get="/quantity-units"
-					hx-trigger="load"
-				/>
+						<button type="button" id="add-ingredient" onclick="handleAddIngredient()">Add</button>
+					</div>
 
-				<button type="submit" form="ingredient-form">Add</button>
+					<table class="table">
+						<tbody id="search-results"></tbody>
+					</table>
+				</div>
+
+				<button type="submit">Submit</button>
 			</form>
-
-			</div>
-			<button type="submit">Submit</button>
-		</form>
-	}
+		}
+	</html>
 }
