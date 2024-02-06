@@ -3,15 +3,15 @@ package services
 import (
 	"log/slog"
 
-	"github.com/mbacalan/bowl/db"
+	"github.com/mbacalan/bowl/repositories"
 )
 
 type QuantityUnitService struct {
 	Log   *slog.Logger
-	Store *db.QuantityUnitStore
+	Store *db.QuantityUnitRepository
 }
 
-func NewQuantityUnitService(log *slog.Logger, rs *db.QuantityUnitStore) QuantityUnitService {
+func NewQuantityUnitService(log *slog.Logger, rs *db.QuantityUnitRepository) QuantityUnitService {
 	return QuantityUnitService{Log: log, Store: rs}
 }
 

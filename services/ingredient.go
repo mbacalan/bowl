@@ -3,15 +3,15 @@ package services
 import (
 	"log/slog"
 
-	"github.com/mbacalan/bowl/db"
+	"github.com/mbacalan/bowl/repositories"
 )
 
 type IngredientService struct {
 	Log             *slog.Logger
-	IngredientStore *db.IngredientStore
+	IngredientStore *db.IngredientRepository
 }
 
-func NewIngredientService(log *slog.Logger, rs *db.IngredientStore) IngredientService {
+func NewIngredientService(log *slog.Logger, rs *db.IngredientRepository) IngredientService {
 	return IngredientService{Log: log, IngredientStore: rs}
 }
 

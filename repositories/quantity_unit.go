@@ -9,21 +9,21 @@ type QuantityUnit struct {
 	Unit string
 }
 
-type QuantityUnitStore struct {
+type QuantityUnitRepository struct {
 	db        *gorm.DB
 	tableName string
 }
 
-func NewQuantityUnitStore(db *gorm.DB, tableName string) *QuantityUnitStore {
-	store := &QuantityUnitStore{
+func NewQuantityUnitRepository(db *gorm.DB, tableName string) *QuantityUnitRepository {
+	repository := &QuantityUnitRepository{
 		tableName: tableName,
 		db:        db,
 	}
 
-	return store
+	return repository
 }
 
-func (s QuantityUnitStore) GetOrCreate(unit string) (i QuantityUnit, err error) {
+func (s QuantityUnitRepository) GetOrCreate(unit string) (i QuantityUnit, err error) {
 	var entry QuantityUnit
 	result := s.db.FirstOrCreate(&entry, QuantityUnit{Unit: unit})
 
@@ -34,7 +34,7 @@ func (s QuantityUnitStore) GetOrCreate(unit string) (i QuantityUnit, err error) 
 	return entry, nil
 }
 
-func (s QuantityUnitStore) GetAll() (i []QuantityUnit, err error) {
+func (s QuantityUnitRepository) GetAll() (i []QuantityUnit, err error) {
 	var units []QuantityUnit
 	result := s.db.Find(&units)
 

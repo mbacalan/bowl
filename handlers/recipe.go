@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/db"
+	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
 )
 
@@ -60,10 +60,10 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	quantityUnits := r.Form["quantity-unit"]
 
 	for i := range ingredients {
-		ingredient, _ := h.RecipeService.IngredientStore.GetOrCreate(ingredients[i])
-		unit, _ := h.RecipeService.QuantityUnitStore.GetOrCreate(quantityUnits[i])
+		ingredient, _ := h.RecipeService.IngredientRepository.GetOrCreate(ingredients[i])
+		unit, _ := h.RecipeService.QuantityUnitRepository.GetOrCreate(quantityUnits[i])
 
-		h.RecipeService.RecipeIngredientStore.Create(recipe.ID, ingredient.ID, unit.ID, quantities[i])
+		h.RecipeService.RecipeIngredientRepository.Create(recipe.ID, ingredient.ID, unit.ID, quantities[i])
 	}
 
 	if err != nil {

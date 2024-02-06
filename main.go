@@ -12,8 +12,8 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/mbacalan/bowl/assets"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/db"
 	"github.com/mbacalan/bowl/handlers"
+	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
 )
 
@@ -24,10 +24,10 @@ func main() {
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	database := db.NewConnection()
-	rds := db.NewRecipeStore(database, "recipes")
-	ids := db.NewIngredientStore(database, "ingredients")
-	qds := db.NewQuantityUnitStore(database, "quantity_units")
-	rids := db.NewRecipeIngredientStore(database, "recipe_ingredients")
+	rds := db.NewRecipeRepository(database, "recipes")
+	ids := db.NewIngredientRepository(database, "ingredients")
+	qds := db.NewQuantityUnitRepository(database, "quantity_units")
+	rids := db.NewRecipeIngredientRepository(database, "recipe_ingredients")
 
 	rs := services.NewRecipeService(log, rds, rids, ids, qds)
 	rh := handlers.NewRecipeHandler(log, rs)

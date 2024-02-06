@@ -14,21 +14,21 @@ type RecipeIngredient struct {
 	Quantity       string
 }
 
-type RecipeIngredientStore struct {
+type RecipeIngredientRepository struct {
 	db        *gorm.DB
 	tableName string
 }
 
-func NewRecipeIngredientStore(db *gorm.DB, tableName string) *RecipeIngredientStore {
-	store := &RecipeIngredientStore{
+func NewRecipeIngredientRepository(db *gorm.DB, tableName string) *RecipeIngredientRepository {
+	repository := &RecipeIngredientRepository{
 		tableName: tableName,
 		db:        db,
 	}
 
-	return store
+	return repository
 }
 
-func (s RecipeIngredientStore) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (i RecipeIngredient, err error) {
+func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (i RecipeIngredient, err error) {
 	entry := RecipeIngredient{
 		RecipeID:       recipeID,
 		IngredientID:   ingredientID,
@@ -45,7 +45,7 @@ func (s RecipeIngredientStore) Create(recipeID uint, ingredientID uint, unitID u
 	return entry, nil
 }
 
-func (s RecipeIngredientStore) GetAll() (recipeIngredients []RecipeIngredient, err error) {
+func (s RecipeIngredientRepository) GetAll() (recipeIngredients []RecipeIngredient, err error) {
 	var entries []RecipeIngredient
 	result := s.db.Find(&entries)
 

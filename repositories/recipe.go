@@ -18,21 +18,21 @@ type Recipe struct {
 	// Comments    []string
 }
 
-type RecipeStore struct {
+type RecipeRepository struct {
 	DB        *gorm.DB
 	tableName string
 }
 
-func NewRecipeStore(db *gorm.DB, tableName string) *RecipeStore {
-	store := &RecipeStore{
+func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
+	repository := &RecipeRepository{
 		tableName: tableName,
 		DB:        db,
 	}
 
-	return store
+	return repository
 }
 
-func (s RecipeStore) CreateRecipe(recipe Recipe) (r Recipe, err error) {
+func (s RecipeRepository) CreateRecipe(recipe Recipe) (r Recipe, err error) {
 	entry := Recipe{Name: recipe.Name}
 	result := s.DB.Create(&entry)
 
@@ -43,7 +43,7 @@ func (s RecipeStore) CreateRecipe(recipe Recipe) (r Recipe, err error) {
 	return entry, nil
 }
 
-func (s RecipeStore) GetRecipe(id int) (r Recipe, err error) {
+func (s RecipeRepository) GetRecipe(id int) (r Recipe, err error) {
 	var recipe Recipe
 	result := s.DB.Model(&Recipe{}).Preload("RecipeIngredients").Preload("RecipeIngredients.Ingredient").Preload("RecipeIngredients.QuantityUnit").Find(&recipe, id)
 
@@ -54,7 +54,7 @@ func (s RecipeStore) GetRecipe(id int) (r Recipe, err error) {
 	return recipe, nil
 }
 
-func (s RecipeStore) GetAllRecipes() (r []Recipe, err error) {
+func (s RecipeRepository) GetAllRecipes() (r []Recipe, err error) {
 	var recipes []Recipe
 	result := s.DB.Find(&recipes)
 
@@ -65,7 +65,7 @@ func (s RecipeStore) GetAllRecipes() (r []Recipe, err error) {
 	return recipes, nil
 }
 
-func (s RecipeStore) GetRecentRecipes(limit int) (r []Recipe, err error) {
+func (s RecipeRepository) GetRecentRecipes(limit int) (r []Recipe, err error) {
 	var recipes []Recipe
 	result := s.DB.Order("id DESC").Limit(limit).Find(&recipes)
 

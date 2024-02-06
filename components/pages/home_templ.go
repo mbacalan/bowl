@@ -12,7 +12,7 @@ import "bytes"
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
-	"github.com/mbacalan/bowl/db"
+	"github.com/mbacalan/bowl/repositories"
 )
 
 func Home(recipes []db.Recipe) templ.Component {
