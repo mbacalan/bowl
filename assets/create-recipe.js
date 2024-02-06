@@ -1,25 +1,18 @@
-class RecipeStore {
+class RecipeIngredientStore {
   constructor() {
     this.ingredients = []
   }
 
-  addIngredient(ingredient, quantity, unit) {
-    this.ingredients.push({ ingredient, quantity, unit })
-    console.info(`Added ${quantity} of ${ingredient}: ${this.ingredients}`)
+  addRecipeIngredient(ri) {
+    this.ingredients.push(ri)
   }
 
-  removeIngredient(ingredient) {
+  removeRecipeIngredient(ingredient) {
     this.ingredients = this.ingredients.filter(i => i.ingredient == ingredient)
-    console.info(`Removed ${ingredient}: ${this.ingredients}`)
-  }
-
-  clean() {
-    this.ingredients = []
-    console.info(`Cleaned ingredients: ${this.ingredients}`)
   }
 }
 
-const rs = new RecipeStore()
+const rs = new RecipeIngredientStore()
 
 function renderIngredientTable(ingredients) {
   const ingredientTable = document.getElementById('ingredient-list')
@@ -28,10 +21,13 @@ function renderIngredientTable(ingredients) {
     return `
       <tr>
         <td>
-          ${i.ingredient}
+          <input class="table-input" type="text" name="ingredient" readonly value="${i.ingredient}" />
         </td>
         <td>
-          ${i.quantity} ${i.unit}
+          <input class="table-input" type="text" name="quantity" readonly value="${i.quantity}" />
+        </td>
+        <td>
+          <input class="table-input" type="text" name="quantity-unit" readonly value="${i.unit}" />
         </td>
       </tr>
     `
@@ -40,34 +36,27 @@ function renderIngredientTable(ingredients) {
   ingredientTable.innerHTML = template
 }
 
-function removeSearchResults() {
-  const searchResultsEl = document.getElementById('search-results')
-
-  while (searchResultsEl.firstChild) {
-    searchResultsEl.removeChild(searchResultsEl.firstChild);
-  }
-}
-
-function handleSelectIngredient(e) {
-  const ingredientEl = document.querySelector('input[id="search"]')
-
-  ingredientEl.value = e.dataset.ingredient
-  removeSearchResults()
-}
-
-function handleAddIngredient() {
-  const ingredientEl = document.querySelector('input[id="search"]')
+function clearIngredientFields() {
+  const ingredientEl = document.getElementById('ingredient')
   const quantityEl = document.getElementById('quantity')
   const quantityUnitEl = document.getElementById('quantity-unit')
 
-  rs.addIngredient(ingredientEl.value, quantityEl.value, quantityUnitEl.value)
-  renderIngredientTable(rs.ingredients)
+  ingredientEl.value = ''
+  quantityEl.value = ''
+  quantityUnitEl.value = quantityUnitEl.options[0].value
 }
 
-window.onload = () => {
-  document.body.addEventListener('htmx:configRequest', function (evt) {
-    if (evt.target.id == 'recipe-form') {
-      console.log('anan')
-    }
-  });
+function addIngredient() {
+  const ingredientEl = document.getElementById('ingredient')
+  const quantityEl = document.getElementById('quantity')
+  const quantityUnitEl = document.getElementById('quantity-unit')
+
+  rs.addRecipeIngredient({
+    ingredient: ingredientEl.value,
+    quantity: quantityEl.value,
+    unit: quantityUnitEl.value
+  })
+
+  clearIngredientFields()
+  renderIngredientTable(rs.ingredients)
 }

@@ -10,11 +10,11 @@ templ Recipe(recipe db.Recipe) {
 	<article data-swap="recipe" id={ strconv.FormatUint(uint64(recipe.ID), 10) }>
 		<h2>{ recipe.Name }</h2>
 		<h3>Ingredients</h3>
-		<ol>
-			<li>Red Lentil, <em>1 cup</em></li>
-			<li>Rice, <em>1 desert spoon</em></li>
-			<li>Onion, <em>1 piece</em></li>
-		</ol>
+		<ul>
+			for _, ingredient := range recipe.RecipeIngredients {
+				<li>{ ingredient.Ingredient.Name } - { ingredient.Quantity }, { ingredient.QuantityUnit.Unit }</li>
+			}
+		</ul>
 		<h3>Steps</h3>
 		<ol>
 			<li>Lorem ipsum</li>

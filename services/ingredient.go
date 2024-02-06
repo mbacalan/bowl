@@ -37,8 +37,8 @@ func (s *IngredientService) GetAll() (ingredients []db.Ingredient, error error) 
 	return result, nil
 }
 
-func (s *IngredientService) Create(i db.Ingredient) (ingredient db.Ingredient, error error) {
-	result, err := s.IngredientStore.CreateIngredient(i)
+func (s *IngredientService) Create(i string) (ingredient db.Ingredient, error error) {
+	result, err := s.IngredientStore.GetOrCreate(i)
 
 	if err != nil {
 		s.Log.Error("Error creating ingredient", err)

@@ -7,7 +7,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/db"
 	"github.com/mbacalan/bowl/services"
 )
 
@@ -30,7 +29,7 @@ func (h *IngredientHandler) Routes() chi.Router {
 	r.Get("/{id}", h.ViewIngredient)
 	r.Get("/create", h.CreateIngredient)
 	r.Post("/create", h.CreateIngredient)
-	r.Post("/search", h.SearchIngredient)
+	// r.Post("/search", h.SearchIngredient)
 
 	return r
 }
@@ -52,7 +51,7 @@ func (h *IngredientHandler) CreateIngredient(w http.ResponseWriter, r *http.Requ
 
 	r.ParseForm()
 
-	ingredient, err := h.IngredientService.Create(db.Ingredient{Name: r.Form.Get("name")})
+	ingredient, err := h.IngredientService.Create(r.Form.Get("name"))
 
 	if err != nil {
 		h.Log.Error("", err)
@@ -86,12 +85,12 @@ func (h *IngredientHandler) ViewIngredientList(w http.ResponseWriter, r *http.Re
 	pages.IngredientListPage(ingredients).Render(r.Context(), w)
 }
 
-func (h *IngredientHandler) SearchIngredient(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-	ingredients, err := h.IngredientService.Search(r.Form.Get("search"))
-	if err != nil {
-		h.Log.Error("Error searching ingredients", err)
-	}
+// func (h *IngredientHandler) SearchIngredient(w http.ResponseWriter, r *http.Request) {
+// 	r.ParseForm()
+// 	ingredients, err := h.IngredientService.Search(r.Form.Get("search"))
+// 	if err != nil {
+// 		h.Log.Error("Error searching ingredients", err)
+// 	}
 
-	pages.IngredientSearchList(ingredients).Render(r.Context(), w)
-}
+// 	pages.IngredientSearchList(ingredients).Render(r.Context(), w)
+// }

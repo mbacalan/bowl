@@ -3,7 +3,7 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
-	"strconv"
+	// "strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
@@ -49,14 +49,14 @@ func (h *RecipeIngredientHandler) CreateRecipeIngredient(w http.ResponseWriter, 
 
 	r.ParseForm()
 
-	ingredient, err := h.IngredientService.Create(r.Form.Get("name"))
+	// ingredient, err := h.IngredientService.Create(r.Form.Get("name"))
 
-	if err != nil {
-		h.Log.Error("", err)
-		return
-	}
+	// if err != nil {
+	// 	h.Log.Error("", err)
+	// 	return
+	// }
 
-	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(ingredient.ID), 10))
+	// w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(ingredient.ID), 10))
 	// pages.IngredientDetailPage(ingredient).Render(r.Context(), w)
 }
 
@@ -66,5 +66,5 @@ func (h *RecipeIngredientHandler) CreateRecipeIngredient(w http.ResponseWriter, 
 // 		h.Log.Error("Error listing ingredients", err)
 // 	}
 
-	// pages.IngredientListPage(ingredients).Render(r.Context(), w)
+// pages.IngredientListPage(ingredients).Render(r.Context(), w)
 // }

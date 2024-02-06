@@ -27,8 +27,9 @@ func main() {
 	rds := db.NewRecipeStore(database, "recipes")
 	ids := db.NewIngredientStore(database, "ingredients")
 	qds := db.NewQuantityUnitStore(database, "quantity_units")
+	rids := db.NewRecipeIngredientStore(database, "recipe_ingredients")
 
-	rs := services.NewRecipeService(log, rds)
+	rs := services.NewRecipeService(log, rds, rids, ids, qds)
 	rh := handlers.NewRecipeHandler(log, rs)
 	is := services.NewIngredientService(log, ids)
 	ih := handlers.NewIngredientHandler(log, is)

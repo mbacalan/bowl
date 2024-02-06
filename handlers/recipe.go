@@ -51,7 +51,20 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	recipe, err := h.RecipeService.Create(db.Recipe{Name: r.Form.Get("name")})
+	recipe, err := h.RecipeService.Create(db.Recipe{
+		Name: r.Form.Get("name"),
+	})
+
+	ingredients := r.Form["ingredient"]
+	quantities := r.Form["quantity"]
+	quantityUnits := r.Form["quantity-unit"]
+
+	for i := range ingredients {
+		ingredient, _ := h.RecipeService.IngredientStore.GetOrCreate(ingredients[i])
+		unit, _ := h.RecipeService.QuantityUnitStore.GetOrCreate(quantityUnits[i])
+
+		h.RecipeService.RecipeIngredientStore.Create(recipe.ID, ingredient.ID, unit.ID, quantities[i])
+	}
 
 	if err != nil {
 		h.Log.Error("", err)
@@ -59,7 +72,8 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
-	pages.RecipeDetailPage(recipe).Render(r.Context(), w)
+	recipeDetail, _ := h.RecipeService.Get(int(recipe.ID))
+	pages.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {

@@ -19,29 +19,32 @@ templ CreateRecipe() {
 				hx-post="/recipes/create"
 				hx-swap="outerHTML"
 				hx-select="[data-swap='recipe']"
+				hx-params="not ingredient-entry,quantity-entry,quantity-unit-entry"
 			>
 				<label for="name">Name</label>
-				<input type="text" id="name" name="name"/>
+				<input
+					type="text"
+					id="name"
+					name="name"
+					placeholder="Recipe Name"
+					required
+				/>
 
 				<div hx-disinherit="*" class="bordered">
 					@InredientListForRecipe()
-					<h4>Add Ingredient</h4>
+					<h6>Add Ingredient</h6>
 					<div>
 						<input
-							class="form-control"
-							type="search"
-							name="search"
-							id="search"
-							placeholder="Search Ingredient"
+							type="text"
+							name="ingredient-entry"
+							id="ingredient"
+							placeholder="Ingredient"
 							required
-							hx-post="/ingredients/search"
-							hx-trigger="input changed delay:500ms, search"
-							hx-target="#search-results"
 						/>
 
 						<input
 							type="text"
-							name="quantity"
+							name="quantity-entry"
 							id="quantity"
 							placeholder="Quantity"
 							required
@@ -49,17 +52,13 @@ templ CreateRecipe() {
 
 						<select
 							id="quantity-unit"
-							name="quantity-unit"
+							name="quantity-unit-entry"
 							hx-get="/quantity-units"
 							hx-trigger="load"
 						/>
 
-						<button type="button" id="add-ingredient" onclick="handleAddIngredient()">Add</button>
+						<button type="button" id="add-ingredient" onclick="addIngredient()">Add</button>
 					</div>
-
-					<table class="table">
-						<tbody id="search-results"></tbody>
-					</table>
 				</div>
 
 				<button type="submit">Submit</button>

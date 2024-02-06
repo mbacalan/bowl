@@ -7,12 +7,21 @@ import (
 )
 
 type RecipeService struct {
-	Log         *slog.Logger
-	RecipeStore *db.RecipeStore
+	Log                   *slog.Logger
+	RecipeStore           *db.RecipeStore
+	RecipeIngredientStore *db.RecipeIngredientStore
+	IngredientStore       *db.IngredientStore
+	QuantityUnitStore     *db.QuantityUnitStore
 }
 
-func NewRecipeService(log *slog.Logger, rs *db.RecipeStore) RecipeService {
-	return RecipeService{Log: log, RecipeStore: rs}
+func NewRecipeService(log *slog.Logger, rs *db.RecipeStore, rids *db.RecipeIngredientStore, ids *db.IngredientStore, qds *db.QuantityUnitStore) RecipeService {
+	return RecipeService{
+		Log:                   log,
+		RecipeStore:           rs,
+		RecipeIngredientStore: rids,
+		IngredientStore:       ids,
+		QuantityUnitStore:     qds,
+	}
 }
 
 func (s *RecipeService) Get(id int) (recipe db.Recipe, error error) {

@@ -23,9 +23,9 @@ func NewIngredientStore(db *gorm.DB, tableName string) *IngredientStore {
 	return store
 }
 
-func (s IngredientStore) CreateIngredient(ingredient Ingredient) (i Ingredient, err error) {
-	entry := Ingredient{Name: ingredient.Name}
-	result := s.db.Create(&entry)
+func (s IngredientStore) GetOrCreate(ingredient string) (i Ingredient, err error) {
+	var entry Ingredient
+	result := s.db.FirstOrCreate(&entry, Ingredient{Name: ingredient})
 
 	if result.Error != nil {
 		return Ingredient{}, result.Error

@@ -11,9 +11,7 @@ func NewConnection() *gorm.DB {
 		panic("failed to connect database")
 	}
 
-	db.AutoMigrate(&Ingredient{})
-	db.AutoMigrate(&Recipe{})
-	db.AutoMigrate(&QuantityUnit{})
+	db.AutoMigrate(&Ingredient{}, &QuantityUnit{}, &RecipeIngredient{}, &Recipe{})
 
 	CreateIfNotExists(db, QuantityUnit{Unit: "g"})
 	CreateIfNotExists(db, QuantityUnit{Unit: "kg"})

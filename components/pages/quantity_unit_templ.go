@@ -25,6 +25,10 @@ func QuantityUnits(units []db.QuantityUnit) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<option selected disabled>Select</option> ")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
 		for _, unit := range units {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<option>")
 			if templ_7745c5c3_Err != nil {
@@ -33,7 +37,7 @@ func QuantityUnits(units []db.QuantityUnit) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(unit.Unit)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/quantity_unit.templ`, Line: 7, Col: 14}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/quantity_unit.templ`, Line: 8, Col: 14}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {

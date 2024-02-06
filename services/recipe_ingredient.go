@@ -26,8 +26,8 @@ func (s *RecipeIngredientService) GetAll() (ingredients []db.RecipeIngredient, e
 	return result, nil
 }
 
-func (s *RecipeIngredientService) Create(i string) (ingredient db.RecipeIngredient, error error) {
-	result, err := s.IngredientStore.Create(i)
+func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ingredient db.RecipeIngredient, error error) {
+	result, err := s.IngredientStore.Create(r, i, qu, q)
 
 	if err != nil {
 		s.Log.Error("Error creating ingredient", err)

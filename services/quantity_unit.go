@@ -7,7 +7,7 @@ import (
 )
 
 type QuantityUnitService struct {
-	Log             *slog.Logger
+	Log   *slog.Logger
 	Store *db.QuantityUnitStore
 }
 
@@ -27,7 +27,7 @@ func (s *QuantityUnitService) GetAll() (units []db.QuantityUnit, error error) {
 }
 
 func (s *QuantityUnitService) Create(i string) (unit db.QuantityUnit, error error) {
-	result, err := s.Store.Create(i)
+	result, err := s.Store.GetOrCreate(i)
 
 	if err != nil {
 		s.Log.Error("Error creating unit", err)

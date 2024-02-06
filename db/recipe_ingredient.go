@@ -6,10 +6,12 @@ import (
 
 type RecipeIngredient struct {
 	gorm.Model
-	RecipeID     uint
-	IngredientID uint
-	UnitID       uint
-	Quantity     string
+	RecipeID       uint
+	IngredientID   uint
+	Ingredient     Ingredient `gorm:"foreignKey:IngredientID"`
+	QuantityUnitID uint
+	QuantityUnit   QuantityUnit `gorm:"foreignKey:QuantityUnitID"`
+	Quantity       string
 }
 
 type RecipeIngredientStore struct {
@@ -26,8 +28,14 @@ func NewRecipeIngredientStore(db *gorm.DB, tableName string) *RecipeIngredientSt
 	return store
 }
 
-func (s RecipeIngredientStore) Create(quantity string) (i RecipeIngredient, err error) {
-	entry := RecipeIngredient{Quantity: quantity}
+func (s RecipeIngredientStore) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (i RecipeIngredient, err error) {
+	entry := RecipeIngredient{
+		RecipeID:       recipeID,
+		IngredientID:   ingredientID,
+		QuantityUnitID: unitID,
+		Quantity:       quantity,
+	}
+
 	result := s.db.Create(&entry)
 
 	if result.Error != nil {

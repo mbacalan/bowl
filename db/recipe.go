@@ -6,8 +6,8 @@ import (
 
 type Recipe struct {
 	gorm.Model
-	Name string
-	// Ingredients []RecipeIngredient
+	Name              string
+	RecipeIngredients []RecipeIngredient
 	// Steps       []string
 	// Rating      uint
 	// Difficulty  uint
@@ -19,14 +19,14 @@ type Recipe struct {
 }
 
 type RecipeStore struct {
-	db        *gorm.DB
+	DB        *gorm.DB
 	tableName string
 }
 
 func NewRecipeStore(db *gorm.DB, tableName string) *RecipeStore {
 	store := &RecipeStore{
 		tableName: tableName,
-		db:        db,
+		DB:        db,
 	}
 
 	return store
@@ -34,7 +34,7 @@ func NewRecipeStore(db *gorm.DB, tableName string) *RecipeStore {
 
 func (s RecipeStore) CreateRecipe(recipe Recipe) (r Recipe, err error) {
 	entry := Recipe{Name: recipe.Name}
-	result := s.db.Create(&entry)
+	result := s.DB.Create(&entry)
 
 	if result.Error != nil {
 		return Recipe{}, result.Error
@@ -45,7 +45,7 @@ func (s RecipeStore) CreateRecipe(recipe Recipe) (r Recipe, err error) {
 
 func (s RecipeStore) GetRecipe(id int) (r Recipe, err error) {
 	var recipe Recipe
-	result := s.db.Find(&recipe, id)
+	result := s.DB.Model(&Recipe{}).Preload("RecipeIngredients").Preload("RecipeIngredients.Ingredient").Preload("RecipeIngredients.QuantityUnit").Find(&recipe, id)
 
 	if result.Error != nil {
 		return Recipe{}, result.Error
@@ -56,7 +56,7 @@ func (s RecipeStore) GetRecipe(id int) (r Recipe, err error) {
 
 func (s RecipeStore) GetAllRecipes() (r []Recipe, err error) {
 	var recipes []Recipe
-	result := s.db.Find(&recipes)
+	result := s.DB.Find(&recipes)
 
 	if result.Error != nil {
 		return []Recipe{}, result.Error
@@ -67,7 +67,7 @@ func (s RecipeStore) GetAllRecipes() (r []Recipe, err error) {
 
 func (s RecipeStore) GetRecentRecipes(limit int) (r []Recipe, err error) {
 	var recipes []Recipe
-	result := s.db.Order("id DESC").Limit(limit).Find(&recipes)
+	result := s.DB.Order("id DESC").Limit(limit).Find(&recipes)
 
 	if result.Error != nil {
 		return []Recipe{}, result.Error
