@@ -64,7 +64,7 @@ func CreateRecipe() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h6>Add Ingredient</h6><div><input type=\"text\" name=\"ingredient-entry\" id=\"ingredient\" placeholder=\"Ingredient\" required> <input type=\"text\" name=\"quantity-entry\" id=\"quantity\" placeholder=\"Quantity\" required> <select id=\"quantity-unit\" name=\"quantity-unit-entry\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <button type=\"button\" id=\"add-ingredient\" onclick=\"addIngredient()\">Add</button></div></div><button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h6>Add Ingredient</h6><div><input type=\"text\" name=\"ingredient-entry\" id=\"ingredient\" placeholder=\"Ingredient\" required> <input type=\"text\" name=\"quantity-entry\" id=\"quantity\" placeholder=\"Quantity\" required> <select id=\"quantity-unit\" name=\"quantity-unit-entry\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <input type=\"text\" name=\"step\" placeholder=\"Step\" required> <input type=\"text\" name=\"step\" placeholder=\"Step\" required> <button type=\"button\" id=\"add-ingredient\" onclick=\"addIngredient()\">Add</button></div></div><button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

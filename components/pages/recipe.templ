@@ -17,9 +17,9 @@ templ Recipe(recipe db.Recipe) {
 		</ul>
 		<h3>Steps</h3>
 		<ol>
-			<li>Lorem ipsum</li>
-			<li>Lorem ipsum</li>
-			<li>Lorem ipsum</li>
+			for _, step := range recipe.Steps {
+				<li>{ step.Step }</li>
+			}
 		</ol>
 	</article>
 }

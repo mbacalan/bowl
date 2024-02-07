@@ -7,7 +7,6 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
 )
 
@@ -51,20 +50,13 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	recipe, err := h.RecipeService.Create(db.Recipe{
-		Name: r.Form.Get("name"),
-	})
-
+	name := r.Form.Get("name")
+	steps := r.Form["step"]
 	ingredients := r.Form["ingredient"]
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
 
-	for i := range ingredients {
-		ingredient, _ := h.RecipeService.UnitOfWork.IngredientRepository.GetOrCreate(ingredients[i])
-		unit, _ := h.RecipeService.UnitOfWork.QuantityUnitRepository.GetOrCreate(quantityUnits[i])
-
-		h.RecipeService.UnitOfWork.RecipeIngredientRepository.Create(recipe.ID, ingredient.ID, unit.ID, quantities[i])
-	}
+	recipe, err := h.RecipeService.Create(name, steps, ingredients, quantities, quantityUnits)
 
 	if err != nil {
 		h.Log.Error("", err)

@@ -8,7 +8,7 @@ type Recipe struct {
 	gorm.Model
 	Name              string
 	RecipeIngredients []RecipeIngredient
-	// Steps       []string
+	Steps             []Step
 	// Rating      uint
 	// Difficulty  uint
 	// Duration    uint
@@ -32,8 +32,8 @@ func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	return repository
 }
 
-func (s RecipeRepository) CreateRecipe(recipe Recipe) (r Recipe, err error) {
-	entry := Recipe{Name: recipe.Name}
+func (s RecipeRepository) CreateRecipe(name string) (r Recipe, err error) {
+	entry := Recipe{Name: name}
 	result := s.DB.Create(&entry)
 
 	if result.Error != nil {
@@ -45,7 +45,7 @@ func (s RecipeRepository) CreateRecipe(recipe Recipe) (r Recipe, err error) {
 
 func (s RecipeRepository) GetRecipe(id int) (r Recipe, err error) {
 	var recipe Recipe
-	result := s.DB.Model(&Recipe{}).Preload("RecipeIngredients").Preload("RecipeIngredients.Ingredient").Preload("RecipeIngredients.QuantityUnit").Find(&recipe, id)
+	result := s.DB.Model(&Recipe{}).Preload("RecipeIngredients").Preload("RecipeIngredients.Ingredient").Preload("RecipeIngredients.QuantityUnit").Preload("Steps").Find(&recipe, id)
 
 	if result.Error != nil {
 		return Recipe{}, result.Error
