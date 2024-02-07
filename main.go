@@ -7,11 +7,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/a-h/templ"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/mbacalan/bowl/assets"
-	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/handlers"
 	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
@@ -30,13 +28,13 @@ func main() {
 
 	rs := services.NewRecipeService(log, ruow)
 	rh := handlers.NewRecipeHandler(log, rs)
+	hh := handlers.NewHomeHandler(log, rs)
 	is := services.NewIngredientService(log, ids)
 	ih := handlers.NewIngredientHandler(log, is)
 	qs := services.NewQuantityUnitService(log, qds)
 	qh := handlers.NewQuantityUnitHandler(log, qs)
 
-	recent, _ := rs.GetRecent(5)
-	r.Get("/", templ.Handler(pages.Home(recent)).ServeHTTP)
+	r.Mount("/", hh.Routes())
 	r.Mount("/assets", assets.Routes())
 	r.Mount("/recipes", rh.Routes())
 	r.Mount("/ingredients", ih.Routes())
