@@ -56,15 +56,7 @@ func CreateRecipe() templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Create Recipe</h2><form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\" hx-params=\"not ingredient-entry,quantity-entry,quantity-unit-entry\"><label for=\"name\">Name</label> <input type=\"text\" id=\"name\" name=\"name\" placeholder=\"Recipe Name\" required><div hx-disinherit=\"*\" class=\"bordered\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = InredientListForRecipe().Render(ctx, templ_7745c5c3_Buffer)
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h6>Add Ingredient</h6><div><input type=\"text\" name=\"ingredient-entry\" id=\"ingredient\" placeholder=\"Ingredient\" required> <input type=\"text\" name=\"quantity-entry\" id=\"quantity\" placeholder=\"Quantity\" required> <select id=\"quantity-unit\" name=\"quantity-unit-entry\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <input type=\"text\" name=\"step\" placeholder=\"Step\" required> <input type=\"text\" name=\"step\" placeholder=\"Step\" required> <button type=\"button\" id=\"add-ingredient\" onclick=\"addIngredient()\">Add</button></div></div><button type=\"submit\">Submit</button></form>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/recipes\" method=\"post\" hx-post=\"/recipes/create\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><h2>Create Recipe</h2><label for=\"name\">Name</label> <input type=\"text\" name=\"name\" placeholder=\"Recipe Name\" required><div hx-disinherit=\"*\" class=\"bordered\"><h6>Ingredients</h6><div id=\"ingredients\"><input type=\"text\" name=\"ingredient\" placeholder=\"Ingredient\" required> <input type=\"text\" name=\"quantity\" placeholder=\"Quantity\" required> <select id=\"quantity-unit\" name=\"quantity-unit\" hx-get=\"/quantity-units\" hx-trigger=\"load\"></select> <button type=\"button\" id=\"add-ingredient\">Add</button></div><h6>Steps</h6><div id=\"steps\"><input type=\"text\" name=\"step\" placeholder=\"Step\" required> <button type=\"button\" id=\"add-step\">Add</button></div></div><button type=\"submit\">Submit</button></form>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

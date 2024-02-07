@@ -1,62 +1,47 @@
-class RecipeIngredientStore {
-  constructor() {
-    this.ingredients = []
-  }
+window.onload = () => {
+  const ingredients = document.getElementById("ingredients")
+  const addIngredientButton = document.getElementById("add-ingredient")
 
-  addRecipeIngredient(ri) {
-    this.ingredients.push(ri)
-  }
+  addIngredientButton.addEventListener("click", () => {
+    ingredients.insertAdjacentHTML("beforeend", `
+        <input
+          type="text"
+          name="ingredient"
+          placeholder="Ingredient"
+          required
+        />
 
-  removeRecipeIngredient(ingredient) {
-    this.ingredients = this.ingredients.filter(i => i.ingredient == ingredient)
-  }
-}
+        <input
+          type="text"
+          name="quantity"
+          placeholder="Quantity"
+          required
+        />
 
-const rs = new RecipeIngredientStore()
+        <select
+          id="quantity-unit"
+          name="quantity-unit"
+          hx-get="/quantity-units"
+          hx-trigger="load"
+        />
+    `)
 
-function renderIngredientTable(ingredients) {
-  const ingredientTable = document.getElementById('ingredient-list')
-
-  const template = ingredients.map(i => {
-    return `
-      <tr>
-        <td>
-          <input class="table-input" type="text" name="ingredient" readonly value="${i.ingredient}" />
-        </td>
-        <td>
-          <input class="table-input" type="text" name="quantity" readonly value="${i.quantity}" />
-        </td>
-        <td>
-          <input class="table-input" type="text" name="quantity-unit" readonly value="${i.unit}" />
-        </td>
-      </tr>
-    `
-  }).join('')
-
-  ingredientTable.innerHTML = template
-}
-
-function clearIngredientFields() {
-  const ingredientEl = document.getElementById('ingredient')
-  const quantityEl = document.getElementById('quantity')
-  const quantityUnitEl = document.getElementById('quantity-unit')
-
-  ingredientEl.value = ''
-  quantityEl.value = ''
-  quantityUnitEl.value = quantityUnitEl.options[0].value
-}
-
-function addIngredient() {
-  const ingredientEl = document.getElementById('ingredient')
-  const quantityEl = document.getElementById('quantity')
-  const quantityUnitEl = document.getElementById('quantity-unit')
-
-  rs.addRecipeIngredient({
-    ingredient: ingredientEl.value,
-    quantity: quantityEl.value,
-    unit: quantityUnitEl.value
+    htmx.process(ingredients)
   })
 
-  clearIngredientFields()
-  renderIngredientTable(rs.ingredients)
+  const steps = document.getElementById("steps")
+  const addStepButton = document.getElementById("add-step")
+
+  addStepButton.addEventListener("click", () => {
+    steps.insertAdjacentHTML("beforeend", `
+      <input
+        type="text"
+        name="step"
+        placeholder="Step"
+        required
+      />
+    `)
+
+    htmx.process(steps)
+  })
 }

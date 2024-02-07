@@ -28,26 +28,6 @@ templ IngredientList(ingredients []db.Ingredient) {
 	</ul>
 }
 
-templ InredientListForRecipe() {
-	<table class="table">
-		<thead>
-			<tr>
-				<th>
-					Ingredient
-				</th>
-				<th>
-					Quantity
-				</th>
-				<th>
-					Quantity Unit
-				</th>
-			</tr>
-		</thead>
-
-		<tbody id="ingredient-list"></tbody>
-	</table>
-}
-
 templ IngredientListPage(ingredients []db.Ingredient) {
 	@shared.Page() {
 		if len(ingredients) == 0 {
