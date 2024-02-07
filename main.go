@@ -24,12 +24,11 @@ func main() {
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 	database := db.NewConnection()
-	rds := db.NewRecipeRepository(database, "recipes")
 	ids := db.NewIngredientRepository(database, "ingredients")
 	qds := db.NewQuantityUnitRepository(database, "quantity_units")
-	rids := db.NewRecipeIngredientRepository(database, "recipe_ingredients")
+	ruow := services.NewRecipeUOW(database)
 
-	rs := services.NewRecipeService(log, rds, rids, ids, qds)
+	rs := services.NewRecipeService(log, ruow)
 	rh := handlers.NewRecipeHandler(log, rs)
 	is := services.NewIngredientService(log, ids)
 	ih := handlers.NewIngredientHandler(log, is)

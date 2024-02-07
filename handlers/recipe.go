@@ -60,10 +60,10 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	quantityUnits := r.Form["quantity-unit"]
 
 	for i := range ingredients {
-		ingredient, _ := h.RecipeService.IngredientRepository.GetOrCreate(ingredients[i])
-		unit, _ := h.RecipeService.QuantityUnitRepository.GetOrCreate(quantityUnits[i])
+		ingredient, _ := h.RecipeService.UnitOfWork.IngredientRepository.GetOrCreate(ingredients[i])
+		unit, _ := h.RecipeService.UnitOfWork.QuantityUnitRepository.GetOrCreate(quantityUnits[i])
 
-		h.RecipeService.RecipeIngredientRepository.Create(recipe.ID, ingredient.ID, unit.ID, quantities[i])
+		h.RecipeService.UnitOfWork.RecipeIngredientRepository.Create(recipe.ID, ingredient.ID, unit.ID, quantities[i])
 	}
 
 	if err != nil {

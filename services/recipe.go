@@ -4,28 +4,41 @@ import (
 	"log/slog"
 
 	"github.com/mbacalan/bowl/repositories"
+	"gorm.io/gorm"
 )
 
 type RecipeService struct {
-	Log                        *slog.Logger
-	RecipeRepository           *db.RecipeRepository
-	RecipeIngredientRepository *db.RecipeIngredientRepository
-	IngredientRepository       *db.IngredientRepository
-	QuantityUnitRepository     *db.QuantityUnitRepository
+	Log        *slog.Logger
+	UnitOfWork RecipeUnitOfWork
 }
 
-func NewRecipeService(log *slog.Logger, rs *db.RecipeRepository, rids *db.RecipeIngredientRepository, ids *db.IngredientRepository, qds *db.QuantityUnitRepository) RecipeService {
+type RecipeUnitOfWork struct {
+	db                         *gorm.DB
+	RecipeRepository           *db.RecipeRepository
+	IngredientRepository       *db.IngredientRepository
+	QuantityUnitRepository     *db.QuantityUnitRepository
+	RecipeIngredientRepository *db.RecipeIngredientRepository
+}
+
+func NewRecipeUOW(database *gorm.DB) RecipeUnitOfWork {
+	return RecipeUnitOfWork{
+		db:                         database,
+		RecipeRepository:           db.NewRecipeRepository(database, "recipes"),
+		IngredientRepository:       db.NewIngredientRepository(database, "ingredients"),
+		QuantityUnitRepository:     db.NewQuantityUnitRepository(database, "quantity_units"),
+		RecipeIngredientRepository: db.NewRecipeIngredientRepository(database, "recipe_ingredients"),
+	}
+}
+
+func NewRecipeService(log *slog.Logger, uow RecipeUnitOfWork) RecipeService {
 	return RecipeService{
-		Log:                        log,
-		RecipeRepository:           rs,
-		RecipeIngredientRepository: rids,
-		IngredientRepository:       ids,
-		QuantityUnitRepository:     qds,
+		Log:        log,
+		UnitOfWork: uow,
 	}
 }
 
 func (s *RecipeService) Get(id int) (recipe db.Recipe, error error) {
-	result, err := s.RecipeRepository.GetRecipe(id)
+	result, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
 
 	if err != nil {
 		s.Log.Error("Error getting recipe", err)
@@ -36,7 +49,7 @@ func (s *RecipeService) Get(id int) (recipe db.Recipe, error error) {
 }
 
 func (s *RecipeService) GetAll() (recipes []db.Recipe, error error) {
-	result, err := s.RecipeRepository.GetAllRecipes()
+	result, err := s.UnitOfWork.RecipeRepository.GetAllRecipes()
 
 	if err != nil {
 		s.Log.Error("Error getting all recipes", err)
@@ -47,7 +60,7 @@ func (s *RecipeService) GetAll() (recipes []db.Recipe, error error) {
 }
 
 func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) {
-	result, err := s.RecipeRepository.GetRecentRecipes(limit)
+	result, err := s.UnitOfWork.RecipeRepository.GetRecentRecipes(limit)
 
 	if err != nil {
 		s.Log.Error("Error getting recent recipes", err)
@@ -58,7 +71,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) 
 }
 
 func (s *RecipeService) Create(r db.Recipe) (recipe db.Recipe, error error) {
-	result, err := s.RecipeRepository.CreateRecipe(r)
+	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(r)
 
 	if err != nil {
 		s.Log.Error("Error creating recipe", err)
