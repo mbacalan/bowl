@@ -4,26 +4,28 @@ window.onload = () => {
 
   addIngredientButton.addEventListener("click", () => {
     ingredients.insertAdjacentHTML("beforeend", `
-        <input
-          type="text"
-          name="ingredient"
-          placeholder="Ingredient"
-          required
-        />
+        <div class="input-group">
+          <input
+            type="text"
+            name="ingredient"
+            placeholder="Ingredient"
+            required
+          />
 
-        <input
-          type="text"
-          name="quantity"
-          placeholder="Quantity"
-          required
-        />
+          <input
+            type="text"
+            name="quantity"
+            placeholder="Quantity"
+            required
+          />
 
-        <select
-          id="quantity-unit"
-          name="quantity-unit"
-          hx-get="/quantity-units"
-          hx-trigger="load"
-        />
+          <select
+            id="quantity-unit"
+            name="quantity-unit"
+            hx-get="/quantity-units"
+            hx-trigger="load"
+          />
+        </div>
     `)
 
     htmx.process(ingredients)
@@ -34,12 +36,14 @@ window.onload = () => {
 
   addStepButton.addEventListener("click", () => {
     steps.insertAdjacentHTML("beforeend", `
-      <input
-        type="text"
-        name="step"
-        placeholder="Step"
-        required
-      />
+      <div class="input-group">
+        <input
+          type="text"
+          name="step"
+          placeholder="Step"
+          required
+        />
+      </div>
     `)
 
     htmx.process(steps)

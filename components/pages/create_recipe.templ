@@ -21,55 +21,63 @@ templ CreateRecipe() {
 			>
 				<h2>Create Recipe</h2>
 
-				<label for="name">Name</label>
-				<input
-					type="text"
-					name="name"
-					placeholder="Recipe Name"
-					required
-				/>
-
-				<div hx-disinherit="*" class="bordered">
+				<div hx-disinherit="*">
+					<h6>Name</h6>
+					<input
+						type="text"
+						name="name"
+						placeholder="Recipe Name"
+						required
+					/>
 					<h6>Ingredients</h6>
 					<div id="ingredients">
-						<input
-							type="text"
-							name="ingredient"
-							placeholder="Ingredient"
-							required
-						/>
+						<div class="input-group">
+							<input
+								type="text"
+								name="ingredient"
+								placeholder="Ingredient"
+								required
+							/>
 
-						<input
-							type="text"
-							name="quantity"
-							placeholder="Quantity"
-							required
-						/>
+							<input
+								type="text"
+								name="quantity"
+								placeholder="Quantity"
+								required
+							/>
 
-						<select
-							id="quantity-unit"
-							name="quantity-unit"
-							hx-get="/quantity-units"
-							hx-trigger="load"
-						/>
-
-						<button type="button" id="add-ingredient">Add</button>
+							<select
+								id="quantity-unit"
+								name="quantity-unit"
+								hx-get="/quantity-units"
+								hx-trigger="load"
+								required
+							/>
+						</div>
 					</div>
+
+					<button type="button" id="add-ingredient" class="form-button">
+						+ Ingredient
+					</button>
 
 					<h6>Steps</h6>
 					<div id="steps">
-						<input
-							type="text"
-							name="step"
-							placeholder="Step"
-							required
-						/>
-
-						<button type="button" id="add-step">Add</button>
+						<div class="input-group">
+							<input
+								type="text"
+								name="step"
+								placeholder="Step"
+								required
+							/>
+						</div>
 					</div>
+
+					<button type="button" id="add-step" class="form-button">
+						+ Step
+					</button>
 				</div>
 
-				<button type="submit">Submit</button>
+				<button type="submit" class="form-button form-button-submit">Submit</button>
 			</form>
 		}
 	</html>

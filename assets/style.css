@@ -15,12 +15,34 @@ main {
   justify-content: space-between;
 }
 
-.bordered {
+form {
   border: 1px solid var(--fbc-gray-20);
   border-radius: 8px;
   padding: 8px;
 }
 
-.table-input {
+form h6 {
+  margin-top: 1.5rem;
+}
+
+form h2 {
+  margin-top: 1.5rem;
+}
+
+.form-button {
   width: 100%;
+}
+
+.form-button-submit {
+  margin-top: 1.5rem;
+}
+
+.input-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+
+  input {
+    width: 100%;
+  }
 }

@@ -3,7 +3,7 @@ package pages
 import "github.com/mbacalan/bowl/repositories"
 
 templ QuantityUnits(units []db.QuantityUnit) {
-	<option selected disabled>Select</option>
+	<option selected disabled value="">Select</option>
 	for _, unit := range units {
 		<option>
 			{ unit.Unit }
