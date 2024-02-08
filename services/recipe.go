@@ -21,6 +21,14 @@ type RecipeUnitOfWork struct {
 	StepRepository             *db.StepRepository
 }
 
+type RecipeData struct {
+	Name          string
+	Steps         []string
+	Ingredients   []string
+	Quantities    []string
+	QuantityUnits []string
+}
+
 func NewRecipeUOW(database *gorm.DB) RecipeUnitOfWork {
 	return RecipeUnitOfWork{
 		db:                         database,
@@ -72,15 +80,15 @@ func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) 
 	return result, nil
 }
 
-func (s *RecipeService) Create(name string, steps []string, ingredients []string, quantities []string, quantityUnits []string) (recipe db.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(name)
+func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) {
+	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name)
 
-	for i := range ingredients {
-		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(ingredients[i])
-		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(quantityUnits[i])
+	for i := range data.Ingredients {
+		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(data.Ingredients[i])
+		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(data.QuantityUnits[i])
 
-		s.UnitOfWork.RecipeIngredientRepository.Create(result.ID, ingredient.ID, unit.ID, quantities[i])
-		s.UnitOfWork.StepRepository.Create(steps[i], result.ID)
+		s.UnitOfWork.RecipeIngredientRepository.Create(result.ID, ingredient.ID, unit.ID, data.Quantities[i])
+		s.UnitOfWork.StepRepository.Create(data.Steps[i], result.ID)
 	}
 
 	if err != nil {

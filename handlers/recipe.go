@@ -56,7 +56,13 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
 
-	recipe, err := h.RecipeService.Create(name, steps, ingredients, quantities, quantityUnits)
+	recipe, err := h.RecipeService.Create(services.RecipeData{
+		Name:          name,
+		Steps:         steps,
+		Ingredients:   ingredients,
+		Quantities:    quantities,
+		QuantityUnits: quantityUnits,
+	})
 
 	if err != nil {
 		h.Log.Error("", err)
