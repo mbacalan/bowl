@@ -51,6 +51,8 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	name := r.Form.Get("name")
+	prepDuration, _ := strconv.ParseUint(r.Form.Get("prep-duration"), 10, 32)
+	cookDuration, _ := strconv.ParseUint(r.Form.Get("cook-duration"), 10, 32)
 	steps := r.Form["step"]
 	ingredients := r.Form["ingredient"]
 	quantities := r.Form["quantity"]
@@ -58,6 +60,8 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	recipe, err := h.RecipeService.Create(services.RecipeData{
 		Name:          name,
+		PrepDuration:  uint(prepDuration),
+		CookDuration:  uint(cookDuration),
 		Steps:         steps,
 		Ingredients:   ingredients,
 		Quantities:    quantities,

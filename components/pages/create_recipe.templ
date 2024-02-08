@@ -75,6 +75,28 @@ templ CreateRecipe() {
 					<button type="button" id="add-step" class="form-button">
 						+ Step
 					</button>
+
+					<div class="input-group">
+						<label for="prep-duration">Preperation Duration</label>
+						<input
+							type="number"
+							id="prep-duration"
+							name="prep-duration"
+							placeholder="In minutes"
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label for="cook-duration">Cooking Duration</label>
+						<input
+							type="number"
+							id="cook-duration"
+							name="cook-duration"
+							placeholder="In minutes"
+							required
+						/>
+					</div>
 				</div>
 
 				<button type="submit" class="form-button form-button-submit">Submit</button>

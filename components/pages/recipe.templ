@@ -7,14 +7,17 @@ import (
 )
 
 templ Recipe(recipe db.Recipe) {
-	<article data-swap="recipe" id={ strconv.FormatUint(uint64(recipe.ID), 10) }>
+	<article data-swap="recipe" id={ toString(recipe.ID) }>
 		<h2>{ recipe.Name }</h2>
+		<p>Prep: { toString(recipe.PrepDuration) }min - Cooking: { toString(recipe.CookDuration) }min</p>
+
 		<h3>Ingredients</h3>
 		<ul>
 			for _, ingredient := range recipe.RecipeIngredients {
 				<li>{ ingredient.Ingredient.Name } - { ingredient.Quantity }, { ingredient.QuantityUnit.Unit }</li>
 			}
 		</ul>
+
 		<h3>Steps</h3>
 		<ol>
 			for _, step := range recipe.Steps {

@@ -11,7 +11,8 @@ type Recipe struct {
 	Steps             []Step
 	// Rating      uint
 	// Difficulty  uint
-	// Duration    uint
+	PrepDuration uint
+	CookDuration uint
 	// Categories  []Category
 	// WwPoints    uint `gorm:"column:ww_points"`
 	// Language    string
@@ -32,8 +33,13 @@ func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	return repository
 }
 
-func (s RecipeRepository) CreateRecipe(name string) (r Recipe, err error) {
-	entry := Recipe{Name: name}
+func (s RecipeRepository) CreateRecipe(name string, prep uint, cook uint) (r Recipe, err error) {
+	entry := Recipe{
+		Name:         name,
+		PrepDuration: prep,
+		CookDuration: cook,
+	}
+
 	result := s.DB.Create(&entry)
 
 	if result.Error != nil {

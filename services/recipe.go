@@ -27,6 +27,8 @@ type RecipeData struct {
 	Ingredients   []string
 	Quantities    []string
 	QuantityUnits []string
+	PrepDuration  uint
+	CookDuration  uint
 }
 
 func NewRecipeUOW(database *gorm.DB) RecipeUnitOfWork {
@@ -81,7 +83,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) 
 }
 
 func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name)
+	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
 
 	for i := range data.Ingredients {
 		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(data.Ingredients[i])
