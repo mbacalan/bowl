@@ -21,11 +21,11 @@ form {
   padding: 8px;
 }
 
-form h6 {
+form h2 {
   margin-top: 1.5rem;
 }
 
-form h2 {
+form h6 {
   margin-top: 1.5rem;
 }
 
@@ -42,7 +42,7 @@ form h2 {
   justify-content: space-between;
   gap: 8px;
 
-  input {
+  label, input {
     width: 100%;
   }
 }

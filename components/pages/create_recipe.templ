@@ -11,6 +11,8 @@ templ CreateRecipe() {
 			<script src="/assets/create-recipe.js"></script>
 		}
 		@partials.Body() {
+			<h2>Create Recipe</h2>
+
 			<form
 				id="recipe-form"
 				action="/recipes"
@@ -19,17 +21,20 @@ templ CreateRecipe() {
 				hx-swap="outerHTML"
 				hx-select="[data-swap='recipe']"
 			>
-				<h2>Create Recipe</h2>
-
 				<div hx-disinherit="*">
-					<h6>Name</h6>
-					<input
-						type="text"
-						name="name"
-						placeholder="Recipe Name"
-						required
-					/>
-					<h6>Ingredients</h6>
+					<div class="input-group">
+						<label for="name">Name</label>
+						<input
+							type="text"
+							name="name"
+							placeholder="Recipe Name"
+							required
+						/>
+					</div>
+
+					<hr />
+
+					<label>Ingredients</label>
 					<div id="ingredients">
 						<div class="input-group">
 							<input
@@ -53,6 +58,8 @@ templ CreateRecipe() {
 								hx-trigger="load"
 								required
 							/>
+
+							<p>X</p>
 						</div>
 					</div>
 
@@ -60,7 +67,9 @@ templ CreateRecipe() {
 						+ Ingredient
 					</button>
 
-					<h6>Steps</h6>
+					<hr />
+
+					<label>Steps</label>
 					<div id="steps">
 						<div class="input-group">
 							<input
@@ -75,6 +84,8 @@ templ CreateRecipe() {
 					<button type="button" id="add-step" class="form-button">
 						+ Step
 					</button>
+
+					<hr />
 
 					<div class="input-group">
 						<label for="prep-duration">Preperation Duration</label>
@@ -98,6 +109,8 @@ templ CreateRecipe() {
 						/>
 					</div>
 				</div>
+				
+				<hr />
 
 				<button type="submit" class="form-button form-button-submit">Submit</button>
 			</form>
