@@ -85,17 +85,22 @@ func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) 
 func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
 
+	if err != nil {
+		s.Log.Error("Error creating recipe", err)
+		return result, err
+	}
+
 	for i := range data.Ingredients {
 		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(data.Ingredients[i])
 		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(data.QuantityUnits[i])
 
 		s.UnitOfWork.RecipeIngredientRepository.Create(result.ID, ingredient.ID, unit.ID, data.Quantities[i])
+	}
+
+	for i := range data.Steps {
 		s.UnitOfWork.StepRepository.Create(data.Steps[i], result.ID)
 	}
 
-	if err != nil {
-		s.Log.Error("Error creating recipe", err)
-		return result, err
 	}
 
 	return result, nil
