@@ -19,6 +19,7 @@ type RecipeUnitOfWork struct {
 	QuantityUnitRepository     *db.QuantityUnitRepository
 	RecipeIngredientRepository *db.RecipeIngredientRepository
 	StepRepository             *db.StepRepository
+	CategoryRepository         *db.CategoryRepository
 }
 
 type RecipeData struct {
@@ -27,6 +28,7 @@ type RecipeData struct {
 	Ingredients   []string
 	Quantities    []string
 	QuantityUnits []string
+	Categories    []string
 	PrepDuration  uint
 	CookDuration  uint
 }
@@ -39,6 +41,7 @@ func NewRecipeUOW(database *gorm.DB) RecipeUnitOfWork {
 		QuantityUnitRepository:     db.NewQuantityUnitRepository(database, "quantity_units"),
 		RecipeIngredientRepository: db.NewRecipeIngredientRepository(database, "recipe_ingredients"),
 		StepRepository:             db.NewStepRepository(database, "steps"),
+		CategoryRepository:         db.NewCategoryRepository(database, "categories"),
 	}
 }
 
@@ -101,6 +104,8 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 		s.UnitOfWork.StepRepository.Create(data.Steps[i], result.ID)
 	}
 
+	for i := range data.Categories {
+		s.UnitOfWork.CategoryRepository.Create(data.Categories[i], result.ID)
 	}
 
 	return result, nil

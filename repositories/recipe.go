@@ -9,11 +9,11 @@ type Recipe struct {
 	Name              string
 	RecipeIngredients []RecipeIngredient
 	Steps             []Step
+	PrepDuration      uint
+	CookDuration      uint
+	Categories        []Category
 	// Rating      uint
 	// Difficulty  uint
-	PrepDuration uint
-	CookDuration uint
-	// Categories  []Category
 	// WwPoints    uint `gorm:"column:ww_points"`
 	// Language    string
 	// Comments    []string
@@ -55,6 +55,7 @@ func (s RecipeRepository) GetRecipe(id int) (Recipe, error) {
 		Preload("RecipeIngredients.Ingredient").
 		Preload("RecipeIngredients.QuantityUnit").
 		Preload("Steps").
+		Preload("Categories").
 		First(&recipe, id).Error
 
 	if err != nil {

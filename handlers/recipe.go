@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
@@ -54,6 +55,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	prepDuration, _ := strconv.ParseUint(r.Form.Get("prep-duration"), 10, 32)
 	cookDuration, _ := strconv.ParseUint(r.Form.Get("cook-duration"), 10, 32)
 	steps := r.Form["step"]
+	categories := r.Form.Get("categories")
 	ingredients := r.Form["ingredient"]
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
@@ -63,6 +65,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 		PrepDuration:  uint(prepDuration),
 		CookDuration:  uint(cookDuration),
 		Steps:         steps,
+		Categories:    strings.Split(categories, ", "),
 		Ingredients:   ingredients,
 		Quantities:    quantities,
 		QuantityUnits: quantityUnits,
