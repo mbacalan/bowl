@@ -3,7 +3,6 @@ package pages
 import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/repositories"
-	"strconv"
 )
 
 templ Recipe(recipe db.Recipe) {
@@ -43,7 +42,7 @@ templ RecipeList(recipes []db.Recipe) {
 	<ul>
 		for _, recipe := range recipes {
 			<li>
-				<a href={ "/recipes/" + templ.URL(strconv.FormatUint(uint64(recipe.ID), 10)) }>
+				<a href={ "/recipes/" + templ.URL(toString(recipe.ID)) }>
 					{ recipe.Name }
 				</a>
 			</li>
