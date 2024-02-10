@@ -49,12 +49,16 @@ func (s RecipeRepository) CreateRecipe(name string, prep uint, cook uint) (r Rec
 	return entry, nil
 }
 
-func (s RecipeRepository) GetRecipe(id int) (r Recipe, err error) {
+func (s RecipeRepository) GetRecipe(id int) (Recipe, error) {
 	var recipe Recipe
-	result := s.DB.Model(&Recipe{}).Preload("RecipeIngredients").Preload("RecipeIngredients.Ingredient").Preload("RecipeIngredients.QuantityUnit").Preload("Steps").Find(&recipe, id)
+	err := s.DB.Preload("RecipeIngredients").
+		Preload("RecipeIngredients.Ingredient").
+		Preload("RecipeIngredients.QuantityUnit").
+		Preload("Steps").
+		First(&recipe, id).Error
 
-	if result.Error != nil {
-		return Recipe{}, result.Error
+	if err != nil {
+		return Recipe{}, err
 	}
 
 	return recipe, nil
