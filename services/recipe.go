@@ -104,8 +104,10 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 		s.UnitOfWork.StepRepository.Create(data.Steps[i], result.ID)
 	}
 
-	for i := range data.Categories {
-		s.UnitOfWork.CategoryRepository.Create(data.Categories[i], result.ID)
+	if data.Categories[0] != "" {
+		for i := range data.Categories {
+			s.UnitOfWork.CategoryRepository.Create(data.Categories[i], result.ID)
+		}
 	}
 
 	return result, nil
