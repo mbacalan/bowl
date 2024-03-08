@@ -45,3 +45,13 @@ func (s StepRepository) GetAll() (i []Step, err error) {
 
 	return steps, nil
 }
+
+func (s StepRepository) Delete(id uint) (err error) {
+	result := s.db.Delete(&Step{}, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}

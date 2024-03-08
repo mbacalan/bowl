@@ -55,3 +55,13 @@ func (s RecipeIngredientRepository) GetAll() (recipeIngredients []RecipeIngredie
 
 	return entries, nil
 }
+
+func (s RecipeIngredientRepository) Delete(id uint) (err error) {
+	result := s.db.Delete(&RecipeIngredient{}, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}

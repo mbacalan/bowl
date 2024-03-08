@@ -45,3 +45,13 @@ func (s CategoryRepository) GetAll() (i []Category, err error) {
 
 	return categories, nil
 }
+
+func (s CategoryRepository) Delete(id uint) (err error) {
+	result := s.db.Delete(&Category{}, id)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
