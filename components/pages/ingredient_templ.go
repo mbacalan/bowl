@@ -13,12 +13,8 @@ import "bytes"
 import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/repositories"
-	"strconv"
+	"gorm.io/gorm/utils"
 )
-
-func toString(id uint) string {
-	return strconv.FormatUint(uint64(id), 10)
-}
 
 func Ingredient(ingredient db.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
@@ -37,7 +33,7 @@ func Ingredient(ingredient db.Ingredient) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(toString(ingredient.ID)))
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(utils.ToString(ingredient.ID)))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -48,7 +44,7 @@ func Ingredient(ingredient db.Ingredient) templ.Component {
 		var templ_7745c5c3_Var2 string
 		templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ingredient.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/ingredient.templ`, Line: 14, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/ingredient.templ`, Line: 10, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 		if templ_7745c5c3_Err != nil {
@@ -87,7 +83,7 @@ func IngredientList(ingredients []db.Ingredient) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var4 templ.SafeURL = "/ingredients/" + templ.URL(toString(ingredient.ID))
+			var templ_7745c5c3_Var4 templ.SafeURL = "/ingredients/" + templ.URL(utils.ToString(ingredient.ID))
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(string(templ_7745c5c3_Var4)))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -99,7 +95,7 @@ func IngredientList(ingredients []db.Ingredient) templ.Component {
 			var templ_7745c5c3_Var5 string
 			templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(ingredient.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/ingredient.templ`, Line: 23, Col: 22}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/ingredient.templ`, Line: 19, Col: 22}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 			if templ_7745c5c3_Err != nil {

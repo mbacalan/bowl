@@ -3,15 +3,11 @@ package pages
 import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/repositories"
-	"strconv"
+	"gorm.io/gorm/utils"
 )
 
-func toString(id uint) string {
-	return strconv.FormatUint(uint64(id), 10)
-}
-
 templ Ingredient(ingredient db.Ingredient) {
-	<article data-swap="ingredient" id={ toString(ingredient.ID) }>
+	<article data-swap="ingredient" id={ utils.ToString(ingredient.ID) }>
 		<h2>{ ingredient.Name }</h2>
 	</article>
 }
@@ -20,7 +16,7 @@ templ IngredientList(ingredients []db.Ingredient) {
 	<ul>
 		for _, ingredient := range ingredients {
 			<li>
-				<a href={ "/ingredients/" + templ.URL(toString(ingredient.ID)) }>
+				<a href={ "/ingredients/" + templ.URL(utils.ToString(ingredient.ID)) }>
 					{ ingredient.Name }
 				</a>
 			</li>
