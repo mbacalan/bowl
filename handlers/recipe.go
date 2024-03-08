@@ -28,6 +28,8 @@ func (h *RecipeHandler) Routes() chi.Router {
 
 	r.Get("/", h.ViewList)
 	r.Get("/{id}", h.ViewRecipe)
+	r.Get("/{id}/edit", h.Edit)
+	r.Patch("/{id}", h.Update)
 	r.Get("/create", h.Create)
 	r.Post("/create", h.Create)
 
@@ -93,6 +95,51 @@ func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
 	}
 
 	recipes.RecipeDetailPage(recipe).Render(r.Context(), w)
+}
+
+func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(param)
+
+	recipe, err := h.RecipeService.Get(id)
+
+	if err != nil {
+		h.Log.Error("", err)
+		return
+	}
+
+	recipes.EditRecipe(recipe).Render(r.Context(), w)
+}
+
+func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(param)
+
+	r.ParseForm()
+
+	name := r.Form.Get("name")
+	prepDuration, _ := strconv.ParseUint(r.Form.Get("prep-duration"), 10, 32)
+	cookDuration, _ := strconv.ParseUint(r.Form.Get("cook-duration"), 10, 32)
+	steps := r.Form["step"]
+	categories := r.Form.Get("categories")
+	ingredients := r.Form["ingredient"]
+	quantities := r.Form["quantity"]
+	quantityUnits := r.Form["quantity-unit"]
+
+	data := services.RecipeData{
+		Name:          name,
+		PrepDuration:  uint(prepDuration),
+		CookDuration:  uint(cookDuration),
+		Steps:         steps,
+		Categories:    strings.Split(categories, ", "),
+		Ingredients:   ingredients,
+		Quantities:    quantities,
+		QuantityUnits: quantityUnits,
+	}
+
+	w.Header().Set("HX-Push-URL", "/recipes/"+strconv.FormatUint(uint64(id), 10))
+	recipeDetail, _ := h.RecipeService.Update(id, data)
+	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {

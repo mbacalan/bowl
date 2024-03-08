@@ -1,0 +1,158 @@
+package recipes
+
+import (
+	"fmt"
+	"github.com/mbacalan/bowl/components/partials"
+	"github.com/mbacalan/bowl/repositories"
+	"gorm.io/gorm/utils"
+)
+
+func getCategories(categories []db.Category) string {
+	var categoriesString string
+
+	for i, category := range categories {
+		if i == 0 {
+			categoriesString += fmt.Sprintf("%s", category.Category)
+		} else {
+			categoriesString += fmt.Sprintf(", %s", category.Category)
+		}
+	}
+
+	return categoriesString
+}	
+
+templ EditRecipe(recipe db.Recipe) {
+	<!DOCTYPE html>
+	<html lang="en">
+		@partials.Head()
+		@partials.Body() {
+			<form
+				id="recipe-form"
+				action="/recipes"
+				action={ templ.URL("/recipes/" + utils.ToString(recipe.ID)) }
+				method="patch"
+				hx-patch={ string(templ.URL(fmt.Sprintf("/recipes/%d", recipe.ID))) }
+				hx-swap="outerHTML"
+				hx-select="[data-swap='recipe']"
+			>
+				<div hx-disinherit="*">
+					<div class="input-group">
+						<label for="name">Name</label>
+						<input
+							type="text"
+							name="name"
+							placeholder="Recipe Name"
+							value={ recipe.Name }
+							required
+						/>
+					</div>
+
+					<hr />
+
+					<label>Ingredients</label>
+					<div id="ingredients">
+						for _, ingredient := range recipe.RecipeIngredients {
+							<div class="input-group">
+								<input
+									type="text"
+									name="ingredient"
+									placeholder="Ingredient"
+									value={ ingredient.Ingredient.Name }
+									required
+								/>
+
+								<input
+									type="text"
+									name="quantity"
+									placeholder="Quantity"
+									value={ utils.ToString(ingredient.Quantity) }
+									required
+								/>
+
+								<select
+									id="quantity-unit"
+									name="quantity-unit"
+									hx-get="/quantity-units"
+									hx-trigger="load"
+									required
+									selected={ utils.ToString(ingredient.QuantityUnit.Unit) }
+								/>
+
+								<span class="remove remove-ingredient">X</span>
+							</div>
+						}
+					</div>
+
+					<button type="button" id="add-ingredient" class="form-button">
+						+ Ingredient
+					</button>
+
+					<hr />
+
+					<label>Steps</label>
+					<div id="steps">
+						for _, step := range recipe.Steps {
+							<div class="input-group">
+								<input
+									type="text"
+									name="step"
+									placeholder="Step"
+									value={ step.Step }
+									required
+								/>
+
+								<span class="remove remove-step">X</span>
+							</div>
+						}
+					</div>
+
+					<button type="button" id="add-step" class="form-button">
+						+ Step
+					</button>
+
+					<hr />
+
+					<div class="input-group">
+						<label for="prep-duration">Preperation Duration</label>
+						<input
+							type="number"
+							id="prep-duration"
+							name="prep-duration"
+							placeholder="In minutes"
+							value={ utils.ToString(recipe.PrepDuration) }
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label for="cook-duration">Cooking Duration</label>
+						<input
+							type="number"
+							id="cook-duration"
+							name="cook-duration"
+							placeholder="In minutes"
+							value={ utils.ToString(recipe.CookDuration) }
+							required
+						/>
+					</div>
+
+					<div class="input-group">
+						<label for="categories">Categories</label>
+						<input
+							type="text"
+							id="categories"
+							name="categories"
+							placeholder="cat1, cat2"
+							value={ getCategories(recipe.Categories) }
+						/>
+					</div>
+				</div>
+				
+				<hr />
+
+				<button type="submit" class="form-button form-button-submit">Submit</button>
+			</form>
+			<script src="/assets/create-recipe.js"></script>
+		}
+	</html>
+}

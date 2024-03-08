@@ -14,6 +14,14 @@ window.onload = () => {
   const ingredients = document.getElementById("ingredients")
   const addIngredientButton = document.getElementById("add-ingredient")
 
+  document.querySelectorAll(".remove-ingredient").forEach(button => {
+    button.addEventListener("click", removeInputGroup)
+  })
+
+  document.querySelectorAll(".remove-step").forEach(button => {
+    button.addEventListener("click", removeInputGroup)
+  })
+
   addIngredientButton.addEventListener("click", () => {
     ingredients.insertAdjacentHTML("beforeend", `
       <div class="input-group">

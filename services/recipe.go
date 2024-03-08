@@ -112,3 +112,63 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 
 	return result, nil
 }
+
+func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
+	recipe, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
+
+	if err != nil {
+		s.Log.Error("Recipe does not exist", err)
+		return db.Recipe{}, err
+	}
+
+	for i := range recipe.RecipeIngredients {
+		err := s.UnitOfWork.RecipeIngredientRepository.Delete(recipe.RecipeIngredients[i].ID)
+
+		if err != nil {
+			s.Log.Error("Error deleting recipe ingredient", err)
+			return db.Recipe{}, err
+		}
+	}
+
+	for i := range data.Ingredients {
+		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(data.Ingredients[i])
+		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(data.QuantityUnits[i])
+
+		s.UnitOfWork.RecipeIngredientRepository.Create(recipe.ID, ingredient.ID, unit.ID, data.Quantities[i])
+	}
+
+	for i := range recipe.Steps {
+		s.UnitOfWork.StepRepository.Delete(recipe.Steps[i].ID)
+	}
+
+	for i := range data.Steps {
+		s.UnitOfWork.StepRepository.Create(data.Steps[i], recipe.ID)
+	}
+
+	if recipe.Categories != nil {
+		for i := range recipe.Categories {
+			s.UnitOfWork.CategoryRepository.Delete(recipe.Categories[i].ID)
+		}
+	}
+
+	if data.Categories[0] != "" {
+		for i := range data.Categories {
+			s.UnitOfWork.CategoryRepository.Create(data.Categories[i], recipe.ID)
+		}
+	}
+
+	if data.PrepDuration != 0 {
+		recipe.PrepDuration = data.PrepDuration
+	}
+
+	if data.CookDuration != 0 {
+		recipe.CookDuration = data.CookDuration
+	}
+
+	recipe.Name = data.Name
+
+	s.UnitOfWork.db.Save(&recipe)
+	recipe, _ = s.UnitOfWork.RecipeRepository.GetRecipe(id)
+
+	return recipe, nil
+}
