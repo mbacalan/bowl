@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/mbacalan/bowl/components/pages"
+	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/services"
 )
 
@@ -45,7 +45,7 @@ func (h *RecipeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		pages.CreateRecipe().Render(r.Context(), w)
+		recipes.CreateRecipe().Render(r.Context(), w)
 		return
 	}
 
@@ -78,7 +78,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
 	recipeDetail, _ := h.RecipeService.Get(int(recipe.ID))
-	pages.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
+	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
@@ -92,14 +92,14 @@ func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	pages.RecipeDetailPage(recipe).Render(r.Context(), w)
+	recipes.RecipeDetailPage(recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
-	recipes, err := h.RecipeService.GetAll()
+	rs, err := h.RecipeService.GetAll()
 	if err != nil {
 		h.Log.Error("Error listing recipes", err)
 	}
 
-	pages.RecipeListPage(recipes).Render(r.Context(), w)
+	recipes.RecipeListPage(rs).Render(r.Context(), w)
 }
