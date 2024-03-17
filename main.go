@@ -24,6 +24,7 @@ func main() {
 	database := db.NewConnection()
 	ids := db.NewIngredientRepository(database, "ingredients")
 	qds := db.NewQuantityUnitRepository(database, "quantity_units")
+	cds := db.NewCategoryRepository(database, "categories")
 	ruow := services.NewRecipeUOW(database)
 
 	rs := services.NewRecipeService(log, ruow)
@@ -33,10 +34,13 @@ func main() {
 	ih := handlers.NewIngredientHandler(log, is)
 	qs := services.NewQuantityUnitService(log, qds)
 	qh := handlers.NewQuantityUnitHandler(log, qs)
+	cs := services.NewCategoryService(log, cds)
+	ch := handlers.NewCategoryHandler(log, cs)
 
 	r.Mount("/", hh.Routes())
 	r.Mount("/assets", assets.Routes())
 	r.Mount("/recipes", rh.Routes())
+	r.Mount("/categories", ch.Routes())
 	r.Mount("/ingredients", ih.Routes())
 	r.Mount("/quantity-units", qh.Routes())
 

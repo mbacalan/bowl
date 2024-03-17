@@ -1,0 +1,39 @@
+package pages
+
+import (
+	"github.com/mbacalan/bowl/components/shared"
+	"github.com/mbacalan/bowl/repositories"
+	"gorm.io/gorm/utils"
+)
+
+templ Categories(categories []db.Category) {
+	@shared.Page() {
+		<h2>All Categories</h2>
+		<hr/>
+		<ul>
+			for _, category := range categories {
+				<li>
+					<a href={ "/categories/" + templ.URL(utils.ToString(category.ID)) }>
+						{ category.Name }
+					</a>
+				</li>
+			}
+		</ul>
+	}
+}
+
+templ Category(category db.Category) {
+	@shared.Page() {
+		<h2>{ category.Name }</h2>
+		<hr/>
+		<ul>
+			for _, recipe := range category.Recipes {
+				<li>
+					<a href={ "/recipes/" + templ.URL(utils.ToString(recipe.ID)) }>
+						{ recipe.Name }
+					</a>
+				</li>
+			}
+		</ul>
+	}
+}
