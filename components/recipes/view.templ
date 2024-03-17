@@ -34,16 +34,9 @@ templ Recipe(recipe db.Recipe) {
 		</ol>
 
 		if len(recipe.Categories) > 0 {
-			<h3>Categories = { utils.ToString(uint(len(recipe.Categories))) }</h3>
+			<h3>Categories</h3>
 			<p>
-				for i, category := range recipe.Categories {
-					<span>
-						{ category.Category }
-						if i < len(recipe.Categories) - 1 {
-							,
-						}
-					</span>
-				}
+				{ getCategoryList(recipe.Categories) }
 			</p>
 		}
 	</article>
@@ -76,4 +69,17 @@ templ RecipeDetailPage(recipe db.Recipe) {
 	@shared.Page() {
 		@Recipe(recipe)
 	}
+}
+
+func getCategoryList(categories []*db.Category) string {
+	categoryList := ""
+
+	for i, category := range categories {
+		categoryList += category.Name
+		if i < len(categories) - 1 {
+			categoryList += ", "
+		}
+	}
+
+	return categoryList
 }
