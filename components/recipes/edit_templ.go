@@ -17,14 +17,14 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-func getCategories(categories []db.Category) string {
+func getCategories(categories []*db.Category) string {
 	var categoriesString string
 
 	for i, category := range categories {
 		if i == 0 {
-			categoriesString += fmt.Sprintf("%s", category.Category)
+			categoriesString += fmt.Sprintf("%s", category.Name)
 		} else {
-			categoriesString += fmt.Sprintf(", %s", category.Category)
+			categoriesString += fmt.Sprintf(", %s", category.Name)
 		}
 	}
 

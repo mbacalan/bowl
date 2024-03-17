@@ -11,7 +11,7 @@ type Recipe struct {
 	Steps             []Step
 	PrepDuration      uint
 	CookDuration      uint
-	Categories        []Category
+	Categories        []*Category `gorm:"many2many:recipe_categories;"`
 	// Rating      uint
 	// Difficulty  uint
 	// WwPoints    uint `gorm:"column:ww_points"`

@@ -106,7 +106,12 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 
 	if data.Categories[0] != "" {
 		for i := range data.Categories {
-			s.UnitOfWork.CategoryRepository.Create(data.Categories[i], result.ID)
+			var category db.Category
+			error := s.UnitOfWork.db.Find(&category, "name = ?", data.Categories[i]).Error
+
+			if error == nil {
+				s.UnitOfWork.db.Model(&result).Association("Categories").Append(&db.Category{Name: data.Categories[i]})
+			}
 		}
 	}
 
@@ -153,7 +158,12 @@ func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
 
 	if data.Categories[0] != "" {
 		for i := range data.Categories {
-			s.UnitOfWork.CategoryRepository.Create(data.Categories[i], recipe.ID)
+			var category db.Category
+			error := s.UnitOfWork.db.Find(&category, "name = ?", data.Categories[i]).Error
+
+			if error == nil {
+				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&db.Category{Name: data.Categories[i]})
+			}
 		}
 	}
 

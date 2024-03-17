@@ -6,27 +6,38 @@ import (
 
 type Category struct {
 	gorm.Model
-	RecipeID uint
-	Category string
+	Name    string
+	Recipes []*Recipe `gorm:"many2many:recipe_categories;"`
 }
 
 type CategoryRepository struct {
-	db        *gorm.DB
-	tableName string
+	db    *gorm.DB
+	table string
 }
 
-func NewCategoryRepository(db *gorm.DB, tableName string) *CategoryRepository {
+func NewCategoryRepository(db *gorm.DB, table string) *CategoryRepository {
 	repository := &CategoryRepository{
-		tableName: tableName,
-		db:        db,
+		table: table,
+		db:    db,
 	}
 
 	return repository
 }
 
-func (s CategoryRepository) Create(category string, recipe uint) (i Category, err error) {
-	entry := Category{Category: category, RecipeID: recipe}
-	result := s.db.Create(&entry)
+func (s CategoryRepository) Get(id int) (Category, error) {
+	var category Category
+	result := s.db.Preload("Recipes").Find(&category, id)
+
+	if result.Error != nil {
+		return Category{}, result.Error
+	}
+
+	return category, nil
+}
+
+func (s CategoryRepository) GetOrCreate(category string, recipe uint) (Category, error) {
+	var entry Category
+	result := s.db.FirstOrCreate(&entry, Category{Name: category})
 
 	if result.Error != nil {
 		return Category{}, result.Error
@@ -35,18 +46,15 @@ func (s CategoryRepository) Create(category string, recipe uint) (i Category, er
 	return entry, nil
 }
 
-func (s CategoryRepository) GetAll() (i []Category, err error) {
+func (s CategoryRepository) GetAll() ([]Category, error) {
 	var categories []Category
-	result := s.db.Find(&categories)
 
-	if result.Error != nil {
-		return []Category{}, result.Error
-	}
+	error := s.db.Preload("Recipes").Find(&categories).Error
 
-	return categories, nil
+	return categories, error
 }
 
-func (s CategoryRepository) Delete(id uint) (err error) {
+func (s CategoryRepository) Delete(id uint) error {
 	result := s.db.Delete(&Category{}, id)
 
 	if result.Error != nil {
