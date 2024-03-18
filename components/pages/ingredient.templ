@@ -13,6 +13,8 @@ templ Ingredient(ingredient db.Ingredient) {
 }
 
 templ IngredientList(ingredients []db.Ingredient) {
+	<h2>All Ingredients</h2>
+	<hr/>
 	<ul>
 		for _, ingredient := range ingredients {
 			<li>
