@@ -105,12 +105,12 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 	}
 
 	if data.Categories[0] != "" {
-		for i := range data.Categories {
+		for _, categoryName := range data.Categories {
 			var category db.Category
-			error := s.UnitOfWork.db.Find(&category, "name = ?", data.Categories[i]).Error
+			error := s.UnitOfWork.db.FirstOrCreate(&category, db.Category{Name: categoryName}).Error
 
 			if error == nil {
-				s.UnitOfWork.db.Model(&result).Association("Categories").Append(&db.Category{Name: data.Categories[i]})
+				s.UnitOfWork.db.Model(&result).Association("Categories").Append(&category)
 			}
 		}
 	}
