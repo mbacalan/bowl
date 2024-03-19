@@ -87,12 +87,12 @@ func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) 
 	return result, nil
 }
 
-func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
+func (s *RecipeService) Create(data RecipeData) (db.Recipe, error) {
+	recipe, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
 
 	if err != nil {
 		s.Log.Error("Error creating recipe", err)
-		return result, err
+		return recipe, err
 	}
 
 	s.createRecipeIngredients(recipe.ID, data.Ingredients, data.Quantities, data.QuantityUnits)
@@ -104,12 +104,12 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 			error := s.UnitOfWork.db.FirstOrCreate(&category, db.Category{Name: cases.Title(language.English).String(categoryName)}).Error
 
 			if error == nil {
-				s.UnitOfWork.db.Model(&result).Association("Categories").Append(&category)
+				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&category)
 			}
 		}
 	}
 
-	return result, nil
+	return recipe, nil
 }
 
 func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
@@ -181,6 +181,6 @@ func (s *RecipeService) createRecipeIngredients(recipeID uint, ingredients []str
 
 func (s *RecipeService) createSteps(recipeID uint, steps []string) {
 	for i := range steps {
-		s.UnitOfWork.StepRepository.Create(cases.Title(language.English).String(steps[i]), recipeID)
+		s.UnitOfWork.StepRepository.Create(steps[i], recipeID)
 	}
 }
