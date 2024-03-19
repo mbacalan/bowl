@@ -50,8 +50,6 @@ templ Recipe(recipe db.Recipe) {
 }
 
 templ RecipeList(recipes []db.Recipe) {
-	<h2>All Recipes</h2>
-	<hr/>
 	<ul>
 		for _, recipe := range recipes {
 			<li>
@@ -73,6 +71,8 @@ templ RecipeListPage(recipes []db.Recipe) {
 			<h2>No recipes found :(</h2>
 			<p>Why don't you <a href="/recipes/create">create one</a>?</p>
 		} else {
+			<h2>All Recipes</h2>
+			<hr/>
 			@RecipeList(recipes)
 		}
 	}
