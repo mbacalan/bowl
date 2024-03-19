@@ -1,3 +1,9 @@
+@font-face {
+  font-family: 'HedvigLetters';
+  font-style: 'normal';
+  src: url('/assets/HedvigLettersSerif-Regular-Variable.ttf') format('truetype');
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -7,6 +13,10 @@ body {
 
 main {
   flex: 1;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'HedvigLetters';
 }
 
 .header {
