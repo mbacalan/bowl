@@ -19,14 +19,14 @@ form {
   border: 1px solid var(--fbc-gray-20);
   border-radius: 8px;
   padding: 8px;
-}
 
-form h2 {
-  margin-top: 1.5rem;
-}
+  & h2 {
+    margin-top: 1.5rem;
+  }
 
-form h6 {
-  margin-top: 1.5rem;
+  & h6 {
+    margin-top: 1.5rem;
+  }
 }
 
 .form-button {
