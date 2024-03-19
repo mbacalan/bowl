@@ -1,6 +1,8 @@
 package handlers
 
 import (
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"log/slog"
 	"net/http"
 	"strconv"
@@ -63,7 +65,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	quantityUnits := r.Form["quantity-unit"]
 
 	recipe, err := h.RecipeService.Create(services.RecipeData{
-		Name:          name,
+		Name:          cases.Title(language.English).String(name),
 		PrepDuration:  uint(prepDuration),
 		CookDuration:  uint(cookDuration),
 		Steps:         steps,

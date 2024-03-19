@@ -4,6 +4,8 @@ import (
 	"log/slog"
 
 	"github.com/mbacalan/bowl/repositories"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"gorm.io/gorm"
 )
 
@@ -93,21 +95,13 @@ func (s *RecipeService) Create(data RecipeData) (recipe db.Recipe, error error) 
 		return result, err
 	}
 
-	for i := range data.Ingredients {
-		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(data.Ingredients[i])
-		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(data.QuantityUnits[i])
-
-		s.UnitOfWork.RecipeIngredientRepository.Create(result.ID, ingredient.ID, unit.ID, data.Quantities[i])
-	}
-
-	for i := range data.Steps {
-		s.UnitOfWork.StepRepository.Create(data.Steps[i], result.ID)
-	}
+	s.createRecipeIngredients(recipe.ID, data.Ingredients, data.Quantities, data.QuantityUnits)
+	s.createSteps(recipe.ID, data.Steps)
 
 	if data.Categories[0] != "" {
 		for _, categoryName := range data.Categories {
 			var category db.Category
-			error := s.UnitOfWork.db.FirstOrCreate(&category, db.Category{Name: categoryName}).Error
+			error := s.UnitOfWork.db.FirstOrCreate(&category, db.Category{Name: cases.Title(language.English).String(categoryName)}).Error
 
 			if error == nil {
 				s.UnitOfWork.db.Model(&result).Association("Categories").Append(&category)
@@ -135,20 +129,13 @@ func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
 		}
 	}
 
-	for i := range data.Ingredients {
-		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(data.Ingredients[i])
-		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(data.QuantityUnits[i])
-
-		s.UnitOfWork.RecipeIngredientRepository.Create(recipe.ID, ingredient.ID, unit.ID, data.Quantities[i])
-	}
+	s.createRecipeIngredients(recipe.ID, data.Ingredients, data.Quantities, data.QuantityUnits)
 
 	for i := range recipe.Steps {
 		s.UnitOfWork.StepRepository.Delete(recipe.Steps[i].ID)
 	}
 
-	for i := range data.Steps {
-		s.UnitOfWork.StepRepository.Create(data.Steps[i], recipe.ID)
-	}
+	s.createSteps(recipe.ID, data.Steps)
 
 	if recipe.Categories != nil {
 		for i := range recipe.Categories {
@@ -162,7 +149,7 @@ func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
 			error := s.UnitOfWork.db.Find(&category, "name = ?", data.Categories[i]).Error
 
 			if error == nil {
-				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&db.Category{Name: data.Categories[i]})
+				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&db.Category{Name: cases.Title(language.English).String(data.Categories[i])})
 			}
 		}
 	}
@@ -181,4 +168,19 @@ func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
 	recipe, _ = s.UnitOfWork.RecipeRepository.GetRecipe(id)
 
 	return recipe, nil
+}
+
+func (s *RecipeService) createRecipeIngredients(recipeID uint, ingredients []string, quantities []string, quantityUnits []string) {
+	for i := range ingredients {
+		ingredient, _ := s.UnitOfWork.IngredientRepository.GetOrCreate(cases.Title(language.English).String(ingredients[i]))
+		unit, _ := s.UnitOfWork.QuantityUnitRepository.GetOrCreate(quantityUnits[i])
+
+		s.UnitOfWork.RecipeIngredientRepository.Create(recipeID, ingredient.ID, unit.ID, quantities[i])
+	}
+}
+
+func (s *RecipeService) createSteps(recipeID uint, steps []string) {
+	for i := range steps {
+		s.UnitOfWork.StepRepository.Create(cases.Title(language.English).String(steps[i]), recipeID)
+	}
 }
