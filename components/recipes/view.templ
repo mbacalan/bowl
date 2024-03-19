@@ -50,12 +50,18 @@ templ Recipe(recipe db.Recipe) {
 }
 
 templ RecipeList(recipes []db.Recipe) {
+	<h2>All Recipes</h2>
+	<hr/>
 	<ul>
 		for _, recipe := range recipes {
 			<li>
 				<a href={ "/recipes/" + templ.URL(utils.ToString(recipe.ID)) }>
 					{ recipe.Name }
 				</a>
+				-
+				<span>
+					Prep: { utils.ToString(recipe.PrepDuration) }min - Cooking: { utils.ToString(recipe.CookDuration) }min
+				</span>
 			</li>
 		}
 	</ul>
