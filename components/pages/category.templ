@@ -6,7 +6,7 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-templ Categories(categories []db.Category) {
+templ Categories(categories []repositories.Category) {
 	@shared.Page() {
 		<h2>All Categories</h2>
 		<hr/>
@@ -22,7 +22,7 @@ templ Categories(categories []db.Category) {
 	}
 }
 
-templ Category(category db.Category) {
+templ Category(category repositories.Category) {
 	@shared.Page() {
 		<h2>{ category.Name }</h2>
 		<hr/>

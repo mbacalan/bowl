@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-templ Recipe(recipe db.Recipe) {
+templ Recipe(recipe repositories.Recipe) {
 	<article data-swap="recipe" id={ utils.ToString(recipe.ID) }>
 		<div class="recipe-header">
 			<h2>{ recipe.Name }</h2>
@@ -49,7 +49,7 @@ templ Recipe(recipe db.Recipe) {
 	</article>
 }
 
-templ RecipeList(recipes []db.Recipe) {
+templ RecipeList(recipes []repositories.Recipe) {
 	<ul>
 		for _, recipe := range recipes {
 			<li>
@@ -65,7 +65,7 @@ templ RecipeList(recipes []db.Recipe) {
 	</ul>
 }
 
-templ RecipeListPage(recipes []db.Recipe) {
+templ RecipeListPage(recipes []repositories.Recipe) {
 	@shared.Page() {
 		if len(recipes) == 0 {
 			<h2>No recipes found :(</h2>
@@ -78,7 +78,7 @@ templ RecipeListPage(recipes []db.Recipe) {
 	}
 }
 
-templ RecipeDetailPage(recipe db.Recipe) {
+templ RecipeDetailPage(recipe repositories.Recipe) {
 	@shared.Page() {
 		@Recipe(recipe)
 	}

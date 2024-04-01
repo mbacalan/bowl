@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-func Categories(categories []db.Category) templ.Component {
+func Categories(categories []repositories.Category) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -87,7 +87,7 @@ func Categories(categories []db.Category) templ.Component {
 	})
 }
 
-func Category(category db.Category) templ.Component {
+func Category(category repositories.Category) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-func getCategories(categories []*db.Category) string {
+func getCategories(categories []*repositories.Category) string {
 	var categoriesString string
 
 	for i, category := range categories {
@@ -21,7 +21,7 @@ func getCategories(categories []*db.Category) string {
 	return categoriesString
 }	
 
-templ EditRecipe(recipe db.Recipe) {
+templ EditRecipe(recipe repositories.Recipe) {
 	<!DOCTYPE html>
 	<html lang="en">
 		@partials.Head()

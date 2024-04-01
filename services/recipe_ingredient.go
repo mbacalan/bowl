@@ -8,14 +8,14 @@ import (
 
 type RecipeIngredientService struct {
 	Log             *slog.Logger
-	IngredientStore *db.RecipeIngredientRepository
+	IngredientStore *repositories.RecipeIngredientRepository
 }
 
-func NewRecipeIngredientService(log *slog.Logger, rs *db.RecipeIngredientRepository) RecipeIngredientService {
+func NewRecipeIngredientService(log *slog.Logger, rs *repositories.RecipeIngredientRepository) RecipeIngredientService {
 	return RecipeIngredientService{Log: log, IngredientStore: rs}
 }
 
-func (s *RecipeIngredientService) GetAll() (ingredients []db.RecipeIngredient, error error) {
+func (s *RecipeIngredientService) GetAll() (ingredients []repositories.RecipeIngredient, error error) {
 	result, err := s.IngredientStore.GetAll()
 
 	if err != nil {
@@ -26,7 +26,7 @@ func (s *RecipeIngredientService) GetAll() (ingredients []db.RecipeIngredient, e
 	return result, nil
 }
 
-func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ingredient db.RecipeIngredient, error error) {
+func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ingredient repositories.RecipeIngredient, error error) {
 	result, err := s.IngredientStore.Create(r, i, qu, q)
 
 	if err != nil {

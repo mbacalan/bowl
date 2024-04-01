@@ -6,7 +6,7 @@ import (
 	"github.com/mbacalan/bowl/repositories"
 )
 
-templ Home(r []db.Recipe) {
+templ Home(r []repositories.Recipe) {
 	@shared.Page() {
 		<h2>A database of your own recipes</h2>
 		<hr/>

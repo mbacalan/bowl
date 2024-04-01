@@ -8,14 +8,14 @@ import (
 
 type QuantityUnitService struct {
 	Log   *slog.Logger
-	Store *db.QuantityUnitRepository
+	Store *repositories.QuantityUnitRepository
 }
 
-func NewQuantityUnitService(log *slog.Logger, rs *db.QuantityUnitRepository) QuantityUnitService {
+func NewQuantityUnitService(log *slog.Logger, rs *repositories.QuantityUnitRepository) QuantityUnitService {
 	return QuantityUnitService{Log: log, Store: rs}
 }
 
-func (s *QuantityUnitService) GetAll() (units []db.QuantityUnit, error error) {
+func (s *QuantityUnitService) GetAll() (units []repositories.QuantityUnit, error error) {
 	result, err := s.Store.GetAll()
 
 	if err != nil {
@@ -26,7 +26,7 @@ func (s *QuantityUnitService) GetAll() (units []db.QuantityUnit, error error) {
 	return result, nil
 }
 
-func (s *QuantityUnitService) Create(i string) (unit db.QuantityUnit, error error) {
+func (s *QuantityUnitService) Create(i string) (unit repositories.QuantityUnit, error error) {
 	result, err := s.Store.GetOrCreate(i)
 
 	if err != nil {

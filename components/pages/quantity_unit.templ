@@ -2,7 +2,7 @@ package pages
 
 import "github.com/mbacalan/bowl/repositories"
 
-templ QuantityUnits(units []db.QuantityUnit) {
+templ QuantityUnits(units []repositories.QuantityUnit) {
 	<option selected disabled value="">Select</option>
 	for _, unit := range units {
 		<option>

@@ -8,17 +8,17 @@ import (
 
 type CategoryService struct {
 	Logger *slog.Logger
-	Store  *db.CategoryRepository
+	Store  *repositories.CategoryRepository
 }
 
-func NewCategoryService(logger *slog.Logger, store *db.CategoryRepository) CategoryService {
+func NewCategoryService(logger *slog.Logger, store *repositories.CategoryRepository) CategoryService {
 	return CategoryService{
 		Logger: logger,
 		Store:  store,
 	}
 }
 
-func (s *CategoryService) Get(id int) (db.Category, error) {
+func (s *CategoryService) Get(id int) (repositories.Category, error) {
 	result, err := s.Store.Get(id)
 
 	if err != nil {
@@ -29,7 +29,7 @@ func (s *CategoryService) Get(id int) (db.Category, error) {
 	return result, nil
 }
 
-func (s *CategoryService) GetAll() ([]db.Category, error) {
+func (s *CategoryService) GetAll() ([]repositories.Category, error) {
 	result, err := s.Store.GetAll()
 
 	if err != nil {

@@ -11,17 +11,17 @@ import (
 
 type RecipeService struct {
 	Log        *slog.Logger
-	UnitOfWork RecipeUnitOfWork
+	UnitOfWork *RecipeUnitOfWork
 }
 
 type RecipeUnitOfWork struct {
 	db                         *gorm.DB
-	RecipeRepository           *db.RecipeRepository
-	IngredientRepository       *db.IngredientRepository
-	QuantityUnitRepository     *db.QuantityUnitRepository
-	RecipeIngredientRepository *db.RecipeIngredientRepository
-	StepRepository             *db.StepRepository
-	CategoryRepository         *db.CategoryRepository
+	RecipeRepository           *repositories.RecipeRepository
+	IngredientRepository       *repositories.IngredientRepository
+	QuantityUnitRepository     *repositories.QuantityUnitRepository
+	RecipeIngredientRepository *repositories.RecipeIngredientRepository
+	StepRepository             *repositories.StepRepository
+	CategoryRepository         *repositories.CategoryRepository
 }
 
 type RecipeData struct {
@@ -35,26 +35,26 @@ type RecipeData struct {
 	CookDuration  uint
 }
 
-func NewRecipeUOW(database *gorm.DB) RecipeUnitOfWork {
-	return RecipeUnitOfWork{
+func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
+	return &RecipeUnitOfWork{
 		db:                         database,
-		RecipeRepository:           db.NewRecipeRepository(database, "recipes"),
-		IngredientRepository:       db.NewIngredientRepository(database, "ingredients"),
-		QuantityUnitRepository:     db.NewQuantityUnitRepository(database, "quantity_units"),
-		RecipeIngredientRepository: db.NewRecipeIngredientRepository(database, "recipe_ingredients"),
-		StepRepository:             db.NewStepRepository(database, "steps"),
-		CategoryRepository:         db.NewCategoryRepository(database, "categories"),
+		RecipeRepository:           repositories.NewRecipeRepository(database, "recipes"),
+		IngredientRepository:       repositories.NewIngredientRepository(database, "ingredients"),
+		QuantityUnitRepository:     repositories.NewQuantityUnitRepository(database, "quantity_units"),
+		RecipeIngredientRepository: repositories.NewRecipeIngredientRepository(database, "recipe_ingredients"),
+		StepRepository:             repositories.NewStepRepository(database, "steps"),
+		CategoryRepository:         repositories.NewCategoryRepository(database, "categories"),
 	}
 }
 
-func NewRecipeService(log *slog.Logger, uow RecipeUnitOfWork) RecipeService {
+func NewRecipeService(log *slog.Logger, uow *RecipeUnitOfWork) RecipeService {
 	return RecipeService{
 		Log:        log,
 		UnitOfWork: uow,
 	}
 }
 
-func (s *RecipeService) Get(id int) (recipe db.Recipe, error error) {
+func (s *RecipeService) Get(id int) (recipe repositories.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
 
 	if err != nil {
@@ -65,7 +65,7 @@ func (s *RecipeService) Get(id int) (recipe db.Recipe, error error) {
 	return result, nil
 }
 
-func (s *RecipeService) GetAll() (recipes []db.Recipe, error error) {
+func (s *RecipeService) GetAll() (recipes []repositories.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetAllRecipes()
 
 	if err != nil {
@@ -76,7 +76,7 @@ func (s *RecipeService) GetAll() (recipes []db.Recipe, error error) {
 	return result, nil
 }
 
-func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) {
+func (s *RecipeService) GetRecent(limit int) (recipes []repositories.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetRecentRecipes(limit)
 
 	if err != nil {
@@ -87,7 +87,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []db.Recipe, error error) 
 	return result, nil
 }
 
-func (s *RecipeService) Create(data RecipeData) (db.Recipe, error) {
+func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
 
 	if err != nil {
@@ -100,8 +100,8 @@ func (s *RecipeService) Create(data RecipeData) (db.Recipe, error) {
 
 	if data.Categories[0] != "" {
 		for _, categoryName := range data.Categories {
-			var category db.Category
-			error := s.UnitOfWork.db.FirstOrCreate(&category, db.Category{Name: cases.Title(language.English).String(categoryName)}).Error
+			var category repositories.Category
+			error := s.UnitOfWork.db.FirstOrCreate(&category, repositories.Category{Name: cases.Title(language.English).String(categoryName)}).Error
 
 			if error == nil {
 				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&category)
@@ -112,12 +112,12 @@ func (s *RecipeService) Create(data RecipeData) (db.Recipe, error) {
 	return recipe, nil
 }
 
-func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
+func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
 
 	if err != nil {
 		s.Log.Error("Recipe does not exist", err)
-		return db.Recipe{}, err
+		return repositories.Recipe{}, err
 	}
 
 	for i := range recipe.RecipeIngredients {
@@ -125,7 +125,7 @@ func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
 
 		if err != nil {
 			s.Log.Error("Error deleting recipe ingredient", err)
-			return db.Recipe{}, err
+			return repositories.Recipe{}, err
 		}
 	}
 
@@ -145,11 +145,11 @@ func (s *RecipeService) Update(id int, data RecipeData) (db.Recipe, error) {
 
 	if data.Categories[0] != "" {
 		for i := range data.Categories {
-			var category db.Category
+			var category repositories.Category
 			error := s.UnitOfWork.db.Find(&category, "name = ?", data.Categories[i]).Error
 
 			if error == nil {
-				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&db.Category{Name: cases.Title(language.English).String(data.Categories[i])})
+				s.UnitOfWork.db.Model(&recipe).Association("Categories").Append(&repositories.Category{Name: cases.Title(language.English).String(data.Categories[i])})
 			}
 		}
 	}

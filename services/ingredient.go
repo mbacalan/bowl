@@ -8,14 +8,14 @@ import (
 
 type IngredientService struct {
 	Log             *slog.Logger
-	IngredientStore *db.IngredientRepository
+	IngredientStore *repositories.IngredientRepository
 }
 
-func NewIngredientService(log *slog.Logger, rs *db.IngredientRepository) IngredientService {
+func NewIngredientService(log *slog.Logger, rs *repositories.IngredientRepository) IngredientService {
 	return IngredientService{Log: log, IngredientStore: rs}
 }
 
-func (s *IngredientService) Get(id int) (ingredient db.Ingredient, error error) {
+func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, error error) {
 	result, err := s.IngredientStore.GetIngredient(id)
 
 	if err != nil {
@@ -26,7 +26,7 @@ func (s *IngredientService) Get(id int) (ingredient db.Ingredient, error error) 
 	return result, nil
 }
 
-func (s *IngredientService) GetAll() (ingredients []db.Ingredient, error error) {
+func (s *IngredientService) GetAll() (ingredients []repositories.Ingredient, error error) {
 	result, err := s.IngredientStore.GetAllIngredients()
 
 	if err != nil {
@@ -37,7 +37,7 @@ func (s *IngredientService) GetAll() (ingredients []db.Ingredient, error error) 
 	return result, nil
 }
 
-func (s *IngredientService) Create(i string) (ingredient db.Ingredient, error error) {
+func (s *IngredientService) Create(i string) (ingredient repositories.Ingredient, error error) {
 	result, err := s.IngredientStore.GetOrCreate(i)
 
 	if err != nil {
@@ -48,9 +48,9 @@ func (s *IngredientService) Create(i string) (ingredient db.Ingredient, error er
 	return result, nil
 }
 
-func (s *IngredientService) Search(name string) (ingredients []db.Ingredient, error error) {
+func (s *IngredientService) Search(name string) (ingredients []repositories.Ingredient, error error) {
 	if len(name) == 0 {
-		return []db.Ingredient{}, error
+		return []repositories.Ingredient{}, error
 	}
 
 	result, err := s.IngredientStore.SearchIngredient(name)

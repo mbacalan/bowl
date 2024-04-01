@@ -17,7 +17,7 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-func Recipe(recipe db.Recipe) templ.Component {
+func Recipe(recipe repositories.Recipe) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -222,7 +222,7 @@ func Recipe(recipe db.Recipe) templ.Component {
 	})
 }
 
-func RecipeList(recipes []db.Recipe) templ.Component {
+func RecipeList(recipes []repositories.Recipe) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -304,7 +304,7 @@ func RecipeList(recipes []db.Recipe) templ.Component {
 	})
 }
 
-func RecipeListPage(recipes []db.Recipe) templ.Component {
+func RecipeListPage(recipes []repositories.Recipe) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -354,7 +354,7 @@ func RecipeListPage(recipes []db.Recipe) templ.Component {
 	})
 }
 
-func RecipeDetailPage(recipe db.Recipe) templ.Component {
+func RecipeDetailPage(recipe repositories.Recipe) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

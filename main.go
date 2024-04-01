@@ -21,10 +21,10 @@ func main() {
 	r.Use(middleware.Compress(5))
 
 	log := slog.New(slog.NewJSONHandler(os.Stdout, nil))
-	database := db.NewConnection()
-	ids := db.NewIngredientRepository(database, "ingredients")
-	qds := db.NewQuantityUnitRepository(database, "quantity_units")
-	cds := db.NewCategoryRepository(database, "categories")
+	database := repositories.NewConnection()
+	ids := repositories.NewIngredientRepository(database, "ingredients")
+	qds := repositories.NewQuantityUnitRepository(database, "quantity_units")
+	cds := repositories.NewCategoryRepository(database, "categories")
 	ruow := services.NewRecipeUOW(database)
 
 	rh := handlers.NewRecipeHandler(log, services.NewRecipeService(log, ruow))

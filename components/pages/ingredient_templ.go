@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm/utils"
 )
 
-func Ingredient(ingredient db.Ingredient) templ.Component {
+func Ingredient(ingredient repositories.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -61,7 +61,7 @@ func Ingredient(ingredient db.Ingredient) templ.Component {
 	})
 }
 
-func IngredientList(ingredients []db.Ingredient) templ.Component {
+func IngredientList(ingredients []repositories.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -117,7 +117,7 @@ func IngredientList(ingredients []db.Ingredient) templ.Component {
 	})
 }
 
-func IngredientListPage(ingredients []db.Ingredient) templ.Component {
+func IngredientListPage(ingredients []repositories.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -163,7 +163,7 @@ func IngredientListPage(ingredients []db.Ingredient) templ.Component {
 	})
 }
 
-func IngredientDetailPage(ingredient db.Ingredient) templ.Component {
+func IngredientDetailPage(ingredient repositories.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
