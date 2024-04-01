@@ -11,8 +11,8 @@ type RecipeIngredientService struct {
 	IngredientStore *repositories.RecipeIngredientRepository
 }
 
-func NewRecipeIngredientService(log *slog.Logger, rs *repositories.RecipeIngredientRepository) RecipeIngredientService {
-	return RecipeIngredientService{Log: log, IngredientStore: rs}
+func NewRecipeIngredientService(log *slog.Logger, rs *repositories.RecipeIngredientRepository) *RecipeIngredientService {
+	return &RecipeIngredientService{Log: log, IngredientStore: rs}
 }
 
 func (s *RecipeIngredientService) GetAll() (ingredients []repositories.RecipeIngredient, error error) {

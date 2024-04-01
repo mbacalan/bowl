@@ -12,10 +12,10 @@ import (
 
 type CategoryHandler struct {
 	Logger  *slog.Logger
-	Service services.CategoryService
+	Service *services.CategoryService
 }
 
-func NewCategoryHandler(log *slog.Logger, service services.CategoryService) *CategoryHandler {
+func NewCategoryHandler(log *slog.Logger, service *services.CategoryService) *CategoryHandler {
 	return &CategoryHandler{
 		Logger:  log,
 		Service: service,

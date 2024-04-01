@@ -11,10 +11,10 @@ import (
 
 type QuantityUnitHandler struct {
 	Log     *slog.Logger
-	Service services.QuantityUnitService
+	Service *services.QuantityUnitService
 }
 
-func NewQuantityUnitHandler(log *slog.Logger, service services.QuantityUnitService) *QuantityUnitHandler {
+func NewQuantityUnitHandler(log *slog.Logger, service *services.QuantityUnitService) *QuantityUnitHandler {
 	return &QuantityUnitHandler{
 		Log:     log,
 		Service: service,

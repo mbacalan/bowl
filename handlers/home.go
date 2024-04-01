@@ -11,10 +11,10 @@ import (
 
 type HomeHandler struct {
 	Log         *slog.Logger
-	HomeService services.RecipeService
+	HomeService *services.RecipeService
 }
 
-func NewHomeHandler(log *slog.Logger, service services.RecipeService) *HomeHandler {
+func NewHomeHandler(log *slog.Logger, service *services.RecipeService) *HomeHandler {
 	return &HomeHandler{
 		Log:         log,
 		HomeService: service,

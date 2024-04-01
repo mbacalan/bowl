@@ -11,8 +11,8 @@ type IngredientService struct {
 	IngredientStore *repositories.IngredientRepository
 }
 
-func NewIngredientService(log *slog.Logger, rs *repositories.IngredientRepository) IngredientService {
-	return IngredientService{Log: log, IngredientStore: rs}
+func NewIngredientService(log *slog.Logger, rs *repositories.IngredientRepository) *IngredientService {
+	return &IngredientService{Log: log, IngredientStore: rs}
 }
 
 func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, error error) {

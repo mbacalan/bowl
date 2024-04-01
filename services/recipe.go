@@ -47,8 +47,8 @@ func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
 	}
 }
 
-func NewRecipeService(log *slog.Logger, uow *RecipeUnitOfWork) RecipeService {
-	return RecipeService{
+func NewRecipeService(log *slog.Logger, uow *RecipeUnitOfWork) *RecipeService {
+	return &RecipeService{
 		Log:        log,
 		UnitOfWork: uow,
 	}

@@ -11,8 +11,8 @@ type CategoryService struct {
 	Store  *repositories.CategoryRepository
 }
 
-func NewCategoryService(logger *slog.Logger, store *repositories.CategoryRepository) CategoryService {
-	return CategoryService{
+func NewCategoryService(logger *slog.Logger, store *repositories.CategoryRepository) *CategoryService {
+	return &CategoryService{
 		Logger: logger,
 		Store:  store,
 	}

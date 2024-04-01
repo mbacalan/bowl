@@ -11,8 +11,8 @@ type QuantityUnitService struct {
 	Store *repositories.QuantityUnitRepository
 }
 
-func NewQuantityUnitService(log *slog.Logger, rs *repositories.QuantityUnitRepository) QuantityUnitService {
-	return QuantityUnitService{Log: log, Store: rs}
+func NewQuantityUnitService(log *slog.Logger, rs *repositories.QuantityUnitRepository) *QuantityUnitService {
+	return &QuantityUnitService{Log: log, Store: rs}
 }
 
 func (s *QuantityUnitService) GetAll() (units []repositories.QuantityUnit, error error) {
