@@ -24,19 +24,12 @@ func NewQuantityUnitHandler(log *slog.Logger, service *services.QuantityUnitServ
 func (h *QuantityUnitHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	// r.Get("/", h.ViewIngredientList)
 	r.Get("/", h.GetAll)
-	// r.Post("/create", h.CreateRecipeIngredient)
 
 	return r
 }
 
 func (h *QuantityUnitHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	// if r.Method == http.MethodPost {
-	// 	h.CreateRecipeIngredient(w, r)
-	// 	return
-	// }
-
 	h.GetAll(w, r)
 }
 

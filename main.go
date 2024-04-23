@@ -109,5 +109,5 @@ func (s *Server) mountHandlers() {
 	s.Router.Mount("/recipes", s.Handlers.RecipeHandler.Routes())
 	s.Router.Mount("/categories", s.Handlers.CategoryHandler.Routes())
 	s.Router.Mount("/ingredients", s.Handlers.IngredientHandler.Routes())
-	s.Router.Mount("/quantity-units", s.Handlers.CategoryHandler.Routes())
+	s.Router.Mount("/quantity-units", s.Handlers.QuantityUnitHandler.Routes())
 }
