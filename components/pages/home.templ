@@ -13,7 +13,12 @@ templ Home(r []repositories.Recipe) {
 		<h3><a href="/recipes">📃 Recipes</a></h3>
 		<h3><a href="/categories">📚 Categories</a></h3>
 		<h3><a href="/ingredients">🍒 Ingredients</a></h3>
-		<h4>...or take a look at the recently created recipes</h4>
+
+		<hr />
+
+		if len(r) > 0 {
+			<h4>Recently created:</h4>
+		}
 		@recipes.RecipeList(r)
 	}
 }

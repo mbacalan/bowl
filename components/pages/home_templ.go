@@ -35,7 +35,17 @@ func Home(r []repositories.Recipe) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>A database of your own recipes</h2><hr><h3><a href=\"/recipes\">📃 Recipes</a></h3><h3><a href=\"/categories\">📚 Categories</a></h3><h3><a href=\"/ingredients\">🍒 Ingredients</a></h3><h4>...or take a look at the recently created recipes</h4>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>A database of your own recipes</h2><hr><h3><a href=\"/recipes\">📃 Recipes</a></h3><h3><a href=\"/categories\">📚 Categories</a></h3><h3><a href=\"/ingredients\">🍒 Ingredients</a></h3><hr>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			if len(r) > 0 {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h4>Recently created:</h4>")
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
