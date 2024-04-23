@@ -18,9 +18,7 @@ templ IngredientList(ingredients []repositories.Ingredient) {
 	<ul>
 		for _, ingredient := range ingredients {
 			<li>
-				<a href={ "/ingredients/" + templ.URL(utils.ToString(ingredient.ID)) }>
-					{ ingredient.Name }
-				</a>
+				{ ingredient.Name }
 			</li>
 		}
 	</ul>
@@ -34,11 +32,5 @@ templ IngredientListPage(ingredients []repositories.Ingredient) {
 		} else {
 			@IngredientList(ingredients)
 		}
-	}
-}
-
-templ IngredientDetailPage(ingredient repositories.Ingredient) {
-	@shared.Page() {
-		@Ingredient(ingredient)
 	}
 }
