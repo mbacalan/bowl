@@ -2,10 +2,24 @@ package pages
 
 import "github.com/mbacalan/bowl/repositories"
 
-templ QuantityUnits(units []repositories.QuantityUnit) {
-	<option selected disabled value="">Select</option>
+templ QuantityUnits(units []repositories.QuantityUnit, selected string) {
+	<option
+		disabled
+		value=""
+		if selected == "" {
+			selected
+		}
+	>
+		Select
+	</option>
+
 	for _, unit := range units {
-		<option>
+		<option
+			id={ unit.Unit }
+			if selected == unit.Unit {
+				selected
+			}
+		>
 			{ unit.Unit }
 		</option>
 	}

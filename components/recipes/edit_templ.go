@@ -104,15 +104,15 @@ func EditRecipe(recipe repositories.Recipe) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required> <select id=\"quantity-unit\" name=\"quantity-unit\" hx-get=\"/quantity-units\" hx-trigger=\"load\" required selected=\"")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" required> <select id=\"quantity-unit\" name=\"quantity-unit\" hx-get=\"")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(utils.ToString(ingredient.QuantityUnit.Unit)))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("/quantity-units/?selected=" + utils.ToString(ingredient.QuantityUnit.Unit)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\"></select> <span class=\"remove remove-ingredient\">X</span></div>")
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-trigger=\"load\" required></select> <span class=\"remove remove-ingredient\">X</span></div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

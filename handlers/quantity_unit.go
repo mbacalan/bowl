@@ -34,17 +34,18 @@ func (h *QuantityUnitHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 }
 
 func (h *QuantityUnitHandler) GetAll(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
+	selected := r.URL.Query().Get("selected")
+	unit, err := h.Service.GetAll()
 
-		r.ParseForm()
-
-		unit, err := h.Service.GetAll()
-
-		if err != nil {
-			h.Log.Error("", err)
-			return
-		}
-
-		pages.QuantityUnits(unit).Render(r.Context(), w)
+	if err != nil {
+		h.Log.Error("", err)
+		return
 	}
+
+	if selected != "" {
+		pages.QuantityUnits(unit, selected).Render(r.Context(), w)
+		return
+	}
+
+	pages.QuantityUnits(unit, "").Render(r.Context(), w)
 }

@@ -72,10 +72,9 @@ templ EditRecipe(recipe repositories.Recipe) {
 								<select
 									id="quantity-unit"
 									name="quantity-unit"
-									hx-get="/quantity-units"
+									hx-get={ "/quantity-units/?selected=" + utils.ToString(ingredient.QuantityUnit.Unit) }
 									hx-trigger="load"
 									required
-									selected={ utils.ToString(ingredient.QuantityUnit.Unit) }
 								/>
 
 								<span class="remove remove-ingredient">X</span>
