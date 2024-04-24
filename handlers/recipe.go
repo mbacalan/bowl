@@ -29,7 +29,7 @@ func (h *RecipeHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
-	r.Get("/{id}", h.ViewRecipe)
+	r.Get("/{id}", h.View)
 	r.Get("/{id}/edit", h.Edit)
 	r.Patch("/{id}", h.Update)
 	r.Get("/create", h.Create)
@@ -76,7 +76,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
-func (h *RecipeHandler) ViewRecipe(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 

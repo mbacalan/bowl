@@ -25,7 +25,7 @@ func NewCategoryHandler(log *slog.Logger, service *services.CategoryService) *Ca
 func (h *CategoryHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", h.ViewAll)
+	r.Get("/", h.ViewList)
 	r.Get("/{id}", h.View)
 
 	return r
@@ -43,7 +43,7 @@ func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 	pages.Category(category).Render(r.Context(), w)
 }
 
-func (h *CategoryHandler) ViewAll(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	categories, err := h.Service.GetAll()
 	if err != nil {
 		h.Logger.Error("Error listing ingredients", err)

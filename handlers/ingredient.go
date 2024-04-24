@@ -24,15 +24,14 @@ func NewIngredientHandler(log *slog.Logger, service *services.IngredientService)
 func (h *IngredientHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", h.ViewIngredientList)
-	r.Get("/create", h.CreateIngredient)
-	r.Post("/create", h.CreateIngredient)
+	r.Get("/", h.ViewList)
+	r.Post("/create", h.Create)
 	// r.Post("/search", h.SearchIngredient)
 
 	return r
 }
 
-func (h *IngredientHandler) CreateIngredient(w http.ResponseWriter, r *http.Request) {
+func (h *IngredientHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		pages.CreateIngredient().Render(r.Context(), w)
 		return
@@ -54,7 +53,7 @@ func (h *IngredientHandler) CreateIngredient(w http.ResponseWriter, r *http.Requ
 	pages.IngredientListPage(ingredients).Render(r.Context(), w)
 }
 
-func (h *IngredientHandler) ViewIngredientList(w http.ResponseWriter, r *http.Request) {
+func (h *IngredientHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	ingredients, err := h.IngredientService.GetAll()
 	if err != nil {
 		h.Log.Error("Error listing ingredients", err)

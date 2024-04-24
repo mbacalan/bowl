@@ -26,13 +26,12 @@ func (h *RecipeIngredientHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	// r.Get("/", h.ViewIngredientList)
-	r.Get("/create", h.CreateRecipeIngredient)
-	r.Post("/create", h.CreateRecipeIngredient)
+	r.Post("/create", h.Create)
 
 	return r
 }
 
-func (h *RecipeIngredientHandler) CreateRecipeIngredient(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeIngredientHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		pages.CreateIngredient().Render(r.Context(), w)
 		return

@@ -24,12 +24,12 @@ func NewQuantityUnitHandler(log *slog.Logger, service *services.QuantityUnitServ
 func (h *QuantityUnitHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", h.GetAll)
+	r.Get("/", h.ViewList)
 
 	return r
 }
 
-func (h *QuantityUnitHandler) GetAll(w http.ResponseWriter, r *http.Request) {
+func (h *QuantityUnitHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	selected := r.URL.Query().Get("selected")
 	unit, err := h.Service.GetAll()
 

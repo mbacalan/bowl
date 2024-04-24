@@ -24,12 +24,12 @@ func NewHomeHandler(log *slog.Logger, service *services.RecipeService) *HomeHand
 func (h *HomeHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", h.ViewHome)
+	r.Get("/", h.View)
 
 	return r
 }
 
-func (h *HomeHandler) ViewHome(w http.ResponseWriter, r *http.Request) {
+func (h *HomeHandler) View(w http.ResponseWriter, r *http.Request) {
 	recipes, err := h.HomeService.GetRecent(10)
 
 	if err != nil {
