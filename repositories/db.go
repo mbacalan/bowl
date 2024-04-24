@@ -13,10 +13,10 @@ func NewConnection() *gorm.DB {
 
 	db.AutoMigrate(&Ingredient{}, &QuantityUnit{}, &RecipeIngredient{}, &Step{}, &Category{}, &Recipe{})
 
-	CreateIfNotExists(db, QuantityUnit{Unit: "g"})
-	CreateIfNotExists(db, QuantityUnit{Unit: "kg"})
-	CreateIfNotExists(db, QuantityUnit{Unit: "ml"})
-	CreateIfNotExists(db, QuantityUnit{Unit: "L"})
+	CreateIfNotExists(db, QuantityUnit{Name: "g"})
+	CreateIfNotExists(db, QuantityUnit{Name: "kg"})
+	CreateIfNotExists(db, QuantityUnit{Name: "ml"})
+	CreateIfNotExists(db, QuantityUnit{Name: "L"})
 
 	return db
 }

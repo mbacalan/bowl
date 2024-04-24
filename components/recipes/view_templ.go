@@ -122,7 +122,7 @@ func Recipe(recipe repositories.Recipe) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var8 string
-			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(ingredient.QuantityUnit.Unit)
+			templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(ingredient.QuantityUnit.Name)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/recipes/view.templ`, Line: 24, Col: 96}
 			}

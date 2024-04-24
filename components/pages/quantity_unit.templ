@@ -15,12 +15,12 @@ templ QuantityUnits(units []repositories.QuantityUnit, selected string) {
 
 	for _, unit := range units {
 		<option
-			id={ unit.Unit }
-			if selected == unit.Unit {
+			id={ unit.Name }
+			if selected == unit.Name {
 				selected
 			}
 		>
-			{ unit.Unit }
+			{ unit.Name }
 		</option>
 	}
 }

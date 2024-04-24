@@ -108,7 +108,7 @@ func EditRecipe(recipe repositories.Recipe) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("/quantity-units/?selected=" + utils.ToString(ingredient.QuantityUnit.Unit)))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString("/quantity-units/?selected=" + utils.ToString(ingredient.QuantityUnit.Name)))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

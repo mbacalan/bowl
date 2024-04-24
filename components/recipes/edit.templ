@@ -72,7 +72,7 @@ templ EditRecipe(recipe repositories.Recipe) {
 								<select
 									id="quantity-unit"
 									name="quantity-unit"
-									hx-get={ "/quantity-units/?selected=" + utils.ToString(ingredient.QuantityUnit.Unit) }
+									hx-get={ "/quantity-units/?selected=" + utils.ToString(ingredient.QuantityUnit.Name) }
 									hx-trigger="load"
 									required
 								/>

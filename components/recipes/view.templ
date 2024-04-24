@@ -22,7 +22,7 @@ templ Recipe(recipe repositories.Recipe) {
 		<h3>Ingredients</h3>
 		<ul>
 			for _, ingredient := range recipe.RecipeIngredients {
-				<li>{ ingredient.Ingredient.Name } - { ingredient.Quantity }, { ingredient.QuantityUnit.Unit }</li>
+				<li>{ ingredient.Ingredient.Name } - { ingredient.Quantity }, { ingredient.QuantityUnit.Name }</li>
 			}
 		</ul>
 

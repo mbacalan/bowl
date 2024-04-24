@@ -44,7 +44,7 @@ func QuantityUnits(units []repositories.QuantityUnit, selected string) templ.Com
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(unit.Unit))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(unit.Name))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -52,7 +52,7 @@ func QuantityUnits(units []repositories.QuantityUnit, selected string) templ.Com
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if selected == unit.Unit {
+			if selected == unit.Name {
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(" selected")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -63,7 +63,7 @@ func QuantityUnits(units []repositories.QuantityUnit, selected string) templ.Com
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(unit.Unit)
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(unit.Name)
 			if templ_7745c5c3_Err != nil {
 				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/pages/quantity_unit.templ`, Line: 22, Col: 14}
 			}
