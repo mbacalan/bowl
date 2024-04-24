@@ -11,14 +11,14 @@ type Category struct {
 }
 
 type CategoryRepository struct {
-	db    *gorm.DB
-	table string
+	db        *gorm.DB
+	tableName string
 }
 
-func NewCategoryRepository(db *gorm.DB, table string) *CategoryRepository {
+func NewCategoryRepository(db *gorm.DB, tableName string) *CategoryRepository {
 	repository := &CategoryRepository{
-		table: table,
-		db:    db,
+		tableName: tableName,
+		db:        db,
 	}
 
 	return repository
