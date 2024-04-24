@@ -38,15 +38,6 @@ func (h *RecipeHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *RecipeHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-		h.Create(w, r)
-		return
-	}
-
-	h.ViewList(w, r)
-}
-
 func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		recipes.CreateRecipe().Render(r.Context(), w)

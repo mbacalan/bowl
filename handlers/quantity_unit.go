@@ -29,10 +29,6 @@ func (h *QuantityUnitHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *QuantityUnitHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.GetAll(w, r)
-}
-
 func (h *QuantityUnitHandler) GetAll(w http.ResponseWriter, r *http.Request) {
 	selected := r.URL.Query().Get("selected")
 	unit, err := h.Service.GetAll()

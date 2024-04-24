@@ -32,15 +32,6 @@ func (h *RecipeIngredientHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *RecipeIngredientHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodPost {
-		h.CreateRecipeIngredient(w, r)
-		return
-	}
-
-	// h.ViewIngredientList(w, r)
-}
-
 func (h *RecipeIngredientHandler) CreateRecipeIngredient(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		pages.CreateIngredient().Render(r.Context(), w)

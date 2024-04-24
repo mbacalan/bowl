@@ -31,10 +31,6 @@ func (h *CategoryHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *CategoryHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.ViewAll(w, r)
-}
-
 func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
