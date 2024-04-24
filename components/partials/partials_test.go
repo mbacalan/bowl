@@ -1,4 +1,4 @@
-package partials
+package partials_test
 
 import (
 	"context"
@@ -6,13 +6,14 @@ import (
 	"testing"
 
 	"github.com/PuerkitoBio/goquery"
+	"github.com/mbacalan/bowl/components/partials"
 )
 
 func TestHeader(t *testing.T) {
 	r, w := io.Pipe()
 
 	go func() {
-		_ = Header().Render(context.Background(), w)
+		_ = partials.Header().Render(context.Background(), w)
 		_ = w.Close()
 	}()
 
@@ -30,7 +31,7 @@ func TestFooter(t *testing.T) {
 	r, w := io.Pipe()
 
 	go func() {
-		_ = Footer().Render(context.Background(), w)
+		_ = partials.Footer().Render(context.Background(), w)
 		_ = w.Close()
 	}()
 
@@ -48,7 +49,7 @@ func TestBody(t *testing.T) {
 	r, w := io.Pipe()
 
 	go func() {
-		_ = Body().Render(context.Background(), w)
+		_ = partials.Body().Render(context.Background(), w)
 		_ = w.Close()
 	}()
 
