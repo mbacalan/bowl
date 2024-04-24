@@ -3,7 +3,6 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
-	// "strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
@@ -11,14 +10,14 @@ import (
 )
 
 type RecipeIngredientHandler struct {
-	Log               *slog.Logger
-	IngredientService *services.RecipeIngredientService
+	Logger  *slog.Logger
+	Service *services.RecipeIngredientService
 }
 
-func NewRecipeIngredientHandler(log *slog.Logger, service *services.RecipeIngredientService) *RecipeIngredientHandler {
+func NewRecipeIngredientHandler(logger *slog.Logger, service *services.RecipeIngredientService) *RecipeIngredientHandler {
 	return &RecipeIngredientHandler{
-		Log:               log,
-		IngredientService: service,
+		Logger:  logger,
+		Service: service,
 	}
 }
 

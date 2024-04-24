@@ -10,14 +10,14 @@ import (
 )
 
 type IngredientHandler struct {
-	Log               *slog.Logger
-	IngredientService *services.IngredientService
+	Logger  *slog.Logger
+	Service *services.IngredientService
 }
 
-func NewIngredientHandler(log *slog.Logger, service *services.IngredientService) *IngredientHandler {
+func NewIngredientHandler(logger *slog.Logger, service *services.IngredientService) *IngredientHandler {
 	return &IngredientHandler{
-		Log:               log,
-		IngredientService: service,
+		Logger:  logger,
+		Service: service,
 	}
 }
 
@@ -39,24 +39,24 @@ func (h *IngredientHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	r.ParseForm()
 
-	_, err := h.IngredientService.Create(r.Form.Get("name"))
+	_, err := h.Service.Create(r.Form.Get("name"))
 	if err != nil {
-		h.Log.Error("", err)
+		h.Logger.Error("", err)
 		return
 	}
 
-	ingredients, err := h.IngredientService.GetAll()
+	ingredients, err := h.Service.GetAll()
 	if err != nil {
-		h.Log.Error("Error listing ingredients", err)
+		h.Logger.Error("Error listing ingredients", err)
 	}
 
 	pages.IngredientListPage(ingredients).Render(r.Context(), w)
 }
 
 func (h *IngredientHandler) ViewList(w http.ResponseWriter, r *http.Request) {
-	ingredients, err := h.IngredientService.GetAll()
+	ingredients, err := h.Service.GetAll()
 	if err != nil {
-		h.Log.Error("Error listing ingredients", err)
+		h.Logger.Error("Error listing ingredients", err)
 	}
 
 	pages.IngredientListPage(ingredients).Render(r.Context(), w)

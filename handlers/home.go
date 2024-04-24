@@ -10,14 +10,14 @@ import (
 )
 
 type HomeHandler struct {
-	Log         *slog.Logger
-	HomeService *services.RecipeService
+	Logger  *slog.Logger
+	Service *services.RecipeService
 }
 
-func NewHomeHandler(log *slog.Logger, service *services.RecipeService) *HomeHandler {
+func NewHomeHandler(logger *slog.Logger, service *services.RecipeService) *HomeHandler {
 	return &HomeHandler{
-		Log:         log,
-		HomeService: service,
+		Logger:  logger,
+		Service: service,
 	}
 }
 
@@ -30,10 +30,10 @@ func (h *HomeHandler) Routes() chi.Router {
 }
 
 func (h *HomeHandler) View(w http.ResponseWriter, r *http.Request) {
-	recipes, err := h.HomeService.GetRecent(10)
+	recipes, err := h.Service.GetRecent(10)
 
 	if err != nil {
-		h.Log.Error("Error viewing home", err)
+		h.Logger.Error("Error viewing home", err)
 	}
 
 	pages.Home(recipes).Render(r.Context(), w)

@@ -10,13 +10,13 @@ import (
 )
 
 type QuantityUnitHandler struct {
-	Log     *slog.Logger
+	Logger  *slog.Logger
 	Service *services.QuantityUnitService
 }
 
-func NewQuantityUnitHandler(log *slog.Logger, service *services.QuantityUnitService) *QuantityUnitHandler {
+func NewQuantityUnitHandler(logger *slog.Logger, service *services.QuantityUnitService) *QuantityUnitHandler {
 	return &QuantityUnitHandler{
-		Log:     log,
+		Logger:  logger,
 		Service: service,
 	}
 }
@@ -34,7 +34,7 @@ func (h *QuantityUnitHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	unit, err := h.Service.GetAll()
 
 	if err != nil {
-		h.Log.Error("", err)
+		h.Logger.Error("", err)
 		return
 	}
 

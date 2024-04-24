@@ -14,14 +14,14 @@ import (
 )
 
 type RecipeHandler struct {
-	Log           *slog.Logger
-	RecipeService *services.RecipeService
+	Logger  *slog.Logger
+	Service *services.RecipeService
 }
 
-func NewRecipeHandler(log *slog.Logger, service *services.RecipeService) *RecipeHandler {
+func NewRecipeHandler(logger *slog.Logger, service *services.RecipeService) *RecipeHandler {
 	return &RecipeHandler{
-		Log:           log,
-		RecipeService: service,
+		Logger:  logger,
+		Service: service,
 	}
 }
 
@@ -55,7 +55,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
 
-	recipe, err := h.RecipeService.Create(services.RecipeData{
+	recipe, err := h.Service.Create(services.RecipeData{
 		Name:          cases.Title(language.English).String(name),
 		PrepDuration:  uint(prepDuration),
 		CookDuration:  uint(cookDuration),
@@ -67,12 +67,12 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		h.Log.Error("", err)
+		h.Logger.Error("", err)
 		return
 	}
 
 	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
-	recipeDetail, _ := h.RecipeService.Get(int(recipe.ID))
+	recipeDetail, _ := h.Service.Get(int(recipe.ID))
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
@@ -80,10 +80,10 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
-	recipe, err := h.RecipeService.Get(id)
+	recipe, err := h.Service.Get(id)
 
 	if err != nil {
-		h.Log.Error("", err)
+		h.Logger.Error("", err)
 		return
 	}
 
@@ -94,10 +94,10 @@ func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
-	recipe, err := h.RecipeService.Get(id)
+	recipe, err := h.Service.Get(id)
 
 	if err != nil {
-		h.Log.Error("", err)
+		h.Logger.Error("", err)
 		return
 	}
 
@@ -131,14 +131,14 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("HX-Push-URL", "/recipes/"+strconv.FormatUint(uint64(id), 10))
-	recipeDetail, _ := h.RecipeService.Update(id, data)
+	recipeDetail, _ := h.Service.Update(id, data)
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
-	rs, err := h.RecipeService.GetAll()
+	rs, err := h.Service.GetAll()
 	if err != nil {
-		h.Log.Error("Error listing recipes", err)
+		h.Logger.Error("Error listing recipes", err)
 	}
 
 	recipes.RecipeListPage(rs).Render(r.Context(), w)
