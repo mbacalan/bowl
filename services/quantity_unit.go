@@ -7,19 +7,19 @@ import (
 )
 
 type QuantityUnitService struct {
-	Log   *slog.Logger
-	Store *repositories.QuantityUnitRepository
+	Logger     *slog.Logger
+	Repository *repositories.QuantityUnitRepository
 }
 
-func NewQuantityUnitService(log *slog.Logger, rs *repositories.QuantityUnitRepository) *QuantityUnitService {
-	return &QuantityUnitService{Log: log, Store: rs}
+func NewQuantityUnitService(logger *slog.Logger, repo *repositories.QuantityUnitRepository) *QuantityUnitService {
+	return &QuantityUnitService{Logger: logger, Repository: repo}
 }
 
 func (s *QuantityUnitService) GetAll() (units []repositories.QuantityUnit, error error) {
-	result, err := s.Store.GetAll()
+	result, err := s.Repository.GetAll()
 
 	if err != nil {
-		s.Log.Error("Error getting all quantity units", err)
+		s.Logger.Error("Error getting all quantity units", err)
 		return result, err
 	}
 
@@ -27,10 +27,10 @@ func (s *QuantityUnitService) GetAll() (units []repositories.QuantityUnit, error
 }
 
 func (s *QuantityUnitService) Create(i string) (unit repositories.QuantityUnit, error error) {
-	result, err := s.Store.GetOrCreate(i)
+	result, err := s.Repository.GetOrCreate(i)
 
 	if err != nil {
-		s.Log.Error("Error creating unit", err)
+		s.Logger.Error("Error creating unit", err)
 		return result, err
 	}
 

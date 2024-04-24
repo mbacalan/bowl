@@ -7,19 +7,19 @@ import (
 )
 
 type IngredientService struct {
-	Log             *slog.Logger
-	IngredientStore *repositories.IngredientRepository
+	Logger     *slog.Logger
+	Repository *repositories.IngredientRepository
 }
 
-func NewIngredientService(log *slog.Logger, rs *repositories.IngredientRepository) *IngredientService {
-	return &IngredientService{Log: log, IngredientStore: rs}
+func NewIngredientService(logger *slog.Logger, repo *repositories.IngredientRepository) *IngredientService {
+	return &IngredientService{Logger: logger, Repository: repo}
 }
 
 func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, error error) {
-	result, err := s.IngredientStore.GetIngredient(id)
+	result, err := s.Repository.GetIngredient(id)
 
 	if err != nil {
-		s.Log.Error("Error getting ingredient", err)
+		s.Logger.Error("Error getting ingredient", err)
 		return result, err
 	}
 
@@ -27,10 +27,10 @@ func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, err
 }
 
 func (s *IngredientService) GetAll() (ingredients []repositories.Ingredient, error error) {
-	result, err := s.IngredientStore.GetAllIngredients()
+	result, err := s.Repository.GetAllIngredients()
 
 	if err != nil {
-		s.Log.Error("Error getting all ingredients", err)
+		s.Logger.Error("Error getting all ingredients", err)
 		return result, err
 	}
 
@@ -38,10 +38,10 @@ func (s *IngredientService) GetAll() (ingredients []repositories.Ingredient, err
 }
 
 func (s *IngredientService) Create(i string) (ingredient repositories.Ingredient, error error) {
-	result, err := s.IngredientStore.GetOrCreate(i)
+	result, err := s.Repository.GetOrCreate(i)
 
 	if err != nil {
-		s.Log.Error("Error creating ingredient", err)
+		s.Logger.Error("Error creating ingredient", err)
 		return result, err
 	}
 
@@ -53,10 +53,10 @@ func (s *IngredientService) Search(name string) (ingredients []repositories.Ingr
 		return []repositories.Ingredient{}, error
 	}
 
-	result, err := s.IngredientStore.SearchIngredient(name)
+	result, err := s.Repository.SearchIngredient(name)
 
 	if err != nil {
-		s.Log.Error("Error searching ingredients", err)
+		s.Logger.Error("Error searching ingredients", err)
 		return result, err
 	}
 

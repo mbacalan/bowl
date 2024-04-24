@@ -7,19 +7,19 @@ import (
 )
 
 type RecipeIngredientService struct {
-	Log             *slog.Logger
-	IngredientStore *repositories.RecipeIngredientRepository
+	Logger     *slog.Logger
+	Repository *repositories.RecipeIngredientRepository
 }
 
-func NewRecipeIngredientService(log *slog.Logger, rs *repositories.RecipeIngredientRepository) *RecipeIngredientService {
-	return &RecipeIngredientService{Log: log, IngredientStore: rs}
+func NewRecipeIngredientService(logger *slog.Logger, repo *repositories.RecipeIngredientRepository) *RecipeIngredientService {
+	return &RecipeIngredientService{Logger: logger, Repository: repo}
 }
 
 func (s *RecipeIngredientService) GetAll() (ingredients []repositories.RecipeIngredient, error error) {
-	result, err := s.IngredientStore.GetAll()
+	result, err := s.Repository.GetAll()
 
 	if err != nil {
-		s.Log.Error("Error getting all ingredients", err)
+		s.Logger.Error("Error getting all ingredients", err)
 		return result, err
 	}
 
@@ -27,10 +27,10 @@ func (s *RecipeIngredientService) GetAll() (ingredients []repositories.RecipeIng
 }
 
 func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ingredient repositories.RecipeIngredient, error error) {
-	result, err := s.IngredientStore.Create(r, i, qu, q)
+	result, err := s.Repository.Create(r, i, qu, q)
 
 	if err != nil {
-		s.Log.Error("Error creating ingredient", err)
+		s.Logger.Error("Error creating ingredient", err)
 		return result, err
 	}
 

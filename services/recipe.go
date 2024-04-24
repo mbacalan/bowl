@@ -10,7 +10,7 @@ import (
 )
 
 type RecipeService struct {
-	Log        *slog.Logger
+	Logger     *slog.Logger
 	UnitOfWork *RecipeUnitOfWork
 }
 
@@ -49,7 +49,7 @@ func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
 
 func NewRecipeService(log *slog.Logger, uow *RecipeUnitOfWork) *RecipeService {
 	return &RecipeService{
-		Log:        log,
+		Logger:     log,
 		UnitOfWork: uow,
 	}
 }
@@ -58,7 +58,7 @@ func (s *RecipeService) Get(id int) (recipe repositories.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
 
 	if err != nil {
-		s.Log.Error("Error getting recipe", err)
+		s.Logger.Error("Error getting recipe", err)
 		return result, err
 	}
 
@@ -69,7 +69,7 @@ func (s *RecipeService) GetAll() (recipes []repositories.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetAllRecipes()
 
 	if err != nil {
-		s.Log.Error("Error getting all recipes", err)
+		s.Logger.Error("Error getting all recipes", err)
 		return result, err
 	}
 
@@ -80,7 +80,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []repositories.Recipe, err
 	result, err := s.UnitOfWork.RecipeRepository.GetRecentRecipes(limit)
 
 	if err != nil {
-		s.Log.Error("Error getting recent recipes", err)
+		s.Logger.Error("Error getting recent recipes", err)
 		return result, err
 	}
 
@@ -91,7 +91,7 @@ func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
 
 	if err != nil {
-		s.Log.Error("Error creating recipe", err)
+		s.Logger.Error("Error creating recipe", err)
 		return recipe, err
 	}
 
@@ -116,7 +116,7 @@ func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, er
 	recipe, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
 
 	if err != nil {
-		s.Log.Error("Recipe does not exist", err)
+		s.Logger.Error("Recipe does not exist", err)
 		return repositories.Recipe{}, err
 	}
 
@@ -124,7 +124,7 @@ func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, er
 		err := s.UnitOfWork.RecipeIngredientRepository.Delete(recipe.RecipeIngredients[i].ID)
 
 		if err != nil {
-			s.Log.Error("Error deleting recipe ingredient", err)
+			s.Logger.Error("Error deleting recipe ingredient", err)
 			return repositories.Recipe{}, err
 		}
 	}
