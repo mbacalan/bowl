@@ -26,17 +26,11 @@ func (h *IngredientHandler) Routes() chi.Router {
 
 	r.Get("/", h.ViewList)
 	r.Post("/create", h.Create)
-	// r.Post("/search", h.SearchIngredient)
 
 	return r
 }
 
 func (h *IngredientHandler) Create(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		pages.CreateIngredient().Render(r.Context(), w)
-		return
-	}
-
 	r.ParseForm()
 
 	_, err := h.Service.Create(r.Form.Get("name"))
@@ -61,13 +55,3 @@ func (h *IngredientHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 
 	pages.IngredientListPage(ingredients).Render(r.Context(), w)
 }
-
-// func (h *IngredientHandler) SearchIngredient(w http.ResponseWriter, r *http.Request) {
-// 	r.ParseForm()
-// 	ingredients, err := h.IngredientService.Search(r.Form.Get("search"))
-// 	if err != nil {
-// 		h.Log.Error("Error searching ingredients", err)
-// 	}
-
-// 	pages.IngredientSearchList(ingredients).Render(r.Context(), w)
-// }

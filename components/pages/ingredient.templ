@@ -3,19 +3,11 @@ package pages
 import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/repositories"
-	"gorm.io/gorm/utils"
 )
-
-templ Ingredient(ingredient repositories.Ingredient) {
-	<article data-swap="ingredient" id={ utils.ToString(ingredient.ID) }>
-		<h2>{ ingredient.Name }</h2>
-	</article>
-}
 
 templ IngredientList(ingredients []repositories.Ingredient) {
 	<h2>All Ingredients</h2>
 	<hr/>
-	<ul>
 		for _, ingredient := range ingredients {
 			<li>
 				{ ingredient.Name }
