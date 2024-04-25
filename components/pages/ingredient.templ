@@ -8,6 +8,7 @@ import (
 templ IngredientList(ingredients []repositories.Ingredient) {
 	<h2>All Ingredients</h2>
 	<hr/>
+	<ul data-testid="ingredient-list">
 		for _, ingredient := range ingredients {
 			<li>
 				{ ingredient.Name }
