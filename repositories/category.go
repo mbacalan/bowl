@@ -35,17 +35,6 @@ func (s CategoryRepository) Get(id int) (Category, error) {
 	return category, nil
 }
 
-func (s CategoryRepository) GetOrCreate(category string, recipe uint) (Category, error) {
-	var entry Category
-	result := s.db.FirstOrCreate(&entry, Category{Name: category})
-
-	if result.Error != nil {
-		return Category{}, result.Error
-	}
-
-	return entry, nil
-}
-
 func (s CategoryRepository) GetAll() ([]Category, error) {
 	var categories []Category
 
