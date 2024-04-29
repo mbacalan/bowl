@@ -33,7 +33,7 @@ func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	return repository
 }
 
-func (s RecipeRepository) CreateRecipe(name string, prep uint, cook uint) (r Recipe, err error) {
+func (s RecipeRepository) Create(name string, prep uint, cook uint) (r Recipe, err error) {
 	entry := Recipe{
 		Name:         name,
 		PrepDuration: prep,
@@ -49,7 +49,7 @@ func (s RecipeRepository) CreateRecipe(name string, prep uint, cook uint) (r Rec
 	return entry, nil
 }
 
-func (s RecipeRepository) GetRecipe(id int) (Recipe, error) {
+func (s RecipeRepository) Get(id int) (Recipe, error) {
 	var recipe Recipe
 	err := s.DB.Preload("RecipeIngredients").
 		Preload("RecipeIngredients.Ingredient").
@@ -65,7 +65,7 @@ func (s RecipeRepository) GetRecipe(id int) (Recipe, error) {
 	return recipe, nil
 }
 
-func (s RecipeRepository) GetAllRecipes() (r []Recipe, err error) {
+func (s RecipeRepository) GetAll() (r []Recipe, err error) {
 	var recipes []Recipe
 	result := s.DB.Find(&recipes)
 
@@ -76,7 +76,7 @@ func (s RecipeRepository) GetAllRecipes() (r []Recipe, err error) {
 	return recipes, nil
 }
 
-func (s RecipeRepository) GetRecentRecipes(limit int) (r []Recipe, err error) {
+func (s RecipeRepository) GetRecent(limit int) (r []Recipe, err error) {
 	var recipes []Recipe
 	result := s.DB.Order("id DESC").Limit(limit).Find(&recipes)
 

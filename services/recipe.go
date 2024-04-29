@@ -55,7 +55,7 @@ func NewRecipeService(log *slog.Logger, uow *RecipeUnitOfWork) *RecipeService {
 }
 
 func (s *RecipeService) Get(id int) (recipe repositories.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
+	result, err := s.UnitOfWork.RecipeRepository.Get(id)
 
 	if err != nil {
 		s.Logger.Error("Error getting recipe", err)
@@ -66,7 +66,7 @@ func (s *RecipeService) Get(id int) (recipe repositories.Recipe, error error) {
 }
 
 func (s *RecipeService) GetAll() (recipes []repositories.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.GetAllRecipes()
+	result, err := s.UnitOfWork.RecipeRepository.GetAll()
 
 	if err != nil {
 		s.Logger.Error("Error getting all recipes", err)
@@ -77,7 +77,7 @@ func (s *RecipeService) GetAll() (recipes []repositories.Recipe, error error) {
 }
 
 func (s *RecipeService) GetRecent(limit int) (recipes []repositories.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.GetRecentRecipes(limit)
+	result, err := s.UnitOfWork.RecipeRepository.GetRecent(limit)
 
 	if err != nil {
 		s.Logger.Error("Error getting recent recipes", err)
@@ -88,7 +88,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []repositories.Recipe, err
 }
 
 func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
-	recipe, err := s.UnitOfWork.RecipeRepository.CreateRecipe(data.Name, data.PrepDuration, data.CookDuration)
+	recipe, err := s.UnitOfWork.RecipeRepository.Create(data.Name, data.PrepDuration, data.CookDuration)
 
 	if err != nil {
 		s.Logger.Error("Error creating recipe", err)
@@ -113,7 +113,7 @@ func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
 }
 
 func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, error) {
-	recipe, err := s.UnitOfWork.RecipeRepository.GetRecipe(id)
+	recipe, err := s.UnitOfWork.RecipeRepository.Get(id)
 
 	if err != nil {
 		s.Logger.Error("Recipe does not exist", err)
@@ -165,7 +165,7 @@ func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, er
 	recipe.Name = data.Name
 
 	s.UnitOfWork.db.Save(&recipe)
-	recipe, _ = s.UnitOfWork.RecipeRepository.GetRecipe(id)
+	recipe, _ = s.UnitOfWork.RecipeRepository.Get(id)
 
 	return recipe, nil
 }

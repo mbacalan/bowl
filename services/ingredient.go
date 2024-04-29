@@ -16,7 +16,7 @@ func NewIngredientService(logger *slog.Logger, repo *repositories.IngredientRepo
 }
 
 func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, error error) {
-	result, err := s.Repository.GetIngredient(id)
+	result, err := s.Repository.Get(id)
 
 	if err != nil {
 		s.Logger.Error("Error getting ingredient", err)
@@ -27,7 +27,7 @@ func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, err
 }
 
 func (s *IngredientService) GetAll() (ingredients []repositories.Ingredient, error error) {
-	result, err := s.Repository.GetAllIngredients()
+	result, err := s.Repository.GetAll()
 
 	if err != nil {
 		s.Logger.Error("Error getting all ingredients", err)
@@ -53,7 +53,7 @@ func (s *IngredientService) Search(name string) (ingredients []repositories.Ingr
 		return []repositories.Ingredient{}, error
 	}
 
-	result, err := s.Repository.SearchIngredient(name)
+	result, err := s.Repository.Search(name)
 
 	if err != nil {
 		s.Logger.Error("Error searching ingredients", err)

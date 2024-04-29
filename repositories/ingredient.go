@@ -34,7 +34,7 @@ func (s IngredientRepository) GetOrCreate(ingredient string) (i Ingredient, err 
 	return entry, nil
 }
 
-func (s IngredientRepository) GetIngredient(id int) (i Ingredient, err error) {
+func (s IngredientRepository) Get(id int) (i Ingredient, err error) {
 	var ingredient Ingredient
 	result := s.db.Find(&ingredient, id)
 
@@ -45,7 +45,7 @@ func (s IngredientRepository) GetIngredient(id int) (i Ingredient, err error) {
 	return ingredient, nil
 }
 
-func (s IngredientRepository) GetAllIngredients() (i []Ingredient, err error) {
+func (s IngredientRepository) GetAll() (i []Ingredient, err error) {
 	var ingredients []Ingredient
 	result := s.db.Find(&ingredients)
 
@@ -56,7 +56,7 @@ func (s IngredientRepository) GetAllIngredients() (i []Ingredient, err error) {
 	return ingredients, nil
 }
 
-func (s IngredientRepository) SearchIngredient(name string) (i []Ingredient, err error) {
+func (s IngredientRepository) Search(name string) (i []Ingredient, err error) {
 	var ingredients []Ingredient
 	result := s.db.Where("name LIKE ?", "%"+name+"%").Find(&ingredients)
 
