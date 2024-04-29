@@ -4,23 +4,7 @@ import (
 	"testing"
 
 	"github.com/mbacalan/bowl/repositories"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
-
-func setupTestDB(t *testing.T) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	if err != nil {
-		t.Fatalf("error connecting database: %v", err)
-	}
-
-	err = db.AutoMigrate(&repositories.Category{}, &repositories.Recipe{})
-	if err != nil {
-		t.Fatalf("error migrating models: %v", err)
-	}
-
-	return db
-}
 
 func TestCategoryRepository(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
