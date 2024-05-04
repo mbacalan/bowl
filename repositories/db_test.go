@@ -9,15 +9,46 @@ import (
 )
 
 func setupTestDB(t *testing.T) *gorm.DB {
-	db, err := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
+	db, err := repositories.NewConnection(sqlite.Open(":memory:"))
 	if err != nil {
 		t.Fatalf("error connecting database: %v", err)
 	}
 
-	err = db.AutoMigrate(&repositories.Ingredient{}, &repositories.QuantityUnit{}, &repositories.RecipeIngredient{}, &repositories.Step{}, &repositories.Category{}, &repositories.Recipe{})
-	if err != nil {
-		t.Fatalf("error migrating models: %v", err)
+	return db
+}
+
+func TestNewConnection(t *testing.T) {
+	db, err := repositories.NewConnection(sqlite.Open(":memory:"))
+	if db == nil {
+		t.Errorf("error connecting database")
 	}
 
-	return db
+	db, err = repositories.NewConnection(sqlite.Open("sqlserver://test:fail@localhost:9930"))
+	if err == nil {
+		t.Errorf("expected error connecting database")
+	}
+}
+
+func TestCreateIfNotExists(t *testing.T) {
+	db := setupTestDB(t)
+	expected := repositories.QuantityUnit{Name: "Test unit"}
+	actual, err := repositories.CreateIfNotExists(db, expected)
+	if err != nil {
+		t.Errorf("error creating QuantityUnit: %v", err)
+	}
+
+	if expected.Name != actual.Name {
+		t.Errorf("expected name %s, got %s", expected.Name, actual.Name)
+	}
+
+	_, err = repositories.CreateIfNotExists(db, expected)
+	if err != nil {
+		t.Errorf("error creating existing QuantityUnit: %v", err)
+	}
+}
+
+func TestSeedQuantityUnits(t *testing.T) {
+	db := setupTestDB(t)
+
+	repositories.SeedQuantityUnits(db)
 }

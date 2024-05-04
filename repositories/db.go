@@ -1,24 +1,21 @@
 package repositories
 
 import (
-	"gorm.io/driver/sqlite"
+	"fmt"
+
 	"gorm.io/gorm"
 )
 
-func NewConnection() *gorm.DB {
-	db, err := gorm.Open(sqlite.Open("./db.sqlite"), &gorm.Config{})
+func NewConnection(dialector gorm.Dialector) (*gorm.DB, error) {
+	db, err := gorm.Open(dialector, &gorm.Config{})
 	if err != nil {
-		panic("failed to connect database")
+		fmt.Printf("error connecting database: %v", err)
+		return nil, err
 	}
 
 	db.AutoMigrate(&Ingredient{}, &QuantityUnit{}, &RecipeIngredient{}, &Step{}, &Category{}, &Recipe{})
 
-	CreateIfNotExists(db, QuantityUnit{Name: "g"})
-	CreateIfNotExists(db, QuantityUnit{Name: "kg"})
-	CreateIfNotExists(db, QuantityUnit{Name: "ml"})
-	CreateIfNotExists(db, QuantityUnit{Name: "L"})
-
-	return db
+	return db, nil
 }
 
 func CreateIfNotExists(db *gorm.DB, data QuantityUnit) (QuantityUnit, error) {
@@ -27,4 +24,12 @@ func CreateIfNotExists(db *gorm.DB, data QuantityUnit) (QuantityUnit, error) {
 	error := db.Where(data).FirstOrCreate(&result).Error
 
 	return result, error
+}
+
+func SeedQuantityUnits(db *gorm.DB) {
+	quantityUnitNames := []string{"g", "kg", "ml", "L"}
+
+	for _, name := range quantityUnitNames {
+		CreateIfNotExists(db, QuantityUnit{Name: name})
+	}
 }

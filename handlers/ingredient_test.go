@@ -11,6 +11,7 @@ import (
 	"github.com/mbacalan/bowl/handlers"
 	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
+	"gorm.io/driver/sqlite"
 )
 
 func TestIngredientHandler(t *testing.T) {
@@ -36,7 +37,11 @@ func TestIngredientHandler(t *testing.T) {
 			w := httptest.NewRecorder()
 			r := httptest.NewRequest(http.MethodGet, "/", nil)
 
-			database := repositories.NewConnection()
+			database, err := repositories.NewConnection(sqlite.Open(":memory:"))
+			if err != nil {
+				os.Exit(1)
+			}
+
 			logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 			repository := repositories.NewIngredientRepository(database, "ingredients")
 			service := services.NewIngredientService(logger, repository)

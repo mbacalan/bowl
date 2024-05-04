@@ -12,6 +12,7 @@ import (
 	"github.com/mbacalan/bowl/handlers"
 	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
+	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
 
@@ -60,8 +61,14 @@ func main() {
 
 func createServer() *Server {
 	s := &Server{}
+	db, err := repositories.NewConnection(sqlite.Open("./db.sqlite"))
+	repositories.SeedQuantityUnits(db)
+	if err != nil {
+		os.Exit(1)
+	}
+
+	s.Database = db
 	s.Router = chi.NewRouter()
-	s.Database = repositories.NewConnection()
 	s.Logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
 	s.createRepositories()
