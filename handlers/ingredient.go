@@ -25,26 +25,8 @@ func (h *IngredientHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
-	r.Post("/create", h.Create)
 
 	return r
-}
-
-func (h *IngredientHandler) Create(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-
-	_, err := h.Service.Create(r.Form.Get("name"))
-	if err != nil {
-		h.Logger.Error("", err)
-		return
-	}
-
-	ingredients, err := h.Service.GetAll()
-	if err != nil {
-		h.Logger.Error("Error listing ingredients", err)
-	}
-
-	pages.IngredientListPage(ingredients).Render(r.Context(), w)
 }
 
 func (h *IngredientHandler) ViewList(w http.ResponseWriter, r *http.Request) {
