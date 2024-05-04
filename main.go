@@ -21,15 +21,8 @@ type Server struct {
 	Database *gorm.DB
 	Logger   *slog.Logger
 	Repos    *repositories.Repositories
-	Services *Services
+	Services *services.Services
 	Handlers *Handlers
-}
-
-type Services struct {
-	RecipeService       *services.RecipeService
-	IngredientService   *services.IngredientService
-	QuantityUnitService *services.QuantityUnitService
-	CategoryService     *services.CategoryService
 }
 
 type Handlers struct {
@@ -65,19 +58,10 @@ func createServer() *Server {
 	s.Logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
 	s.Repos = repositories.CreateRepositories(s.Database)
-	s.createServices()
+	s.Services = services.CreateServices(s.Logger, s.Repos)
 	s.createHandlers()
 
 	return s
-}
-
-func (s *Server) createServices() {
-	s.Services = &Services{
-		RecipeService:       services.NewRecipeService(s.Logger, s.Repos.RecipeRepository),
-		IngredientService:   services.NewIngredientService(s.Logger, s.Repos.IngredientRepository),
-		QuantityUnitService: services.NewQuantityUnitService(s.Logger, s.Repos.QuantityUnitRepository),
-		CategoryService:     services.NewCategoryService(s.Logger, s.Repos.CategoryRepository),
-	}
 }
 
 func (s *Server) createHandlers() {
