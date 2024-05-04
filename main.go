@@ -22,15 +22,7 @@ type Server struct {
 	Logger   *slog.Logger
 	Repos    *repositories.Repositories
 	Services *services.Services
-	Handlers *Handlers
-}
-
-type Handlers struct {
-	HomeHandler         *handlers.HomeHandler
-	RecipeHandler       *handlers.RecipeHandler
-	IngredientHandler   *handlers.IngredientHandler
-	QuantityUnitHandler *handlers.QuantityUnitHandler
-	CategoryHandler     *handlers.CategoryHandler
+	Handlers *handlers.Handlers
 }
 
 func main() {
@@ -59,19 +51,9 @@ func createServer() *Server {
 
 	s.Repos = repositories.CreateRepositories(s.Database)
 	s.Services = services.CreateServices(s.Logger, s.Repos)
-	s.createHandlers()
+	s.Handlers = handlers.CreateHandlers(s.Logger, s.Services)
 
 	return s
-}
-
-func (s *Server) createHandlers() {
-	s.Handlers = &Handlers{
-		HomeHandler:         handlers.NewHomeHandler(s.Logger, s.Services.RecipeService),
-		RecipeHandler:       handlers.NewRecipeHandler(s.Logger, s.Services.RecipeService),
-		IngredientHandler:   handlers.NewIngredientHandler(s.Logger, s.Services.IngredientService),
-		QuantityUnitHandler: handlers.NewQuantityUnitHandler(s.Logger, s.Services.QuantityUnitService),
-		CategoryHandler:     handlers.NewCategoryHandler(s.Logger, s.Services.CategoryService),
-	}
 }
 
 func (s *Server) mountHandlers() {
