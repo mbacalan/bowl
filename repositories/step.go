@@ -24,7 +24,7 @@ func NewStepRepository(db *gorm.DB, tableName string) *StepRepository {
 	return repository
 }
 
-func (s StepRepository) Create(step string, recipe uint) (i Step, err error) {
+func (s StepRepository) Create(step string, recipe uint) (Step, error) {
 	entry := Step{Step: step, RecipeID: recipe}
 
 	error := s.db.Create(&entry).Error
@@ -32,7 +32,7 @@ func (s StepRepository) Create(step string, recipe uint) (i Step, err error) {
 	return entry, error
 }
 
-func (s StepRepository) GetAll() (i []Step, err error) {
+func (s StepRepository) GetAll() ([]Step, error) {
 	var steps []Step
 
 	error := s.db.Find(&steps).Error
@@ -40,7 +40,7 @@ func (s StepRepository) GetAll() (i []Step, err error) {
 	return steps, error
 }
 
-func (s StepRepository) Delete(id uint) (err error) {
+func (s StepRepository) Delete(id uint) error {
 	error := s.db.Delete(&Step{}, id).Error
 
 	return error

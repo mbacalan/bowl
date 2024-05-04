@@ -23,7 +23,7 @@ func NewQuantityUnitRepository(db *gorm.DB, tableName string) *QuantityUnitRepos
 	return repository
 }
 
-func (s QuantityUnitRepository) GetOrCreate(unit string) (i QuantityUnit, err error) {
+func (s QuantityUnitRepository) GetOrCreate(unit string) (QuantityUnit, error) {
 	var entry QuantityUnit
 
 	error := s.db.FirstOrCreate(&entry, QuantityUnit{Name: unit}).Error
@@ -31,7 +31,7 @@ func (s QuantityUnitRepository) GetOrCreate(unit string) (i QuantityUnit, err er
 	return entry, error
 }
 
-func (s QuantityUnitRepository) GetAll() (i []QuantityUnit, err error) {
+func (s QuantityUnitRepository) GetAll() ([]QuantityUnit, error) {
 	var units []QuantityUnit
 
 	error := s.db.Find(&units).Error

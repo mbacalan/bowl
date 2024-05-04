@@ -33,7 +33,7 @@ func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	return repository
 }
 
-func (s RecipeRepository) Create(name string, prep uint, cook uint) (r Recipe, err error) {
+func (s RecipeRepository) Create(name string, prep uint, cook uint) (Recipe, error) {
 	entry := Recipe{
 		Name:         name,
 		PrepDuration: prep,

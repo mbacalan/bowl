@@ -28,7 +28,7 @@ func NewRecipeIngredientRepository(db *gorm.DB, tableName string) *RecipeIngredi
 	return repository
 }
 
-func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (i RecipeIngredient, err error) {
+func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (RecipeIngredient, error) {
 	entry := RecipeIngredient{
 		RecipeID:       recipeID,
 		IngredientID:   ingredientID,
@@ -41,7 +41,7 @@ func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, uni
 	return entry, error
 }
 
-func (s RecipeIngredientRepository) GetAll() (recipeIngredients []RecipeIngredient, err error) {
+func (s RecipeIngredientRepository) GetAll() ([]RecipeIngredient, error) {
 	var entries []RecipeIngredient
 
 	error := s.db.Find(&entries).Error
@@ -49,7 +49,7 @@ func (s RecipeIngredientRepository) GetAll() (recipeIngredients []RecipeIngredie
 	return entries, error
 }
 
-func (s RecipeIngredientRepository) Delete(id uint) (err error) {
+func (s RecipeIngredientRepository) Delete(id uint) error {
 	error := s.db.Delete(&RecipeIngredient{}, id).Error
 
 	return error

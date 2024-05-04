@@ -23,7 +23,7 @@ func NewIngredientRepository(db *gorm.DB, tableName string) *IngredientRepositor
 	return repository
 }
 
-func (s IngredientRepository) GetOrCreate(ingredient string) (i Ingredient, err error) {
+func (s IngredientRepository) GetOrCreate(ingredient string) (Ingredient, error) {
 	var entry Ingredient
 
 	error := s.db.FirstOrCreate(&entry, Ingredient{Name: ingredient}).Error
@@ -31,7 +31,7 @@ func (s IngredientRepository) GetOrCreate(ingredient string) (i Ingredient, err 
 	return entry, error
 }
 
-func (s IngredientRepository) Get(id int) (i Ingredient, err error) {
+func (s IngredientRepository) Get(id int) (Ingredient, error) {
 	var ingredient Ingredient
 
 	error := s.db.First(&ingredient, id).Error
@@ -39,7 +39,7 @@ func (s IngredientRepository) Get(id int) (i Ingredient, err error) {
 	return ingredient, error
 }
 
-func (s IngredientRepository) GetAll() (i []Ingredient, err error) {
+func (s IngredientRepository) GetAll() ([]Ingredient, error) {
 	var ingredients []Ingredient
 
 	error := s.db.Find(&ingredients).Error
@@ -47,7 +47,7 @@ func (s IngredientRepository) GetAll() (i []Ingredient, err error) {
 	return ingredients, error
 }
 
-func (s IngredientRepository) Search(name string) (i []Ingredient, err error) {
+func (s IngredientRepository) Search(name string) ([]Ingredient, error) {
 	var ingredients []Ingredient
 
 	error := s.db.Where("name LIKE ?", "%"+name+"%").Find(&ingredients).Error
