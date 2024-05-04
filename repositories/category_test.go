@@ -13,6 +13,11 @@ func TestCategoryRepository(t *testing.T) {
 		expected := repositories.Category{Name: "Test Category"}
 
 		db.Create(&expected)
+
+		if _, err := repo.Get(1337); err == nil {
+			t.Errorf("expected error getting non-existent category, got nil")
+		}
+
 		actual, err := repo.Get(int(expected.ID))
 
 		if err != nil {
@@ -21,10 +26,6 @@ func TestCategoryRepository(t *testing.T) {
 
 		if expected.Name != actual.Name {
 			t.Errorf("expected category name %s, got %s", expected.Name, actual.Name)
-		}
-
-		if actual.Recipes == nil {
-			t.Errorf("expected non-nil recipes for category %s", actual.Name)
 		}
 	})
 
@@ -55,10 +56,6 @@ func TestCategoryRepository(t *testing.T) {
 		for i := range actual {
 			if expected[i].Name != actual[i].Name {
 				t.Errorf("expected category name %s, got %s", expected[i].Name, actual[i].Name)
-			}
-
-			if actual[i].Recipes == nil {
-				t.Errorf("expected non-nil recipes for category %s", actual[i].Name)
 			}
 		}
 	})

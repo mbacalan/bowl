@@ -13,6 +13,11 @@ func TestIngredientRepository(t *testing.T) {
 		expected := repositories.Ingredient{Name: "Test Ingredient"}
 
 		db.Create(&expected)
+
+		if _, err := repo.Get(1337); err == nil {
+			t.Errorf("expected error getting non-existent ingredient, got nil")
+		}
+
 		actual, err := repo.Get(int(expected.ID))
 
 		if err != nil {
