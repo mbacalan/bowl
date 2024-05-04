@@ -24,6 +24,16 @@ type RecipeRepository struct {
 	tableName string
 }
 
+type RecipeUnitOfWork struct {
+	DB                         *gorm.DB
+	RecipeRepository           *RecipeRepository
+	IngredientRepository       *IngredientRepository
+	QuantityUnitRepository     *QuantityUnitRepository
+	RecipeIngredientRepository *RecipeIngredientRepository
+	StepRepository             *StepRepository
+	CategoryRepository         *CategoryRepository
+}
+
 func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	repository := &RecipeRepository{
 		tableName: tableName,
@@ -31,6 +41,18 @@ func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	}
 
 	return repository
+}
+
+func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
+	return &RecipeUnitOfWork{
+		DB:                         database,
+		RecipeRepository:           NewRecipeRepository(database, "recipes"),
+		IngredientRepository:       NewIngredientRepository(database, "ingredients"),
+		QuantityUnitRepository:     NewQuantityUnitRepository(database, "quantity_units"),
+		RecipeIngredientRepository: NewRecipeIngredientRepository(database, "recipe_ingredients"),
+		StepRepository:             NewStepRepository(database, "steps"),
+		CategoryRepository:         NewCategoryRepository(database, "categories"),
+	}
 }
 
 func (s RecipeRepository) Create(name string, prep uint, cook uint) (Recipe, error) {

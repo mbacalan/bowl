@@ -20,16 +20,9 @@ type Server struct {
 	Router   *chi.Mux
 	Database *gorm.DB
 	Logger   *slog.Logger
-	Repos    *Repositories
+	Repos    *repositories.Repositories
 	Services *Services
 	Handlers *Handlers
-}
-
-type Repositories struct {
-	RecipeRepository       *services.RecipeUnitOfWork
-	IngredientRepository   *repositories.IngredientRepository
-	QuantityUnitRepository *repositories.QuantityUnitRepository
-	CategoryRepository     *repositories.CategoryRepository
 }
 
 type Services struct {
@@ -71,20 +64,11 @@ func createServer() *Server {
 	s.Router = chi.NewRouter()
 	s.Logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	s.createRepositories()
+	s.Repos = repositories.CreateRepositories(s.Database)
 	s.createServices()
 	s.createHandlers()
 
 	return s
-}
-
-func (s *Server) createRepositories() {
-	s.Repos = &Repositories{
-		RecipeRepository:       services.NewRecipeUOW(s.Database),
-		IngredientRepository:   repositories.NewIngredientRepository(s.Database, "ingredients"),
-		QuantityUnitRepository: repositories.NewQuantityUnitRepository(s.Database, "quantity_units"),
-		CategoryRepository:     repositories.NewCategoryRepository(s.Database, "categories"),
-	}
 }
 
 func (s *Server) createServices() {
