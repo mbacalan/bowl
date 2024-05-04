@@ -26,32 +26,22 @@ func NewStepRepository(db *gorm.DB, tableName string) *StepRepository {
 
 func (s StepRepository) Create(step string, recipe uint) (i Step, err error) {
 	entry := Step{Step: step, RecipeID: recipe}
-	result := s.db.Create(&entry)
 
-	if result.Error != nil {
-		return Step{}, result.Error
-	}
+	error := s.db.Create(&entry).Error
 
-	return entry, nil
+	return entry, error
 }
 
 func (s StepRepository) GetAll() (i []Step, err error) {
 	var steps []Step
-	result := s.db.Find(&steps)
 
-	if result.Error != nil {
-		return []Step{}, result.Error
-	}
+	error := s.db.Find(&steps).Error
 
-	return steps, nil
+	return steps, error
 }
 
 func (s StepRepository) Delete(id uint) (err error) {
-	result := s.db.Delete(&Step{}, id)
+	error := s.db.Delete(&Step{}, id).Error
 
-	if result.Error != nil {
-		return result.Error
-	}
-
-	return nil
+	return error
 }

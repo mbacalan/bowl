@@ -26,29 +26,22 @@ func NewCategoryRepository(db *gorm.DB, tableName string) *CategoryRepository {
 
 func (s CategoryRepository) Get(id int) (Category, error) {
 	var category Category
-	result := s.db.Preload("Recipes").Find(&category, id)
 
-	if result.Error != nil {
-		return Category{}, result.Error
-	}
+	error := s.db.Preload("Recipes").First(&category, id).Error
 
-	return category, nil
+	return category, error
 }
 
 func (s CategoryRepository) GetAll() ([]Category, error) {
 	var categories []Category
 
-	error := s.db.Preload("Recipes").Find(&categories).Error
+	error := s.db.Preload("Recipes").First(&categories).Error
 
 	return categories, error
 }
 
 func (s CategoryRepository) Delete(id uint) error {
-	result := s.db.Delete(&Category{}, id)
+	error := s.db.Delete(&Category{}, id).Error
 
-	if result.Error != nil {
-		return result.Error
-	}
-
-	return nil
+	return error
 }

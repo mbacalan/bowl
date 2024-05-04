@@ -24,9 +24,7 @@ func NewConnection() *gorm.DB {
 func CreateIfNotExists(db *gorm.DB, data QuantityUnit) (QuantityUnit, error) {
 	var result QuantityUnit
 
-	if err := db.Where(data).FirstOrCreate(&result).Error; err != nil {
-		return QuantityUnit{}, err
-	}
+	error := db.Where(data).FirstOrCreate(&result).Error
 
-	return result, nil
+	return result, error
 }

@@ -36,32 +36,21 @@ func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, uni
 		Quantity:       quantity,
 	}
 
-	result := s.db.Create(&entry)
+	error := s.db.Create(&entry).Error
 
-	if result.Error != nil {
-		return RecipeIngredient{}, result.Error
-	}
-
-	return entry, nil
+	return entry, error
 }
 
 func (s RecipeIngredientRepository) GetAll() (recipeIngredients []RecipeIngredient, err error) {
 	var entries []RecipeIngredient
-	result := s.db.Find(&entries)
 
-	if result.Error != nil {
-		return []RecipeIngredient{}, result.Error
-	}
+	error := s.db.Find(&entries).Error
 
-	return entries, nil
+	return entries, error
 }
 
 func (s RecipeIngredientRepository) Delete(id uint) (err error) {
-	result := s.db.Delete(&RecipeIngredient{}, id)
+	error := s.db.Delete(&RecipeIngredient{}, id).Error
 
-	if result.Error != nil {
-		return result.Error
-	}
-
-	return nil
+	return error
 }

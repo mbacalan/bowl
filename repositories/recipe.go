@@ -40,49 +40,36 @@ func (s RecipeRepository) Create(name string, prep uint, cook uint) (r Recipe, e
 		CookDuration: cook,
 	}
 
-	result := s.DB.Create(&entry)
+	error := s.DB.Create(&entry).Error
 
-	if result.Error != nil {
-		return Recipe{}, result.Error
-	}
-
-	return entry, nil
+	return entry, error
 }
 
 func (s RecipeRepository) Get(id int) (Recipe, error) {
 	var recipe Recipe
-	err := s.DB.Preload("RecipeIngredients").
+
+	error := s.DB.Preload("RecipeIngredients").
 		Preload("RecipeIngredients.Ingredient").
 		Preload("RecipeIngredients.QuantityUnit").
 		Preload("Steps").
 		Preload("Categories").
 		First(&recipe, id).Error
 
-	if err != nil {
-		return Recipe{}, err
-	}
-
-	return recipe, nil
+	return recipe, error
 }
 
 func (s RecipeRepository) GetAll() (r []Recipe, err error) {
 	var recipes []Recipe
-	result := s.DB.Find(&recipes)
 
-	if result.Error != nil {
-		return []Recipe{}, result.Error
-	}
+	error := s.DB.Find(&recipes).Error
 
-	return recipes, nil
+	return recipes, error
 }
 
 func (s RecipeRepository) GetRecent(limit int) (r []Recipe, err error) {
 	var recipes []Recipe
-	result := s.DB.Order("id DESC").Limit(limit).Find(&recipes)
 
-	if result.Error != nil {
-		return []Recipe{}, result.Error
-	}
+	error := s.DB.Order("id DESC").Limit(limit).Find(&recipes).Error
 
-	return recipes, nil
+	return recipes, error
 }
