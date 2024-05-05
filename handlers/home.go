@@ -6,15 +6,19 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/services"
+	"github.com/mbacalan/bowl/repositories"
 )
 
 type HomeHandler struct {
 	Logger  *slog.Logger
-	Service *services.RecipeService
+	Service HomeService
 }
 
-func NewHomeHandler(logger *slog.Logger, service *services.RecipeService) *HomeHandler {
+type HomeService interface {
+	GetRecent(int) ([]repositories.Recipe, error)
+}
+
+func NewHomeHandler(logger *slog.Logger, service HomeService) *HomeHandler {
 	return &HomeHandler{
 		Logger:  logger,
 		Service: service,

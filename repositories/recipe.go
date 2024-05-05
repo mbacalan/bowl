@@ -20,7 +20,7 @@ type Recipe struct {
 }
 
 type RecipeRepository struct {
-	DB        *gorm.DB
+	db        *gorm.DB
 	tableName string
 }
 
@@ -37,7 +37,7 @@ type RecipeUnitOfWork struct {
 func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
 	repository := &RecipeRepository{
 		tableName: tableName,
-		DB:        db,
+		db:        db,
 	}
 
 	return repository
@@ -62,7 +62,7 @@ func (s RecipeRepository) Create(name string, prep uint, cook uint) (Recipe, err
 		CookDuration: cook,
 	}
 
-	error := s.DB.Create(&entry).Error
+	error := s.db.Create(&entry).Error
 
 	return entry, error
 }
@@ -70,7 +70,7 @@ func (s RecipeRepository) Create(name string, prep uint, cook uint) (Recipe, err
 func (s RecipeRepository) Get(id int) (Recipe, error) {
 	var recipe Recipe
 
-	error := s.DB.Preload("RecipeIngredients").
+	error := s.db.Preload("RecipeIngredients").
 		Preload("RecipeIngredients.Ingredient").
 		Preload("RecipeIngredients.QuantityUnit").
 		Preload("Steps").
@@ -83,7 +83,7 @@ func (s RecipeRepository) Get(id int) (Recipe, error) {
 func (s RecipeRepository) GetAll() (r []Recipe, err error) {
 	var recipes []Recipe
 
-	error := s.DB.Find(&recipes).Error
+	error := s.db.Find(&recipes).Error
 
 	return recipes, error
 }
@@ -91,7 +91,7 @@ func (s RecipeRepository) GetAll() (r []Recipe, err error) {
 func (s RecipeRepository) GetRecent(limit int) (r []Recipe, err error) {
 	var recipes []Recipe
 
-	error := s.DB.Order("id DESC").Limit(limit).Find(&recipes).Error
+	error := s.db.Order("id DESC").Limit(limit).Find(&recipes).Error
 
 	return recipes, error
 }

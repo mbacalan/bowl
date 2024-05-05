@@ -6,15 +6,19 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/services"
+	"github.com/mbacalan/bowl/repositories"
 )
 
 type QuantityUnitHandler struct {
 	Logger  *slog.Logger
-	Service *services.QuantityUnitService
+	Service QuantityUnitService
 }
 
-func NewQuantityUnitHandler(logger *slog.Logger, service *services.QuantityUnitService) *QuantityUnitHandler {
+type QuantityUnitService interface {
+	GetAll() ([]repositories.QuantityUnit, error)
+}
+
+func NewQuantityUnitHandler(logger *slog.Logger, service QuantityUnitService) *QuantityUnitHandler {
 	return &QuantityUnitHandler{
 		Logger:  logger,
 		Service: service,

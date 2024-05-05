@@ -6,15 +6,19 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/services"
+	"github.com/mbacalan/bowl/repositories"
 )
 
 type IngredientHandler struct {
 	Logger  *slog.Logger
-	Service *services.IngredientService
+	Service IngredientService
 }
 
-func NewIngredientHandler(logger *slog.Logger, service *services.IngredientService) *IngredientHandler {
+type IngredientService interface {
+	GetAll() ([]repositories.Ingredient, error)
+}
+
+func NewIngredientHandler(logger *slog.Logger, service IngredientService) *IngredientHandler {
 	return &IngredientHandler{
 		Logger:  logger,
 		Service: service,

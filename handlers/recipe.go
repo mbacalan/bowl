@@ -1,24 +1,34 @@
 package handlers
 
 import (
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"log/slog"
 	"net/http"
 	"strconv"
 	"strings"
 
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
+
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/recipes"
+	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
 )
 
 type RecipeHandler struct {
 	Logger  *slog.Logger
-	Service *services.RecipeService
+	Service RecipeService
 }
 
-func NewRecipeHandler(logger *slog.Logger, service *services.RecipeService) *RecipeHandler {
+type RecipeService interface {
+	Get(id int) (repositories.Recipe, error)
+	GetAll() ([]repositories.Recipe, error)
+	GetRecent(limit int) ([]repositories.Recipe, error)
+	Create(data services.RecipeData) (repositories.Recipe, error)
+	Update(id int, data services.RecipeData) (repositories.Recipe, error)
+}
+
+func NewRecipeHandler(logger *slog.Logger, service RecipeService) *RecipeHandler {
 	return &RecipeHandler{
 		Logger:  logger,
 		Service: service,

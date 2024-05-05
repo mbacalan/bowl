@@ -17,6 +17,12 @@ func setupTestDB(t *testing.T) *gorm.DB {
 	return db
 }
 
+func TestCreateRepositories(t *testing.T) {
+	db := setupTestDB(t)
+
+	repositories.CreateRepositories(db)
+}
+
 func TestNewConnection(t *testing.T) {
 	db, err := repositories.NewConnection(sqlite.Open(":memory:"))
 	if db == nil {
