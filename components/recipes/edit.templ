@@ -3,11 +3,11 @@ package recipes
 import (
 	"fmt"
 	"github.com/mbacalan/bowl/components/partials"
-	"github.com/mbacalan/bowl/repositories"
 	"gorm.io/gorm/utils"
+	"github.com/mbacalan/bowl/models"
 )
 
-func getCategories(categories []*repositories.Category) string {
+func getCategories(categories []*models.Category) string {
 	var categoriesString string
 
 	for i, category := range categories {
@@ -21,7 +21,7 @@ func getCategories(categories []*repositories.Category) string {
 	return categoriesString
 }	
 
-templ EditRecipe(recipe repositories.Recipe) {
+templ EditRecipe(recipe models.Recipe) {
 	<!DOCTYPE html>
 	<html lang="en">
 		@partials.Head()

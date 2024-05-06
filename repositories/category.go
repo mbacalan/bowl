@@ -2,13 +2,9 @@ package repositories
 
 import (
 	"gorm.io/gorm"
-)
 
-type Category struct {
-	gorm.Model
-	Name    string
-	Recipes []*Recipe `gorm:"many2many:recipe_categories;"`
-}
+	"github.com/mbacalan/bowl/models"
+)
 
 type CategoryRepository struct {
 	db        *gorm.DB
@@ -24,16 +20,16 @@ func NewCategoryRepository(db *gorm.DB, tableName string) *CategoryRepository {
 	return repository
 }
 
-func (s CategoryRepository) Get(id int) (Category, error) {
-	var category Category
+func (s CategoryRepository) Get(id int) (models.Category, error) {
+	var category models.Category
 
 	error := s.db.Preload("Recipes").First(&category, id).Error
 
 	return category, error
 }
 
-func (s CategoryRepository) GetAll() ([]Category, error) {
-	var categories []Category
+func (s CategoryRepository) GetAll() ([]models.Category, error) {
+	var categories []models.Category
 
 	error := s.db.Preload("Recipes").First(&categories).Error
 
@@ -41,7 +37,7 @@ func (s CategoryRepository) GetAll() ([]Category, error) {
 }
 
 func (s CategoryRepository) Delete(id uint) error {
-	error := s.db.Delete(&Category{}, id).Error
+	error := s.db.Delete(&models.Category{}, id).Error
 
 	return error
 }

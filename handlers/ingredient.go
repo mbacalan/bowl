@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 )
 
 type IngredientHandler struct {
@@ -15,7 +15,7 @@ type IngredientHandler struct {
 }
 
 type IngredientService interface {
-	GetAll() ([]repositories.Ingredient, error)
+	GetAll() ([]models.Ingredient, error)
 }
 
 func NewIngredientHandler(logger *slog.Logger, service IngredientService) *IngredientHandler {

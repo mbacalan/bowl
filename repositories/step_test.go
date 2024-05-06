@@ -4,11 +4,12 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
-func mockStep(id uint) repositories.Step {
-	return repositories.Step{
+func mockStep(id uint) models.Step {
+	return models.Step{
 		RecipeID: id,
 		Step:     "Step " + strconv.Itoa(int(id)),
 	}
@@ -18,7 +19,7 @@ func TestStepRepository(t *testing.T) {
 	t.Run("get all", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewStepRepository(db, "steps")
-		expected := []repositories.Step{
+		expected := []models.Step{
 			mockStep(1),
 			mockStep(2),
 			mockStep(3),
@@ -31,7 +32,7 @@ func TestStepRepository(t *testing.T) {
 			t.Errorf("error getting all steps: %v", err)
 		}
 
-		var steps []repositories.Step
+		var steps []models.Step
 		var count int64
 		db.Find(&steps).Count(&count)
 
@@ -74,7 +75,7 @@ func TestStepRepository(t *testing.T) {
 	t.Run("delete", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewStepRepository(db, "steps")
-		expected := []repositories.Step{
+		expected := []models.Step{
 			mockStep(1),
 			mockStep(2),
 			mockStep(3),
@@ -82,7 +83,7 @@ func TestStepRepository(t *testing.T) {
 
 		db.Create(&expected)
 
-		var steps []repositories.Step
+		var steps []models.Step
 		db.Find(&steps)
 
 		err := repo.Delete(steps[0].ID)

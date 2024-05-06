@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 )
 
 type CategoryHandler struct {
@@ -16,8 +16,8 @@ type CategoryHandler struct {
 }
 
 type CategoryService interface {
-	Get(id int) (repositories.Category, error)
-	GetAll() ([]repositories.Category, error)
+	Get(id int) (models.Category, error)
+	GetAll() ([]models.Category, error)
 }
 
 func NewCategoryHandler(logger *slog.Logger, service CategoryService) *CategoryHandler {

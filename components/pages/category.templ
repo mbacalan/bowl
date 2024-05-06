@@ -2,11 +2,11 @@ package pages
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm/utils"
 )
 
-templ Categories(categories []repositories.Category) {
+templ Categories(categories []models.Category) {
 	@shared.Page() {
 		<h2>All Categories</h2>
 		<hr/>
@@ -22,7 +22,7 @@ templ Categories(categories []repositories.Category) {
 	}
 }
 
-templ Category(category repositories.Category) {
+templ Category(category models.Category) {
 	@shared.Page() {
 		<h2>{ category.Name }</h2>
 		<hr/>

@@ -10,9 +10,9 @@ import "context"
 import "io"
 import "bytes"
 
-import "github.com/mbacalan/bowl/repositories"
+import "github.com/mbacalan/bowl/models"
 
-func QuantityUnits(units []repositories.QuantityUnit, selected string) templ.Component {
+func QuantityUnits(units []models.QuantityUnit, selected string) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

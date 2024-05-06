@@ -3,6 +3,7 @@ package repositories_test
 import (
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -10,7 +11,7 @@ func TestRecipeRepository(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
-		expected := repositories.Recipe{Name: "Test Recipe"}
+		expected := models.Recipe{Name: "Test Recipe"}
 
 		db.Create(&expected)
 		actual, err := repo.Get(int(expected.ID))
@@ -27,7 +28,7 @@ func TestRecipeRepository(t *testing.T) {
 	t.Run("get all", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
-		expected := []repositories.Recipe{
+		expected := []models.Recipe{
 			{Name: "Test Recipe 1"},
 			{Name: "Test Recipe 2"},
 			{Name: "Test Recipe 3"},
@@ -40,7 +41,7 @@ func TestRecipeRepository(t *testing.T) {
 			t.Errorf("error getting all recipes: %v", err)
 		}
 
-		var recipes []repositories.Recipe
+		var recipes []models.Recipe
 		var count int64
 		db.Find(&recipes).Count(&count)
 
@@ -58,7 +59,7 @@ func TestRecipeRepository(t *testing.T) {
 	t.Run("create", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
-		expected := repositories.Recipe{
+		expected := models.Recipe{
 			Name:         "Test Recipe",
 			PrepDuration: 1,
 			CookDuration: 2,
@@ -87,7 +88,7 @@ func TestRecipeRepository(t *testing.T) {
 	t.Run("get recent", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
-		expected := []repositories.Recipe{
+		expected := []models.Recipe{
 			{Name: "Test Recipe 1"},
 			{Name: "Test Recipe 2"},
 			{Name: "Test Recipe 3"},

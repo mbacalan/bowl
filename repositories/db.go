@@ -4,6 +4,8 @@ import (
 	"fmt"
 
 	"gorm.io/gorm"
+
+	"github.com/mbacalan/bowl/models"
 )
 
 type Repositories struct {
@@ -29,23 +31,38 @@ func NewConnection(dialector gorm.Dialector) (*gorm.DB, error) {
 		return nil, err
 	}
 
-	db.AutoMigrate(&Ingredient{}, &QuantityUnit{}, &RecipeIngredient{}, &Step{}, &Category{}, &Recipe{})
+	Migrate(db)
 
 	return db, nil
 }
 
-func CreateIfNotExists(db *gorm.DB, data QuantityUnit) (QuantityUnit, error) {
-	var result QuantityUnit
+func CreateIfNotExists(db *gorm.DB, data models.QuantityUnit) (models.QuantityUnit, error) {
+	var result models.QuantityUnit
 
 	error := db.Where(data).FirstOrCreate(&result).Error
 
 	return result, error
 }
 
+func Migrate(db *gorm.DB) {
+	dbModels := []interface{}{
+		&models.Ingredient{},
+		&models.QuantityUnit{},
+		&models.RecipeIngredient{},
+		&models.Step{},
+		&models.Category{},
+		&models.Recipe{},
+	}
+
+	for _, model := range dbModels {
+		db.AutoMigrate(model)
+	}
+}
+
 func SeedQuantityUnits(db *gorm.DB) {
 	quantityUnitNames := []string{"g", "kg", "ml", "L"}
 
 	for _, name := range quantityUnitNames {
-		CreateIfNotExists(db, QuantityUnit{Name: name})
+		CreateIfNotExists(db, models.QuantityUnit{Name: name})
 	}
 }

@@ -3,6 +3,7 @@ package services
 import (
 	"log/slog"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -18,7 +19,7 @@ func NewCategoryService(logger *slog.Logger, repo *repositories.CategoryReposito
 	}
 }
 
-func (s *CategoryService) Get(id int) (repositories.Category, error) {
+func (s *CategoryService) Get(id int) (models.Category, error) {
 	result, err := s.Repository.Get(id)
 
 	if err != nil {
@@ -29,7 +30,7 @@ func (s *CategoryService) Get(id int) (repositories.Category, error) {
 	return result, nil
 }
 
-func (s *CategoryService) GetAll() ([]repositories.Category, error) {
+func (s *CategoryService) GetAll() ([]models.Category, error) {
 	result, err := s.Repository.GetAll()
 
 	if err != nil {

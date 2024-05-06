@@ -3,6 +3,7 @@ package services
 import (
 	"log/slog"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -15,7 +16,7 @@ func NewIngredientService(logger *slog.Logger, repo *repositories.IngredientRepo
 	return &IngredientService{Logger: logger, Repository: repo}
 }
 
-func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, error error) {
+func (s *IngredientService) Get(id int) (ingredient models.Ingredient, error error) {
 	result, err := s.Repository.Get(id)
 
 	if err != nil {
@@ -26,7 +27,7 @@ func (s *IngredientService) Get(id int) (ingredient repositories.Ingredient, err
 	return result, nil
 }
 
-func (s *IngredientService) GetAll() (ingredients []repositories.Ingredient, error error) {
+func (s *IngredientService) GetAll() (ingredients []models.Ingredient, error error) {
 	result, err := s.Repository.GetAll()
 
 	if err != nil {
@@ -37,7 +38,7 @@ func (s *IngredientService) GetAll() (ingredients []repositories.Ingredient, err
 	return result, nil
 }
 
-func (s *IngredientService) Create(i string) (ingredient repositories.Ingredient, error error) {
+func (s *IngredientService) Create(i string) (ingredient models.Ingredient, error error) {
 	result, err := s.Repository.GetOrCreate(i)
 
 	if err != nil {
@@ -48,9 +49,9 @@ func (s *IngredientService) Create(i string) (ingredient repositories.Ingredient
 	return result, nil
 }
 
-func (s *IngredientService) Search(name string) (ingredients []repositories.Ingredient, error error) {
+func (s *IngredientService) Search(name string) (ingredients []models.Ingredient, error error) {
 	if len(name) == 0 {
-		return []repositories.Ingredient{}, error
+		return []models.Ingredient{}, error
 	}
 
 	result, err := s.Repository.Search(name)

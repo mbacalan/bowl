@@ -3,6 +3,7 @@ package repositories_test
 import (
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -10,7 +11,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewCategoryRepository(db, "categories")
-		expected := repositories.Category{Name: "Test Category"}
+		expected := models.Category{Name: "Test Category"}
 
 		db.Create(&expected)
 
@@ -32,7 +33,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("get all", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewCategoryRepository(db, "categories")
-		expected := []repositories.Category{
+		expected := []models.Category{
 			{Name: "Test Category"},
 			{Name: "Test Category 2"},
 			{Name: "Test Category 3"},
@@ -45,7 +46,7 @@ func TestCategoryRepository(t *testing.T) {
 			t.Errorf("error getting all categories: %v", err)
 		}
 
-		var categories []repositories.Category
+		var categories []models.Category
 		var count int64
 		db.Find(&categories).Count(&count)
 
@@ -63,7 +64,7 @@ func TestCategoryRepository(t *testing.T) {
 	t.Run("delete", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewCategoryRepository(db, "categories")
-		expected := []repositories.Category{
+		expected := []models.Category{
 			{Name: "Test Category"},
 			{Name: "Test Category 2"},
 			{Name: "Test Category 3"},
@@ -71,7 +72,7 @@ func TestCategoryRepository(t *testing.T) {
 
 		db.Create(&expected)
 
-		var categories []repositories.Category
+		var categories []models.Category
 		db.Find(&categories)
 
 		err := repo.Delete(categories[0].ID)

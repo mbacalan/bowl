@@ -3,6 +3,7 @@ package repositories_test
 import (
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -10,7 +11,7 @@ func TestIngredientRepository(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewIngredientRepository(db, "ingredients")
-		expected := repositories.Ingredient{Name: "Test Ingredient"}
+		expected := models.Ingredient{Name: "Test Ingredient"}
 
 		db.Create(&expected)
 
@@ -32,7 +33,7 @@ func TestIngredientRepository(t *testing.T) {
 	t.Run("get all", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewIngredientRepository(db, "ingredients")
-		expected := []repositories.Ingredient{
+		expected := []models.Ingredient{
 			{Name: "Test Ingredient 1"},
 			{Name: "Test Ingredient 2"},
 			{Name: "Test Ingredient 3"},
@@ -45,7 +46,7 @@ func TestIngredientRepository(t *testing.T) {
 			t.Errorf("error getting all ingredients: %v", err)
 		}
 
-		var ingredients []repositories.Ingredient
+		var ingredients []models.Ingredient
 		var count int64
 		db.Find(&ingredients).Count(&count)
 
@@ -63,7 +64,7 @@ func TestIngredientRepository(t *testing.T) {
 	t.Run("get or create", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewIngredientRepository(db, "ingredients")
-		expected := repositories.Ingredient{Name: "Test Ingredient"}
+		expected := models.Ingredient{Name: "Test Ingredient"}
 
 		// Get
 		db.Create(&expected)
@@ -78,7 +79,7 @@ func TestIngredientRepository(t *testing.T) {
 		}
 
 		// Create
-		expected = repositories.Ingredient{Name: "Test Create Ingredient"}
+		expected = models.Ingredient{Name: "Test Create Ingredient"}
 		actual, err = repo.GetOrCreate(expected.Name)
 
 		if err != nil {
@@ -93,7 +94,7 @@ func TestIngredientRepository(t *testing.T) {
 	t.Run("search", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewIngredientRepository(db, "ingredients")
-		expected := []repositories.Ingredient{
+		expected := []models.Ingredient{
 			{Name: "Test Ingredient 1"},
 			{Name: "Test Ingredient 2"},
 			{Name: "Wont match"},

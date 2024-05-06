@@ -3,6 +3,7 @@ package services
 import (
 	"log/slog"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -31,7 +32,7 @@ func NewRecipeService(log *slog.Logger, uow *repositories.RecipeUnitOfWork) *Rec
 	}
 }
 
-func (s *RecipeService) Get(id int) (recipe repositories.Recipe, error error) {
+func (s *RecipeService) Get(id int) (recipe models.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.Get(id)
 
 	if err != nil {
@@ -42,7 +43,7 @@ func (s *RecipeService) Get(id int) (recipe repositories.Recipe, error error) {
 	return result, nil
 }
 
-func (s *RecipeService) GetAll() (recipes []repositories.Recipe, error error) {
+func (s *RecipeService) GetAll() (recipes []models.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetAll()
 
 	if err != nil {
@@ -53,7 +54,7 @@ func (s *RecipeService) GetAll() (recipes []repositories.Recipe, error error) {
 	return result, nil
 }
 
-func (s *RecipeService) GetRecent(limit int) (recipes []repositories.Recipe, error error) {
+func (s *RecipeService) GetRecent(limit int) (recipes []models.Recipe, error error) {
 	result, err := s.UnitOfWork.RecipeRepository.GetRecent(limit)
 
 	if err != nil {
@@ -64,7 +65,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []repositories.Recipe, err
 	return result, nil
 }
 
-func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
+func (s *RecipeService) Create(data RecipeData) (models.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.Create(data.Name, data.PrepDuration, data.CookDuration)
 
 	if err != nil {
@@ -77,8 +78,8 @@ func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
 
 	if data.Categories[0] != "" {
 		for _, categoryName := range data.Categories {
-			var category repositories.Category
-			error := s.UnitOfWork.DB.FirstOrCreate(&category, repositories.Category{Name: cases.Title(language.English).String(categoryName)}).Error
+			var category models.Category
+			error := s.UnitOfWork.DB.FirstOrCreate(&category, models.Category{Name: cases.Title(language.English).String(categoryName)}).Error
 
 			if error == nil {
 				s.UnitOfWork.DB.Model(&recipe).Association("Categories").Append(&category)
@@ -89,12 +90,12 @@ func (s *RecipeService) Create(data RecipeData) (repositories.Recipe, error) {
 	return recipe, nil
 }
 
-func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, error) {
+func (s *RecipeService) Update(id int, data RecipeData) (models.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.Get(id)
 
 	if err != nil {
 		s.Logger.Error("Recipe does not exist", err)
-		return repositories.Recipe{}, err
+		return models.Recipe{}, err
 	}
 
 	for i := range recipe.RecipeIngredients {
@@ -102,7 +103,7 @@ func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, er
 
 		if err != nil {
 			s.Logger.Error("Error deleting recipe ingredient", err)
-			return repositories.Recipe{}, err
+			return models.Recipe{}, err
 		}
 	}
 
@@ -122,11 +123,11 @@ func (s *RecipeService) Update(id int, data RecipeData) (repositories.Recipe, er
 
 	if data.Categories[0] != "" {
 		for i := range data.Categories {
-			var category repositories.Category
+			var category models.Category
 			error := s.UnitOfWork.DB.Find(&category, "name = ?", data.Categories[i]).Error
 
 			if error == nil {
-				s.UnitOfWork.DB.Model(&recipe).Association("Categories").Append(&repositories.Category{Name: cases.Title(language.English).String(data.Categories[i])})
+				s.UnitOfWork.DB.Model(&recipe).Association("Categories").Append(&models.Category{Name: cases.Title(language.English).String(data.Categories[i])})
 			}
 		}
 	}

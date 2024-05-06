@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 )
 
 type QuantityUnitHandler struct {
@@ -15,7 +15,7 @@ type QuantityUnitHandler struct {
 }
 
 type QuantityUnitService interface {
-	GetAll() ([]repositories.QuantityUnit, error)
+	GetAll() ([]models.QuantityUnit, error)
 }
 
 func NewQuantityUnitHandler(logger *slog.Logger, service QuantityUnitService) *QuantityUnitHandler {

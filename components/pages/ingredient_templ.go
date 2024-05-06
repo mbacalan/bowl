@@ -12,10 +12,10 @@ import "bytes"
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 )
 
-func IngredientList(ingredients []repositories.Ingredient) templ.Component {
+func IngredientList(ingredients []models.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -62,7 +62,7 @@ func IngredientList(ingredients []repositories.Ingredient) templ.Component {
 	})
 }
 
-func IngredientListPage(ingredients []repositories.Ingredient) templ.Component {
+func IngredientListPage(ingredients []models.Ingredient) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

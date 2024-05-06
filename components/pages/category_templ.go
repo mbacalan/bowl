@@ -12,11 +12,11 @@ import "bytes"
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm/utils"
 )
 
-func Categories(categories []repositories.Category) templ.Component {
+func Categories(categories []models.Category) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -87,7 +87,7 @@ func Categories(categories []repositories.Category) templ.Component {
 	})
 }
 
-func Category(category repositories.Category) templ.Component {
+func Category(category models.Category) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {

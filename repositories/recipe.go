@@ -1,23 +1,9 @@
 package repositories
 
 import (
+	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm"
 )
-
-type Recipe struct {
-	gorm.Model
-	Name              string
-	RecipeIngredients []RecipeIngredient
-	Steps             []Step
-	PrepDuration      uint
-	CookDuration      uint
-	Categories        []*Category `gorm:"many2many:recipe_categories;"`
-	// Rating      uint
-	// Difficulty  uint
-	// WwPoints    uint `gorm:"column:ww_points"`
-	// Language    string
-	// Comments    []string
-}
 
 type RecipeRepository struct {
 	db        *gorm.DB
@@ -55,8 +41,8 @@ func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
 	}
 }
 
-func (s RecipeRepository) Create(name string, prep uint, cook uint) (Recipe, error) {
-	entry := Recipe{
+func (s RecipeRepository) Create(name string, prep uint, cook uint) (models.Recipe, error) {
+	entry := models.Recipe{
 		Name:         name,
 		PrepDuration: prep,
 		CookDuration: cook,
@@ -67,8 +53,8 @@ func (s RecipeRepository) Create(name string, prep uint, cook uint) (Recipe, err
 	return entry, error
 }
 
-func (s RecipeRepository) Get(id int) (Recipe, error) {
-	var recipe Recipe
+func (s RecipeRepository) Get(id int) (models.Recipe, error) {
+	var recipe models.Recipe
 
 	error := s.db.Preload("RecipeIngredients").
 		Preload("RecipeIngredients.Ingredient").
@@ -80,16 +66,16 @@ func (s RecipeRepository) Get(id int) (Recipe, error) {
 	return recipe, error
 }
 
-func (s RecipeRepository) GetAll() (r []Recipe, err error) {
-	var recipes []Recipe
+func (s RecipeRepository) GetAll() (r []models.Recipe, err error) {
+	var recipes []models.Recipe
 
 	error := s.db.Find(&recipes).Error
 
 	return recipes, error
 }
 
-func (s RecipeRepository) GetRecent(limit int) (r []Recipe, err error) {
-	var recipes []Recipe
+func (s RecipeRepository) GetRecent(limit int) (r []models.Recipe, err error) {
+	var recipes []models.Recipe
 
 	error := s.db.Order("id DESC").Limit(limit).Find(&recipes).Error
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 )
 
 type HomeHandler struct {
@@ -15,7 +15,7 @@ type HomeHandler struct {
 }
 
 type HomeService interface {
-	GetRecent(int) ([]repositories.Recipe, error)
+	GetRecent(int) ([]models.Recipe, error)
 }
 
 func NewHomeHandler(logger *slog.Logger, service HomeService) *HomeHandler {

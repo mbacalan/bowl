@@ -1,18 +1,9 @@
 package repositories
 
 import (
+	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm"
 )
-
-type RecipeIngredient struct {
-	gorm.Model
-	RecipeID       uint
-	IngredientID   uint
-	Ingredient     Ingredient `gorm:"foreignKey:IngredientID"`
-	QuantityUnitID uint
-	QuantityUnit   QuantityUnit `gorm:"foreignKey:QuantityUnitID"`
-	Quantity       string
-}
 
 type RecipeIngredientRepository struct {
 	db        *gorm.DB
@@ -28,8 +19,8 @@ func NewRecipeIngredientRepository(db *gorm.DB, tableName string) *RecipeIngredi
 	return repository
 }
 
-func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (RecipeIngredient, error) {
-	entry := RecipeIngredient{
+func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (models.RecipeIngredient, error) {
+	entry := models.RecipeIngredient{
 		RecipeID:       recipeID,
 		IngredientID:   ingredientID,
 		QuantityUnitID: unitID,
@@ -41,8 +32,8 @@ func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, uni
 	return entry, error
 }
 
-func (s RecipeIngredientRepository) GetAll() ([]RecipeIngredient, error) {
-	var entries []RecipeIngredient
+func (s RecipeIngredientRepository) GetAll() ([]models.RecipeIngredient, error) {
+	var entries []models.RecipeIngredient
 
 	error := s.db.Find(&entries).Error
 
@@ -50,7 +41,7 @@ func (s RecipeIngredientRepository) GetAll() ([]RecipeIngredient, error) {
 }
 
 func (s RecipeIngredientRepository) Delete(id uint) error {
-	error := s.db.Delete(&RecipeIngredient{}, id).Error
+	error := s.db.Delete(&models.RecipeIngredient{}, id).Error
 
 	return error
 }

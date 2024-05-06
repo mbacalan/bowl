@@ -3,6 +3,7 @@ package repositories_test
 import (
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -10,7 +11,7 @@ func TestQuantityUnitRepository(t *testing.T) {
 	t.Run("get or create", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewQuantityUnitRepository(db, "quantity_units")
-		expected := repositories.QuantityUnit{Name: "Test Kilos"}
+		expected := models.QuantityUnit{Name: "Test Kilos"}
 
 		// Get
 		db.Create(&expected)
@@ -25,7 +26,7 @@ func TestQuantityUnitRepository(t *testing.T) {
 		}
 
 		// Create
-		expected = repositories.QuantityUnit{Name: "Test Grams"}
+		expected = models.QuantityUnit{Name: "Test Grams"}
 		actual, err = repo.GetOrCreate(expected.Name)
 
 		if err != nil {
@@ -40,7 +41,7 @@ func TestQuantityUnitRepository(t *testing.T) {
 	t.Run("get all", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewQuantityUnitRepository(db, "quantity_units")
-		expected := []repositories.QuantityUnit{
+		expected := []models.QuantityUnit{
 			{Name: "Test Unit 1"},
 			{Name: "Test Unit 2"},
 			{Name: "Test Unit 3"},
@@ -53,7 +54,7 @@ func TestQuantityUnitRepository(t *testing.T) {
 			t.Errorf("error getting all quantity units: %v", err)
 		}
 
-		var quantity_units []repositories.QuantityUnit
+		var quantity_units []models.QuantityUnit
 		var count int64
 		db.Find(&quantity_units).Count(&count)
 

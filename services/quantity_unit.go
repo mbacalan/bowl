@@ -3,6 +3,7 @@ package services
 import (
 	"log/slog"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -15,7 +16,7 @@ func NewQuantityUnitService(logger *slog.Logger, repo *repositories.QuantityUnit
 	return &QuantityUnitService{Logger: logger, Repository: repo}
 }
 
-func (s *QuantityUnitService) GetAll() (units []repositories.QuantityUnit, error error) {
+func (s *QuantityUnitService) GetAll() (units []models.QuantityUnit, error error) {
 	result, err := s.Repository.GetAll()
 
 	if err != nil {
@@ -26,7 +27,7 @@ func (s *QuantityUnitService) GetAll() (units []repositories.QuantityUnit, error
 	return result, nil
 }
 
-func (s *QuantityUnitService) Create(i string) (unit repositories.QuantityUnit, error error) {
+func (s *QuantityUnitService) Create(i string) (unit models.QuantityUnit, error error) {
 	result, err := s.Repository.GetOrCreate(i)
 
 	if err != nil {

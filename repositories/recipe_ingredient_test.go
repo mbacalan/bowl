@@ -4,11 +4,12 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
-func mockRecipeIngredient(id uint) repositories.RecipeIngredient {
-	return repositories.RecipeIngredient{
+func mockRecipeIngredient(id uint) models.RecipeIngredient {
+	return models.RecipeIngredient{
 		RecipeID:       id,
 		IngredientID:   id,
 		QuantityUnitID: id,
@@ -20,7 +21,7 @@ func TestRecipeIngredientRepository(t *testing.T) {
 	t.Run("get all", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeIngredientRepository(db, "recipe_ingredients")
-		expected := []repositories.RecipeIngredient{
+		expected := []models.RecipeIngredient{
 			mockRecipeIngredient(1),
 			mockRecipeIngredient(2),
 			mockRecipeIngredient(3),
@@ -33,7 +34,7 @@ func TestRecipeIngredientRepository(t *testing.T) {
 			t.Errorf("error getting all recipe ingredients: %v", err)
 		}
 
-		var recipe_ingredients []repositories.RecipeIngredient
+		var recipe_ingredients []models.RecipeIngredient
 		var count int64
 		db.Find(&recipe_ingredients).Count(&count)
 
@@ -80,7 +81,7 @@ func TestRecipeIngredientRepository(t *testing.T) {
 	t.Run("delete", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeIngredientRepository(db, "recipe_ingredients")
-		expected := []repositories.RecipeIngredient{
+		expected := []models.RecipeIngredient{
 			mockRecipeIngredient(1),
 			mockRecipeIngredient(2),
 			mockRecipeIngredient(3),
@@ -88,7 +89,7 @@ func TestRecipeIngredientRepository(t *testing.T) {
 
 		db.Create(&expected)
 
-		var recipe_ingredients []repositories.RecipeIngredient
+		var recipe_ingredients []models.RecipeIngredient
 		db.Find(&recipe_ingredients)
 
 		err := repo.Delete(recipe_ingredients[0].ID)

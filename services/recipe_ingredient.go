@@ -3,6 +3,7 @@ package services
 import (
 	"log/slog"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 )
 
@@ -15,7 +16,7 @@ func NewRecipeIngredientService(logger *slog.Logger, repo *repositories.RecipeIn
 	return &RecipeIngredientService{Logger: logger, Repository: repo}
 }
 
-func (s *RecipeIngredientService) GetAll() (ingredients []repositories.RecipeIngredient, error error) {
+func (s *RecipeIngredientService) GetAll() (ingredients []models.RecipeIngredient, error error) {
 	result, err := s.Repository.GetAll()
 
 	if err != nil {
@@ -26,7 +27,7 @@ func (s *RecipeIngredientService) GetAll() (ingredients []repositories.RecipeIng
 	return result, nil
 }
 
-func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ingredient repositories.RecipeIngredient, error error) {
+func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ingredient models.RecipeIngredient, error error) {
 	result, err := s.Repository.Create(r, i, qu, q)
 
 	if err != nil {

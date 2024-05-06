@@ -3,6 +3,7 @@ package repositories_test
 import (
 	"testing"
 
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -37,7 +38,7 @@ func TestNewConnection(t *testing.T) {
 
 func TestCreateIfNotExists(t *testing.T) {
 	db := setupTestDB(t)
-	expected := repositories.QuantityUnit{Name: "Test unit"}
+	expected := models.QuantityUnit{Name: "Test unit"}
 	actual, err := repositories.CreateIfNotExists(db, expected)
 	if err != nil {
 		t.Errorf("error creating QuantityUnit: %v", err)
@@ -51,6 +52,12 @@ func TestCreateIfNotExists(t *testing.T) {
 	if err != nil {
 		t.Errorf("error creating existing QuantityUnit: %v", err)
 	}
+}
+
+func TestMigrate(t *testing.T) {
+	db := setupTestDB(t)
+
+	repositories.Migrate(db)
 }
 
 func TestSeedQuantityUnits(t *testing.T) {

@@ -11,7 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/recipes"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/services"
 )
 
@@ -21,11 +21,11 @@ type RecipeHandler struct {
 }
 
 type RecipeService interface {
-	Get(id int) (repositories.Recipe, error)
-	GetAll() ([]repositories.Recipe, error)
-	GetRecent(limit int) ([]repositories.Recipe, error)
-	Create(data services.RecipeData) (repositories.Recipe, error)
-	Update(id int, data services.RecipeData) (repositories.Recipe, error)
+	Get(id int) (models.Recipe, error)
+	GetAll() ([]models.Recipe, error)
+	GetRecent(limit int) ([]models.Recipe, error)
+	Create(data services.RecipeData) (models.Recipe, error)
+	Update(id int, data services.RecipeData) (models.Recipe, error)
 }
 
 func NewRecipeHandler(logger *slog.Logger, service RecipeService) *RecipeHandler {

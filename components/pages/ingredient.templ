@@ -2,10 +2,10 @@ package pages
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 )
 
-templ IngredientList(ingredients []repositories.Ingredient) {
+templ IngredientList(ingredients []models.Ingredient) {
 	<h2>All Ingredients</h2>
 	<hr/>
 	<ul data-testid="ingredient-list">
@@ -17,7 +17,7 @@ templ IngredientList(ingredients []repositories.Ingredient) {
 	</ul>
 }
 
-templ IngredientListPage(ingredients []repositories.Ingredient) {
+templ IngredientListPage(ingredients []models.Ingredient) {
 	@shared.Page() {
 		if len(ingredients) == 0 {
 			<h2>No ingredients found :(</h2>
