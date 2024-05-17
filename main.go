@@ -8,8 +8,10 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/joho/godotenv"
 	"github.com/mbacalan/bowl/assets"
 	"github.com/mbacalan/bowl/handlers"
+	"github.com/mbacalan/bowl/internal"
 	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
 	"gorm.io/driver/sqlite"
@@ -26,6 +28,7 @@ type Server struct {
 }
 
 func main() {
+	godotenv.Load()
 	server := createServer()
 	server.mountHandlers()
 
@@ -57,14 +60,23 @@ func createServer() *Server {
 }
 
 func (s *Server) mountHandlers() {
-	s.Router.Use(middleware.Logger)
-	s.Router.Use(middleware.Compress(5))
+	s.Router.Group(func(r chi.Router) {
+		r.Use(middleware.Logger)
+		r.Use(middleware.Compress(5))
 
-	s.Router.Mount("/assets", assets.Routes())
+		r.Mount("/assets", assets.Routes())
+		r.Mount("/auth", s.Handlers.AuthHandler.Routes())
+	})
 
-	s.Router.Mount("/", s.Handlers.HomeHandler.Routes())
-	s.Router.Mount("/recipes", s.Handlers.RecipeHandler.Routes())
-	s.Router.Mount("/categories", s.Handlers.CategoryHandler.Routes())
-	s.Router.Mount("/ingredients", s.Handlers.IngredientHandler.Routes())
-	s.Router.Mount("/quantity-units", s.Handlers.QuantityUnitHandler.Routes())
+	s.Router.Group(func(r chi.Router) {
+		r.Use(middleware.Logger)
+		r.Use(middleware.Compress(5))
+		r.Use(internal.Authenticated(s.Handlers.AuthHandler.Store))
+
+		r.Mount("/", s.Handlers.HomeHandler.Routes())
+		r.Mount("/recipes", s.Handlers.RecipeHandler.Routes())
+		r.Mount("/categories", s.Handlers.CategoryHandler.Routes())
+		r.Mount("/ingredients", s.Handlers.IngredientHandler.Routes())
+		r.Mount("/quantity-units", s.Handlers.QuantityUnitHandler.Routes())
+	})
 }

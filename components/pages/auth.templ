@@ -1,0 +1,17 @@
+package pages
+
+import (
+	"github.com/mbacalan/bowl/components/shared"
+)
+
+templ Auth() {
+	@shared.Page() {
+		@Login()
+
+		<hr />
+		<div style="text-align: center;">OR</div>
+		<hr />
+
+		@Signup()
+	}
+}

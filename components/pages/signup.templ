@@ -1,0 +1,21 @@
+package pages
+
+templ Signup() {
+	<form
+		id="signup-form"
+		method="post"
+		action="/"
+		hx-post="/auth/signup"
+		hx-target="body"
+	>
+		<h2>Sign up</h2>
+
+		<label for="username">Username</label>
+		<input type="text" name="username" />
+
+		<label for="password">Password</label>
+		<input type="password" name="password" />
+
+		<input type="submit" value="Sign up" />
+	</form>
+}
