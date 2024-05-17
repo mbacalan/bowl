@@ -49,11 +49,6 @@ func (h *RecipeHandler) Routes() chi.Router {
 }
 
 func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
-	if r.Method == http.MethodGet {
-		recipes.CreateRecipe().Render(r.Context(), w)
-		return
-	}
-
 	r.ParseForm()
 
 	name := r.Form.Get("name")

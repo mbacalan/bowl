@@ -9,6 +9,7 @@ import (
 )
 
 type Repositories struct {
+	UserRepository         *UserRepository
 	RecipeRepository       *RecipeUnitOfWork
 	IngredientRepository   *IngredientRepository
 	QuantityUnitRepository *QuantityUnitRepository
@@ -17,6 +18,7 @@ type Repositories struct {
 
 func CreateRepositories(db *gorm.DB) *Repositories {
 	return &Repositories{
+		UserRepository:         NewUserRepository(db, "users"),
 		RecipeRepository:       NewRecipeUOW(db),
 		IngredientRepository:   NewIngredientRepository(db, "ingredients"),
 		QuantityUnitRepository: NewQuantityUnitRepository(db, "quantity_units"),
@@ -52,6 +54,7 @@ func Migrate(db *gorm.DB) {
 		&models.Step{},
 		&models.Category{},
 		&models.Recipe{},
+		&models.User{},
 	}
 
 	for _, model := range dbModels {
