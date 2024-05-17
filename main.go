@@ -7,30 +7,18 @@ import (
 	"os"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/joho/godotenv"
-	"github.com/mbacalan/bowl/assets"
 	"github.com/mbacalan/bowl/handlers"
-	"github.com/mbacalan/bowl/internal"
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services"
 	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
-
-type Server struct {
-	Router   *chi.Mux
-	Database *gorm.DB
-	Logger   *slog.Logger
-	Repos    *repositories.Repositories
-	Services *services.Services
-	Handlers *handlers.Handlers
-}
 
 func main() {
 	godotenv.Load()
 	server := createServer()
-	server.mountHandlers()
+	handlers.MountHandlers(server)
 
 	fmt.Printf("Listening on %v\n", ":3000")
 
@@ -40,43 +28,26 @@ func main() {
 	}
 }
 
-func createServer() *Server {
-	s := &Server{}
+func createServer() *models.Server {
 	db, err := repositories.NewConnection(sqlite.Open("./db.sqlite"))
 	repositories.SeedQuantityUnits(db)
 	if err != nil {
 		os.Exit(1)
 	}
 
-	s.Database = db
-	s.Router = chi.NewRouter()
-	s.Logger = slog.New(slog.NewJSONHandler(os.Stdout, nil))
+	logger := slog.New(slog.NewJSONHandler(os.Stdout, nil))
 
-	s.Repos = repositories.CreateRepositories(s.Database)
-	s.Services = services.CreateServices(s.Logger, s.Repos)
-	s.Handlers = handlers.CreateHandlers(s.Logger, s.Services)
+	repos := repositories.CreateRepositories(db)
+	services := services.CreateServices(logger, repos)
+	handlers := handlers.CreateHandlers(logger, services)
 
-	return s
-}
+	return &models.Server{
+		Database: db,
+		Router:   chi.NewRouter(),
+		Logger:   slog.New(slog.NewJSONHandler(os.Stdout, nil)),
 
-func (s *Server) mountHandlers() {
-	s.Router.Group(func(r chi.Router) {
-		r.Use(middleware.Logger)
-		r.Use(middleware.Compress(5))
-
-		r.Mount("/assets", assets.Routes())
-		r.Mount("/auth", s.Handlers.AuthHandler.Routes())
-	})
-
-	s.Router.Group(func(r chi.Router) {
-		r.Use(middleware.Logger)
-		r.Use(middleware.Compress(5))
-		r.Use(internal.Authenticated(s.Handlers.AuthHandler.Store))
-
-		r.Mount("/", s.Handlers.HomeHandler.Routes())
-		r.Mount("/recipes", s.Handlers.RecipeHandler.Routes())
-		r.Mount("/categories", s.Handlers.CategoryHandler.Routes())
-		r.Mount("/ingredients", s.Handlers.IngredientHandler.Routes())
-		r.Mount("/quantity-units", s.Handlers.QuantityUnitHandler.Routes())
-	})
+		Repos:    repos,
+		Services: services,
+		Handlers: handlers,
+	}
 }

@@ -8,16 +8,8 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type Repositories struct {
-	UserRepository         *UserRepository
-	RecipeRepository       *RecipeUnitOfWork
-	IngredientRepository   *IngredientRepository
-	QuantityUnitRepository *QuantityUnitRepository
-	CategoryRepository     *CategoryRepository
-}
-
-func CreateRepositories(db *gorm.DB) *Repositories {
-	return &Repositories{
+func CreateRepositories(db *gorm.DB) *models.Repositories {
+	return &models.Repositories{
 		UserRepository:         NewUserRepository(db, "users"),
 		RecipeRepository:       NewRecipeUOW(db),
 		IngredientRepository:   NewIngredientRepository(db, "ingredients"),

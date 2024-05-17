@@ -3,22 +3,14 @@ package services
 import (
 	"log/slog"
 
-	"github.com/mbacalan/bowl/repositories"
+	"github.com/mbacalan/bowl/models"
 	"github.com/mbacalan/bowl/services/internal"
 )
 
-type Services struct {
-	AuthService         *AuthService
-	RecipeService       *RecipeService
-	IngredientService   *IngredientService
-	QuantityUnitService *QuantityUnitService
-	CategoryService     *CategoryService
-}
-
-func CreateServices(logger *slog.Logger, repos *repositories.Repositories) *Services {
+func CreateServices(logger *slog.Logger, repos *models.Repositories) *models.Services {
 	hash := internal.NewArgon2idHash(1, 32, 64*1024, 32, 256)
 
-	return &Services{
+	return &models.Services{
 		AuthService:         NewAuthService(logger, repos.UserRepository, hash),
 		RecipeService:       NewRecipeService(logger, repos.RecipeRepository),
 		IngredientService:   NewIngredientService(logger, repos.IngredientRepository),

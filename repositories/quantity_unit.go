@@ -1,36 +1,36 @@
 package repositories
 
 import (
-	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm"
+
+	"github.com/mbacalan/bowl/models"
 )
 
 type QuantityUnitRepository struct {
-	db        *gorm.DB
-	tableName string
+	*models.Repository
 }
 
 func NewQuantityUnitRepository(db *gorm.DB, tableName string) *QuantityUnitRepository {
-	repository := &QuantityUnitRepository{
-		tableName: tableName,
-		db:        db,
+	return &QuantityUnitRepository{
+		Repository: &models.Repository{
+			DB:        db,
+			TableName: tableName,
+		},
 	}
-
-	return repository
 }
 
-func (s QuantityUnitRepository) GetOrCreate(unit string) (models.QuantityUnit, error) {
+func (s *QuantityUnitRepository) GetOrCreate(unit string) (models.QuantityUnit, error) {
 	var entry models.QuantityUnit
 
-	error := s.db.FirstOrCreate(&entry, models.QuantityUnit{Name: unit}).Error
+	error := s.DB.FirstOrCreate(&entry, models.QuantityUnit{Name: unit}).Error
 
 	return entry, error
 }
 
-func (s QuantityUnitRepository) GetAll() ([]models.QuantityUnit, error) {
+func (s *QuantityUnitRepository) GetAll() ([]models.QuantityUnit, error) {
 	var units []models.QuantityUnit
 
-	error := s.db.Find(&units).Error
+	error := s.DB.Find(&units).Error
 
 	return units, error
 }

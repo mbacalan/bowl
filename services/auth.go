@@ -6,17 +6,16 @@ import (
 	"os"
 
 	"github.com/mbacalan/bowl/models"
-	"github.com/mbacalan/bowl/repositories"
 	"github.com/mbacalan/bowl/services/internal"
 )
 
 type AuthService struct {
 	Logger     *slog.Logger
-	Repository *repositories.UserRepository
+	Repository models.UserRepository
 	Hash       *internal.Argon2idHash
 }
 
-func NewAuthService(logger *slog.Logger, repo *repositories.UserRepository, hash *internal.Argon2idHash) *AuthService {
+func NewAuthService(logger *slog.Logger, repo models.UserRepository, hash *internal.Argon2idHash) *AuthService {
 	return &AuthService{
 		Logger:     logger,
 		Repository: repo,

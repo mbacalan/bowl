@@ -4,28 +4,16 @@ import (
 	"log/slog"
 
 	"github.com/mbacalan/bowl/models"
-	"github.com/mbacalan/bowl/repositories"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
 
 type RecipeService struct {
 	Logger     *slog.Logger
-	UnitOfWork *repositories.RecipeUnitOfWork
+	UnitOfWork models.RecipeUnitOfWork
 }
 
-type RecipeData struct {
-	Name          string
-	Steps         []string
-	Ingredients   []string
-	Quantities    []string
-	QuantityUnits []string
-	Categories    []string
-	PrepDuration  uint
-	CookDuration  uint
-}
-
-func NewRecipeService(log *slog.Logger, uow *repositories.RecipeUnitOfWork) *RecipeService {
+func NewRecipeService(log *slog.Logger, uow models.RecipeUnitOfWork) *RecipeService {
 	return &RecipeService{
 		Logger:     log,
 		UnitOfWork: uow,
@@ -65,7 +53,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []models.Recipe, error err
 	return result, nil
 }
 
-func (s *RecipeService) Create(data RecipeData) (models.Recipe, error) {
+func (s *RecipeService) Create(data models.RecipeData) (models.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.Create(data.Name, data.PrepDuration, data.CookDuration)
 
 	if err != nil {
@@ -90,7 +78,7 @@ func (s *RecipeService) Create(data RecipeData) (models.Recipe, error) {
 	return recipe, nil
 }
 
-func (s *RecipeService) Update(id int, data RecipeData) (models.Recipe, error) {
+func (s *RecipeService) Update(id int, data models.RecipeData) (models.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.Get(id)
 
 	if err != nil {

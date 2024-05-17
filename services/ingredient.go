@@ -4,15 +4,14 @@ import (
 	"log/slog"
 
 	"github.com/mbacalan/bowl/models"
-	"github.com/mbacalan/bowl/repositories"
 )
 
 type IngredientService struct {
 	Logger     *slog.Logger
-	Repository *repositories.IngredientRepository
+	Repository models.IngredientRepository
 }
 
-func NewIngredientService(logger *slog.Logger, repo *repositories.IngredientRepository) *IngredientService {
+func NewIngredientService(logger *slog.Logger, repo models.IngredientRepository) *IngredientService {
 	return &IngredientService{Logger: logger, Repository: repo}
 }
 

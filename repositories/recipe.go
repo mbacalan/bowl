@@ -1,36 +1,26 @@
 package repositories
 
 import (
-	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm"
+
+	"github.com/mbacalan/bowl/models"
 )
 
 type RecipeRepository struct {
-	db        *gorm.DB
-	tableName string
-}
-
-type RecipeUnitOfWork struct {
-	DB                         *gorm.DB
-	RecipeRepository           *RecipeRepository
-	IngredientRepository       *IngredientRepository
-	QuantityUnitRepository     *QuantityUnitRepository
-	RecipeIngredientRepository *RecipeIngredientRepository
-	StepRepository             *StepRepository
-	CategoryRepository         *CategoryRepository
+	*models.Repository
 }
 
 func NewRecipeRepository(db *gorm.DB, tableName string) *RecipeRepository {
-	repository := &RecipeRepository{
-		tableName: tableName,
-		db:        db,
+	return &RecipeRepository{
+		Repository: &models.Repository{
+			DB:        db,
+			TableName: tableName,
+		},
 	}
-
-	return repository
 }
 
-func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
-	return &RecipeUnitOfWork{
+func NewRecipeUOW(database *gorm.DB) models.RecipeUnitOfWork {
+	return models.RecipeUnitOfWork{
 		DB:                         database,
 		RecipeRepository:           NewRecipeRepository(database, "recipes"),
 		IngredientRepository:       NewIngredientRepository(database, "ingredients"),
@@ -41,22 +31,22 @@ func NewRecipeUOW(database *gorm.DB) *RecipeUnitOfWork {
 	}
 }
 
-func (s RecipeRepository) Create(name string, prep uint, cook uint) (models.Recipe, error) {
+func (s *RecipeRepository) Create(name string, prep uint, cook uint) (models.Recipe, error) {
 	entry := models.Recipe{
 		Name:         name,
 		PrepDuration: prep,
 		CookDuration: cook,
 	}
 
-	error := s.db.Create(&entry).Error
+	error := s.DB.Create(&entry).Error
 
 	return entry, error
 }
 
-func (s RecipeRepository) Get(id int) (models.Recipe, error) {
+func (s *RecipeRepository) Get(id int) (models.Recipe, error) {
 	var recipe models.Recipe
 
-	error := s.db.Preload("RecipeIngredients").
+	error := s.DB.Preload("RecipeIngredients").
 		Preload("RecipeIngredients.Ingredient").
 		Preload("RecipeIngredients.QuantityUnit").
 		Preload("Steps").
@@ -66,18 +56,18 @@ func (s RecipeRepository) Get(id int) (models.Recipe, error) {
 	return recipe, error
 }
 
-func (s RecipeRepository) GetAll() (r []models.Recipe, err error) {
+func (s *RecipeRepository) GetAll() (r []models.Recipe, err error) {
 	var recipes []models.Recipe
 
-	error := s.db.Find(&recipes).Error
+	error := s.DB.Find(&recipes).Error
 
 	return recipes, error
 }
 
-func (s RecipeRepository) GetRecent(limit int) (r []models.Recipe, err error) {
+func (s *RecipeRepository) GetRecent(limit int) (r []models.Recipe, err error) {
 	var recipes []models.Recipe
 
-	error := s.db.Order("id DESC").Limit(limit).Find(&recipes).Error
+	error := s.DB.Order("id DESC").Limit(limit).Find(&recipes).Error
 
 	return recipes, error
 }

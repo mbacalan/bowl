@@ -12,30 +12,22 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/models"
-	"github.com/mbacalan/bowl/services"
 )
 
-type RecipeHandler struct {
-	Logger  *slog.Logger
-	Service RecipeService
+type recipeHandler struct {
+	*models.RecipeHandler
 }
 
-type RecipeService interface {
-	Get(id int) (models.Recipe, error)
-	GetAll() ([]models.Recipe, error)
-	GetRecent(limit int) ([]models.Recipe, error)
-	Create(data services.RecipeData) (models.Recipe, error)
-	Update(id int, data services.RecipeData) (models.Recipe, error)
-}
-
-func NewRecipeHandler(logger *slog.Logger, service RecipeService) *RecipeHandler {
-	return &RecipeHandler{
-		Logger:  logger,
-		Service: service,
+func NewRecipeHandler(logger *slog.Logger, service models.RecipeService) *recipeHandler {
+	return &recipeHandler{
+		RecipeHandler: &models.RecipeHandler{
+			Logger:  logger,
+			Service: service,
+		},
 	}
 }
 
-func (h *RecipeHandler) Routes() chi.Router {
+func (h *recipeHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
@@ -48,7 +40,12 @@ func (h *RecipeHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *recipeHandler) Create(w http.ResponseWriter, r *http.Request) {
+	if r.Method == http.MethodGet {
+		recipes.CreateRecipe().Render(r.Context(), w)
+		return
+	}
+
 	r.ParseForm()
 
 	name := r.Form.Get("name")
@@ -60,7 +57,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
 
-	recipe, err := h.Service.Create(services.RecipeData{
+	recipe, err := h.Service.Create(models.RecipeData{
 		Name:          cases.Title(language.English).String(name),
 		PrepDuration:  uint(prepDuration),
 		CookDuration:  uint(cookDuration),
@@ -81,7 +78,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
-func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
+func (h *recipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -95,7 +92,7 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipe).Render(r.Context(), w)
 }
 
-func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
+func (h *recipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -109,7 +106,7 @@ func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	recipes.EditRecipe(recipe).Render(r.Context(), w)
 }
 
-func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *recipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -124,7 +121,7 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
 
-	data := services.RecipeData{
+	data := models.RecipeData{
 		Name:          name,
 		PrepDuration:  uint(prepDuration),
 		CookDuration:  uint(cookDuration),
@@ -140,7 +137,7 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
-func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
+func (h *recipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	rs, err := h.Service.GetAll()
 	if err != nil {
 		h.Logger.Error("Error listing recipes", err)

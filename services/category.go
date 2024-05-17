@@ -4,15 +4,14 @@ import (
 	"log/slog"
 
 	"github.com/mbacalan/bowl/models"
-	"github.com/mbacalan/bowl/repositories"
 )
 
 type CategoryService struct {
 	Logger     *slog.Logger
-	Repository *repositories.CategoryRepository
+	Repository models.CategoryRepository
 }
 
-func NewCategoryService(logger *slog.Logger, repo *repositories.CategoryRepository) *CategoryService {
+func NewCategoryService(logger *slog.Logger, repo models.CategoryRepository) *CategoryService {
 	return &CategoryService{
 		Logger:     logger,
 		Repository: repo,

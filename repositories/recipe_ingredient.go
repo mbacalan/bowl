@@ -1,25 +1,25 @@
 package repositories
 
 import (
-	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm"
+
+	"github.com/mbacalan/bowl/models"
 )
 
 type RecipeIngredientRepository struct {
-	db        *gorm.DB
-	tableName string
+	*models.Repository
 }
 
 func NewRecipeIngredientRepository(db *gorm.DB, tableName string) *RecipeIngredientRepository {
-	repository := &RecipeIngredientRepository{
-		tableName: tableName,
-		db:        db,
+	return &RecipeIngredientRepository{
+		Repository: &models.Repository{
+			DB:        db,
+			TableName: tableName,
+		},
 	}
-
-	return repository
 }
 
-func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (models.RecipeIngredient, error) {
+func (s *RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, unitID uint, quantity string) (models.RecipeIngredient, error) {
 	entry := models.RecipeIngredient{
 		RecipeID:       recipeID,
 		IngredientID:   ingredientID,
@@ -27,21 +27,19 @@ func (s RecipeIngredientRepository) Create(recipeID uint, ingredientID uint, uni
 		Quantity:       quantity,
 	}
 
-	error := s.db.Create(&entry).Error
+	error := s.DB.Create(&entry).Error
 
 	return entry, error
 }
 
-func (s RecipeIngredientRepository) GetAll() ([]models.RecipeIngredient, error) {
+func (s *RecipeIngredientRepository) GetAll() ([]models.RecipeIngredient, error) {
 	var entries []models.RecipeIngredient
 
-	error := s.db.Find(&entries).Error
+	error := s.DB.Find(&entries).Error
 
 	return entries, error
 }
 
-func (s RecipeIngredientRepository) Delete(id uint) error {
-	error := s.db.Delete(&models.RecipeIngredient{}, id).Error
-
-	return error
+func (s *RecipeIngredientRepository) Delete(id uint) error {
+	return s.DB.Delete(&models.RecipeIngredient{}, id).Error
 }

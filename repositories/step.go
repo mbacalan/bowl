@@ -1,42 +1,42 @@
 package repositories
 
 import (
-	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm"
+
+	"github.com/mbacalan/bowl/models"
 )
 
 type StepRepository struct {
-	db        *gorm.DB
-	tableName string
+	*models.Repository
 }
 
 func NewStepRepository(db *gorm.DB, tableName string) *StepRepository {
-	repository := &StepRepository{
-		tableName: tableName,
-		db:        db,
+	return &StepRepository{
+		Repository: &models.Repository{
+			DB:        db,
+			TableName: tableName,
+		},
 	}
-
-	return repository
 }
 
-func (s StepRepository) Create(step string, recipe uint) (models.Step, error) {
+func (s *StepRepository) Create(step string, recipe uint) (models.Step, error) {
 	entry := models.Step{Step: step, RecipeID: recipe}
 
-	error := s.db.Create(&entry).Error
+	error := s.DB.Create(&entry).Error
 
 	return entry, error
 }
 
-func (s StepRepository) GetAll() ([]models.Step, error) {
+func (s *StepRepository) GetAll() ([]models.Step, error) {
 	var steps []models.Step
 
-	error := s.db.Find(&steps).Error
+	error := s.DB.Find(&steps).Error
 
 	return steps, error
 }
 
-func (s StepRepository) Delete(id uint) error {
-	error := s.db.Delete(&models.Step{}, id).Error
+func (s *StepRepository) Delete(id uint) error {
+	error := s.DB.Delete(&models.Step{}, id).Error
 
 	return error
 }

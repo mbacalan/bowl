@@ -4,15 +4,14 @@ import (
 	"log/slog"
 
 	"github.com/mbacalan/bowl/models"
-	"github.com/mbacalan/bowl/repositories"
 )
 
 type QuantityUnitService struct {
 	Logger     *slog.Logger
-	Repository *repositories.QuantityUnitRepository
+	Repository models.QuantityUnitRepository
 }
 
-func NewQuantityUnitService(logger *slog.Logger, repo *repositories.QuantityUnitRepository) *QuantityUnitService {
+func NewQuantityUnitService(logger *slog.Logger, repo models.QuantityUnitRepository) *QuantityUnitService {
 	return &QuantityUnitService{Logger: logger, Repository: repo}
 }
 

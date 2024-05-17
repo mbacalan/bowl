@@ -9,23 +9,20 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type IngredientHandler struct {
-	Logger  *slog.Logger
-	Service IngredientService
+type ingredientHandler struct {
+	*models.IngredientHandler
 }
 
-type IngredientService interface {
-	GetAll() ([]models.Ingredient, error)
-}
-
-func NewIngredientHandler(logger *slog.Logger, service IngredientService) *IngredientHandler {
-	return &IngredientHandler{
-		Logger:  logger,
-		Service: service,
+func NewIngredientHandler(logger *slog.Logger, service models.IngredientService) *ingredientHandler {
+	return &ingredientHandler{
+		IngredientHandler: &models.IngredientHandler{
+			Logger:  logger,
+			Service: service,
+		},
 	}
 }
 
-func (h *IngredientHandler) Routes() chi.Router {
+func (h *ingredientHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
@@ -33,7 +30,7 @@ func (h *IngredientHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *IngredientHandler) ViewList(w http.ResponseWriter, r *http.Request) {
+func (h *ingredientHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	ingredients, err := h.Service.GetAll()
 	if err != nil {
 		h.Logger.Error("Error listing ingredients", err)
