@@ -11,21 +11,21 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type authHandler struct {
-	*models.AuthHandler
+type AuthHandler struct {
+	Logger  *slog.Logger
+	Service models.AuthService
+	Store   *sessions.CookieStore
 }
 
-func NewAuthHandler(logger *slog.Logger, service models.AuthService) *authHandler {
-	return &authHandler{
-		AuthHandler: &models.AuthHandler{
-			Logger:  logger,
-			Service: service,
-			Store:   sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET"))),
-		},
+func NewAuthHandler(logger *slog.Logger, service models.AuthService) *AuthHandler {
+	return &AuthHandler{
+		Logger:  logger,
+		Service: service,
+		Store:   sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET"))),
 	}
 }
 
-func (h *authHandler) Routes() chi.Router {
+func (h *AuthHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.Auth)
@@ -36,11 +36,11 @@ func (h *authHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *authHandler) Auth(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Auth(w http.ResponseWriter, r *http.Request) {
 	pages.Auth().Render(r.Context(), w)
 }
 
-func (h *authHandler) Signup(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	username := r.Form.Get("username")
@@ -57,7 +57,7 @@ func (h *authHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	pages.Home([]models.Recipe{}).Render(r.Context(), w)
 }
 
-func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	username := r.Form.Get("username")
@@ -74,7 +74,7 @@ func (h *authHandler) Login(w http.ResponseWriter, r *http.Request) {
 	pages.Home([]models.Recipe{}).Render(r.Context(), w)
 }
 
-func (h *authHandler) Logout(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	session, _ := h.Store.Get(r, "bowl-session")
 	session.Options.MaxAge = -1
 
@@ -87,11 +87,11 @@ func (h *authHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/auth", http.StatusFound)
 }
 
-func (h *authHandler) GetStore() *sessions.CookieStore {
+func (h *AuthHandler) GetStore() *sessions.CookieStore {
 	return h.Store
 }
 
-func (h *authHandler) createSession(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request) {
 	// Get a session. We're ignoring the error resulted from decoding an
 	// existing session: Get() always returns a session, even if empty.
 	session, _ := h.Store.Get(r, "bowl-session")

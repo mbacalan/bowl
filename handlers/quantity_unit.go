@@ -9,20 +9,19 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type quantityUnitHandler struct {
-	*models.QuantityUnitHandler
+type QuantityUnitHandler struct {
+	Logger  *slog.Logger
+	Service models.QuantityUnitService
 }
 
-func NewQuantityUnitHandler(logger *slog.Logger, service models.QuantityUnitService) *quantityUnitHandler {
-	return &quantityUnitHandler{
-		QuantityUnitHandler: &models.QuantityUnitHandler{
-			Logger:  logger,
-			Service: service,
-		},
+func NewQuantityUnitHandler(logger *slog.Logger, service models.QuantityUnitService) *QuantityUnitHandler {
+	return &QuantityUnitHandler{
+		Logger:  logger,
+		Service: service,
 	}
 }
 
-func (h *quantityUnitHandler) Routes() chi.Router {
+func (h *QuantityUnitHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
@@ -30,7 +29,7 @@ func (h *quantityUnitHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *quantityUnitHandler) ViewList(w http.ResponseWriter, r *http.Request) {
+func (h *QuantityUnitHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	selected := r.URL.Query().Get("selected")
 	unit, err := h.Service.GetAll()
 

@@ -14,20 +14,19 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type recipeHandler struct {
-	*models.RecipeHandler
+type RecipeHandler struct {
+	Logger  *slog.Logger
+	Service models.RecipeService
 }
 
-func NewRecipeHandler(logger *slog.Logger, service models.RecipeService) *recipeHandler {
-	return &recipeHandler{
-		RecipeHandler: &models.RecipeHandler{
-			Logger:  logger,
-			Service: service,
-		},
+func NewRecipeHandler(logger *slog.Logger, service models.RecipeService) *RecipeHandler {
+	return &RecipeHandler{
+		Logger:  logger,
+		Service: service,
 	}
 }
 
-func (h *recipeHandler) Routes() chi.Router {
+func (h *RecipeHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
@@ -40,7 +39,7 @@ func (h *recipeHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *recipeHandler) Create(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 		recipes.CreateRecipe().Render(r.Context(), w)
 		return
@@ -78,7 +77,7 @@ func (h *recipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
-func (h *recipeHandler) View(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -92,7 +91,7 @@ func (h *recipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipe).Render(r.Context(), w)
 }
 
-func (h *recipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -106,7 +105,7 @@ func (h *recipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	recipes.EditRecipe(recipe).Render(r.Context(), w)
 }
 
-func (h *recipeHandler) Update(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -137,7 +136,7 @@ func (h *recipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
 }
 
-func (h *recipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
+func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	rs, err := h.Service.GetAll()
 	if err != nil {
 		h.Logger.Error("Error listing recipes", err)

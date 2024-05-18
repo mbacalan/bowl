@@ -9,20 +9,19 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type homeHandler struct {
-	*models.HomeHandler
+type HomeHandler struct {
+	Logger  *slog.Logger
+	Service models.HomeService
 }
 
-func NewHomeHandler(logger *slog.Logger, service models.HomeService) *homeHandler {
-	return &homeHandler{
-		HomeHandler: &models.HomeHandler{
-			Logger:  logger,
-			Service: service,
-		},
+func NewHomeHandler(logger *slog.Logger, service models.HomeService) *HomeHandler {
+	return &HomeHandler{
+		Logger:  logger,
+		Service: service,
 	}
 }
 
-func (h *homeHandler) Routes() chi.Router {
+func (h *HomeHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.View)
@@ -30,7 +29,7 @@ func (h *homeHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *homeHandler) View(w http.ResponseWriter, r *http.Request) {
+func (h *HomeHandler) View(w http.ResponseWriter, r *http.Request) {
 	recipes, err := h.Service.GetRecent(10)
 
 	if err != nil {

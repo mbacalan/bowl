@@ -10,20 +10,19 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-type categoryHandler struct {
-	*models.CategoryHandler
+type CategoryHandler struct {
+	Logger  *slog.Logger
+	Service models.CategoryService
 }
 
-func NewCategoryHandler(logger *slog.Logger, service models.CategoryService) *categoryHandler {
-	return &categoryHandler{
-		CategoryHandler: &models.CategoryHandler{
-			Logger:  logger,
-			Service: service,
-		},
+func NewCategoryHandler(logger *slog.Logger, service models.CategoryService) *CategoryHandler {
+	return &CategoryHandler{
+		Logger:  logger,
+		Service: service,
 	}
 }
 
-func (h *categoryHandler) Routes() chi.Router {
+func (h *CategoryHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.ViewList)
@@ -32,7 +31,7 @@ func (h *categoryHandler) Routes() chi.Router {
 	return r
 }
 
-func (h *categoryHandler) View(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
 
@@ -44,7 +43,7 @@ func (h *categoryHandler) View(w http.ResponseWriter, r *http.Request) {
 	pages.Category(category).Render(r.Context(), w)
 }
 
-func (h *categoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
+func (h *CategoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	categories, err := h.Service.GetAll()
 	if err != nil {
 		h.Logger.Error("Error listing ingredients", err)
