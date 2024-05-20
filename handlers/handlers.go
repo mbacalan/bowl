@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/mbacalan/bowl/assets"
-	"github.com/mbacalan/bowl/internal"
+	"github.com/mbacalan/bowl/handlers/internal"
 	"github.com/mbacalan/bowl/models"
 )
 
