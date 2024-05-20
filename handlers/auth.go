@@ -46,13 +46,13 @@ func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	username := r.Form.Get("username")
 	password := r.Form.Get("password")
 
-	_, err := h.Service.Signup(username, password)
+	user, err := h.Service.Signup(username, password)
 
 	if err != nil {
 		h.Logger.Error("Error signing up in", err)
 	}
 
-	h.createSession(w, r)
+	h.createSession(w, r, &user)
 	w.Header().Set("HX-Push-URL", "/")
 	pages.Home([]models.Recipe{}).Render(r.Context(), w)
 }
@@ -63,13 +63,13 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 	username := r.Form.Get("username")
 	password := r.Form.Get("password")
 
-	_, err := h.Service.Login(username, password)
+	user, err := h.Service.Login(username, password)
 
 	if err != nil {
 		h.Logger.Error("Error logging in", err)
 	}
 
-	h.createSession(w, r)
+	h.createSession(w, r, &user)
 	w.Header().Set("HX-Push-URL", "/")
 	pages.Home([]models.Recipe{}).Render(r.Context(), w)
 }
@@ -91,7 +91,7 @@ func (h *AuthHandler) GetStore() *sessions.CookieStore {
 	return h.Store
 }
 
-func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request) {
+func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user *models.User) {
 	// Get a session. We're ignoring the error resulted from decoding an
 	// existing session: Get() always returns a session, even if empty.
 	session, _ := h.Store.Get(r, "bowl-session")
@@ -102,7 +102,8 @@ func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request) {
 		Secure:   true,
 		HttpOnly: true,
 	}
-
+	session.Values["UserID"] = user.ID
+	session.Values["UserName"] = user.Name
 	err := session.Save(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
