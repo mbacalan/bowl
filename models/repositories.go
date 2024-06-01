@@ -26,8 +26,8 @@ type Repository struct {
 }
 
 type CategoryRepository interface {
-	Get(id int) (Category, error)
-	GetAll() ([]Category, error)
+	Get(user uint, id int) (Category, error)
+	GetAll(user uint) ([]Category, error)
 	Delete(id uint) error
 }
 
@@ -37,10 +37,10 @@ type UserRepository interface {
 }
 
 type RecipeRepository interface {
-	Create(name string, prep uint, cook uint) (Recipe, error)
-	Get(id int) (Recipe, error)
-	GetAll() ([]Recipe, error)
-	GetRecent(limit int) ([]Recipe, error)
+	Create(name string, prep uint, cook uint, user uint) (Recipe, error)
+	Get(user uint, id int) (Recipe, error)
+	GetAll(user uint) ([]Recipe, error)
+	GetRecent(user uint, limit int) ([]Recipe, error)
 	// Delete
 }
 

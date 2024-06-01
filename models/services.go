@@ -14,12 +14,12 @@ type AuthService interface {
 }
 
 type CategoryService interface {
-	Get(id int) (Category, error)
-	GetAll() ([]Category, error)
+	Get(user uint, id int) (Category, error)
+	GetAll(user uint) ([]Category, error)
 }
 
 type HomeService interface {
-	GetRecent(int) ([]Recipe, error)
+	GetRecent(user uint, limit int) ([]Recipe, error)
 }
 
 type IngredientService interface {
@@ -31,9 +31,9 @@ type QuantityUnitService interface {
 }
 
 type RecipeService interface {
-	Get(id int) (Recipe, error)
-	GetAll() ([]Recipe, error)
-	GetRecent(limit int) ([]Recipe, error)
+	Get(user uint, id int) (Recipe, error)
+	GetAll(user uint) ([]Recipe, error)
+	GetRecent(user uint, limit int) ([]Recipe, error)
 	Create(data RecipeData) (Recipe, error)
 	Update(id int, data RecipeData) (Recipe, error)
 }
@@ -47,4 +47,5 @@ type RecipeData struct {
 	Categories    []string
 	PrepDuration  uint
 	CookDuration  uint
+	UserID        uint
 }

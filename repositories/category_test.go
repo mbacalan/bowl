@@ -15,11 +15,11 @@ func TestCategoryRepository(t *testing.T) {
 
 		db.Create(&expected)
 
-		if _, err := repo.Get(1337); err == nil {
+		if _, err := repo.Get(1, 1337); err == nil {
 			t.Errorf("expected error getting non-existent category, got nil")
 		}
 
-		actual, err := repo.Get(int(expected.ID))
+		actual, err := repo.Get(1, int(expected.ID))
 
 		if err != nil {
 			t.Errorf("error getting category: %v", err)
@@ -40,7 +40,7 @@ func TestCategoryRepository(t *testing.T) {
 		}
 
 		db.Create(&expected)
-		actual, err := repo.GetAll()
+		actual, err := repo.GetAll(1)
 
 		if err != nil {
 			t.Errorf("error getting all categories: %v", err)

@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/gorilla/sessions"
 	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/models"
 )
@@ -13,12 +14,14 @@ import (
 type CategoryHandler struct {
 	Logger  *slog.Logger
 	Service models.CategoryService
+	Store   *sessions.CookieStore
 }
 
-func NewCategoryHandler(logger *slog.Logger, service models.CategoryService) *CategoryHandler {
+func NewCategoryHandler(logger *slog.Logger, service models.CategoryService, store *sessions.CookieStore) *CategoryHandler {
 	return &CategoryHandler{
 		Logger:  logger,
 		Service: service,
+		Store:   store,
 	}
 }
 
@@ -34,8 +37,14 @@ func (h *CategoryHandler) Routes() chi.Router {
 func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 	param := chi.URLParam(r, "id")
 	id, _ := strconv.Atoi(param)
+	session, err := h.Store.Get(r, "bowl-session")
+	if err != nil {
+		h.Logger.Error("Error getting user session", err)
+		return
+	}
 
-	category, err := h.Service.Get(id)
+	user := session.Values["UserID"].(uint)
+	category, err := h.Service.Get(user, id)
 	if err != nil {
 		h.Logger.Error("Error getting category", err)
 	}
@@ -44,7 +53,14 @@ func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *CategoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
-	categories, err := h.Service.GetAll()
+	session, err := h.Store.Get(r, "bowl-session")
+	if err != nil {
+		h.Logger.Error("Error getting user session", err)
+		return
+	}
+
+	user := session.Values["UserID"].(uint)
+	categories, err := h.Service.GetAll(user)
 	if err != nil {
 		h.Logger.Error("Error listing ingredients", err)
 	}

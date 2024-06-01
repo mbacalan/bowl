@@ -16,6 +16,7 @@ type Recipe struct {
 	PrepDuration      uint
 	CookDuration      uint
 	Categories        []*Category `gorm:"many2many:recipe_categories;"`
+	UserID            uint
 	// Rating      uint
 	// Difficulty  uint
 	// WwPoints    uint `gorm:"column:ww_points"`
