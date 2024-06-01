@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/models"
 )
@@ -62,6 +63,8 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
 		h.Logger.Error("Error getting user session", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -80,13 +83,15 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		h.Logger.Error("", err)
+		h.Logger.Error("Error creating recipe", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
 	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
 	recipeDetail, _ := h.Service.Get(user, int(recipe.ID))
-	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
+	recipes.Recipe(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
@@ -95,14 +100,17 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
 		h.Logger.Error("Error getting user session", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
 	user := session.Values["UserID"].(uint)
 	recipe, err := h.Service.Get(user, id)
-
 	if err != nil {
-		h.Logger.Error("", err)
+		h.Logger.Error("Error getting recipe", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -115,15 +123,18 @@ func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
 		h.Logger.Error("Error getting user session", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
 	user := session.Values["UserID"].(uint)
 
 	recipe, err := h.Service.Get(user, id)
-
 	if err != nil {
-		h.Logger.Error("", err)
+		h.Logger.Error("Error getting recipe", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -148,6 +159,8 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
 		h.Logger.Error("Error getting user session", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -165,15 +178,25 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 		UserID:        user,
 	}
 
+	recipeDetail, err := h.Service.Update(id, data)
+
+	if err != nil {
+		h.Logger.Error("Error editing recipe", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
+		return
+	}
+
 	w.Header().Set("HX-Push-URL", "/recipes/"+strconv.FormatUint(uint64(id), 10))
-	recipeDetail, _ := h.Service.Update(id, data)
-	recipes.RecipeDetailPage(recipeDetail).Render(r.Context(), w)
+	recipes.Recipe(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
 		h.Logger.Error("Error getting user session", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -181,7 +204,10 @@ func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 
 	rs, err := h.Service.GetAll(user)
 	if err != nil {
-		h.Logger.Error("Error listing recipes", err)
+		h.Logger.Error("Error getting all recipes", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
+		return
 	}
 
 	recipes.RecipeListPage(rs).Render(r.Context(), w)

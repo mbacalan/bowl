@@ -33,7 +33,6 @@ templ EditRecipe(recipe models.Recipe) {
 				method="patch"
 				hx-patch={ string(templ.URL(fmt.Sprintf("/recipes/%d", recipe.ID))) }
 				hx-swap="outerHTML"
-				hx-select="[data-swap='recipe']"
 			>
 				<div hx-disinherit="*">
 					<div class="input-group">

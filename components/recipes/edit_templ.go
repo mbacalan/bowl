@@ -75,7 +75,7 @@ func EditRecipe(recipe models.Recipe) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\" hx-select=\"[data-swap=&#39;recipe&#39;]\"><div hx-disinherit=\"*\"><div class=\"input-group\"><label for=\"name\">Name</label> <input type=\"text\" name=\"name\" placeholder=\"Recipe Name\" value=\"")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("\" hx-swap=\"outerHTML\"><div hx-disinherit=\"*\"><div class=\"input-group\"><label for=\"name\">Name</label> <input type=\"text\" name=\"name\" placeholder=\"Recipe Name\" value=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
