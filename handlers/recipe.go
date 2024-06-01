@@ -145,6 +145,14 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	quantities := r.Form["quantity"]
 	quantityUnits := r.Form["quantity-unit"]
 
+	session, err := h.Store.Get(r, "bowl-session")
+	if err != nil {
+		h.Logger.Error("Error getting user session", err)
+		return
+	}
+
+	user := session.Values["UserID"].(uint)
+
 	data := models.RecipeData{
 		Name:          name,
 		PrepDuration:  uint(prepDuration),
@@ -154,6 +162,7 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 		Ingredients:   ingredients,
 		Quantities:    quantities,
 		QuantityUnits: quantityUnits,
+		UserID:        user,
 	}
 
 	w.Header().Set("HX-Push-URL", "/recipes/"+strconv.FormatUint(uint64(id), 10))

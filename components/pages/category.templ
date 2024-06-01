@@ -8,17 +8,22 @@ import (
 
 templ Categories(categories []models.Category) {
 	@shared.Page() {
-		<h2>All Categories</h2>
-		<hr/>
-		<ul>
-			for _, category := range categories {
-				<li>
-					<a href={ "/categories/" + templ.URL(utils.ToString(category.ID)) }>
-						{ category.Name }
-					</a>
-				</li>
-			}
-		</ul>
+		if len(categories) == 0 {
+			<h2>No categories found :(</h2>
+			<p>You can create categories while creating / editing a recipe</p>
+		} else {
+			<h2>All Categories</h2>
+			<hr/>
+			<ul>
+				for _, category := range categories {
+					<li>
+						<a href={ "/categories/" + templ.URL(utils.ToString(category.ID)) }>
+							{ category.Name }
+						</a>
+					</li>
+				}
+			</ul>
+		}
 	}
 }
 
