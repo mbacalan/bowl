@@ -11,10 +11,10 @@ func TestRecipeRepository(t *testing.T) {
 	t.Run("get", func(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
-		expected := models.Recipe{Name: "Test Recipe"}
+		expected := models.Recipe{Name: "Test Recipe", UserID: 1}
 
 		db.Create(&expected)
-		actual, err := repo.Get(int(expected.ID))
+		actual, err := repo.Get(1, int(expected.ID))
 
 		if err != nil {
 			t.Errorf("error getting recipe: %v", err)
@@ -29,13 +29,13 @@ func TestRecipeRepository(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
 		expected := []models.Recipe{
-			{Name: "Test Recipe 1"},
-			{Name: "Test Recipe 2"},
-			{Name: "Test Recipe 3"},
+			{Name: "Test Recipe 1", UserID: 1},
+			{Name: "Test Recipe 2", UserID: 1},
+			{Name: "Test Recipe 3", UserID: 1},
 		}
 
 		db.Create(&expected)
-		actual, err := repo.GetAll()
+		actual, err := repo.GetAll(1)
 
 		if err != nil {
 			t.Errorf("error getting all recipes: %v", err)
@@ -66,7 +66,7 @@ func TestRecipeRepository(t *testing.T) {
 		}
 
 		db.Create(&expected)
-		actual, err := repo.Create(expected.Name, expected.PrepDuration, expected.CookDuration)
+		actual, err := repo.Create(expected.Name, expected.PrepDuration, expected.CookDuration, 1)
 
 		if err != nil {
 			t.Errorf("error creating recipe: %v", err)
@@ -89,13 +89,13 @@ func TestRecipeRepository(t *testing.T) {
 		db := setupTestDB(t)
 		repo := repositories.NewRecipeRepository(db, "recipes")
 		expected := []models.Recipe{
-			{Name: "Test Recipe 1"},
-			{Name: "Test Recipe 2"},
-			{Name: "Test Recipe 3"},
+			{Name: "Test Recipe 1", UserID: 1},
+			{Name: "Test Recipe 2", UserID: 1},
+			{Name: "Test Recipe 3", UserID: 1},
 		}
 
 		db.Create(&expected)
-		actual, err := repo.GetRecent(2)
+		actual, err := repo.GetRecent(1, 2)
 
 		if err != nil {
 			t.Errorf("error getting recent recipes: %v", err)

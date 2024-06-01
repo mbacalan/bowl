@@ -19,18 +19,22 @@ func NewCategoryRepository(db *gorm.DB, tableName string) *CategoryRepository {
 	}
 }
 
-func (s *CategoryRepository) Get(id int) (models.Category, error) {
+func (s *CategoryRepository) Get(user uint, id int) (models.Category, error) {
 	var category models.Category
 
-	error := s.DB.Preload("Recipes").First(&category, id).Error
+	error := s.DB.Preload("Recipes", "user_id = ?", user).First(&category, id).Error
 
 	return category, error
 }
 
-func (s *CategoryRepository) GetAll() ([]models.Category, error) {
+func (s *CategoryRepository) GetAll(user uint) ([]models.Category, error) {
 	var categories []models.Category
 
-	error := s.DB.Preload("Recipes").Find(&categories).Error
+	error := s.DB.Joins("JOIN recipe_categories ON recipe_categories.category_id = categories.id").
+		Joins("JOIN recipes ON recipes.id = recipe_categories.recipe_id").
+		Where("recipes.user_id = ?", user).
+		Group("categories.id").
+		Find(&categories).Error
 
 	return categories, error
 }

@@ -20,8 +20,8 @@ func NewRecipeService(log *slog.Logger, uow models.RecipeUnitOfWork) *RecipeServ
 	}
 }
 
-func (s *RecipeService) Get(id int) (recipe models.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.Get(id)
+func (s *RecipeService) Get(user uint, id int) (recipe models.Recipe, error error) {
+	result, err := s.UnitOfWork.RecipeRepository.Get(user, id)
 
 	if err != nil {
 		s.Logger.Error("Error getting recipe", err)
@@ -31,8 +31,8 @@ func (s *RecipeService) Get(id int) (recipe models.Recipe, error error) {
 	return result, nil
 }
 
-func (s *RecipeService) GetAll() (recipes []models.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.GetAll()
+func (s *RecipeService) GetAll(user uint) (recipes []models.Recipe, error error) {
+	result, err := s.UnitOfWork.RecipeRepository.GetAll(user)
 
 	if err != nil {
 		s.Logger.Error("Error getting all recipes", err)
@@ -42,8 +42,8 @@ func (s *RecipeService) GetAll() (recipes []models.Recipe, error error) {
 	return result, nil
 }
 
-func (s *RecipeService) GetRecent(limit int) (recipes []models.Recipe, error error) {
-	result, err := s.UnitOfWork.RecipeRepository.GetRecent(limit)
+func (s *RecipeService) GetRecent(user uint, limit int) (recipes []models.Recipe, error error) {
+	result, err := s.UnitOfWork.RecipeRepository.GetRecent(user, limit)
 
 	if err != nil {
 		s.Logger.Error("Error getting recent recipes", err)
@@ -54,7 +54,7 @@ func (s *RecipeService) GetRecent(limit int) (recipes []models.Recipe, error err
 }
 
 func (s *RecipeService) Create(data models.RecipeData) (models.Recipe, error) {
-	recipe, err := s.UnitOfWork.RecipeRepository.Create(data.Name, data.PrepDuration, data.CookDuration)
+	recipe, err := s.UnitOfWork.RecipeRepository.Create(data.Name, data.PrepDuration, data.CookDuration, data.UserID)
 
 	if err != nil {
 		s.Logger.Error("Error creating recipe", err)
@@ -79,7 +79,7 @@ func (s *RecipeService) Create(data models.RecipeData) (models.Recipe, error) {
 }
 
 func (s *RecipeService) Update(id int, data models.RecipeData) (models.Recipe, error) {
-	recipe, err := s.UnitOfWork.RecipeRepository.Get(id)
+	recipe, err := s.UnitOfWork.RecipeRepository.Get(data.UserID, id)
 
 	if err != nil {
 		s.Logger.Error("Recipe does not exist", err)
@@ -131,7 +131,7 @@ func (s *RecipeService) Update(id int, data models.RecipeData) (models.Recipe, e
 	recipe.Name = data.Name
 
 	s.UnitOfWork.DB.Save(&recipe)
-	recipe, _ = s.UnitOfWork.RecipeRepository.Get(id)
+	recipe, _ = s.UnitOfWork.RecipeRepository.Get(data.UserID, id)
 
 	return recipe, nil
 }

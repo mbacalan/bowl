@@ -11,13 +11,16 @@ import (
 )
 
 func CreateHandlers(logger *slog.Logger, services *models.Services) *models.Handlers {
+	authHandler := NewAuthHandler(logger, services.AuthService)
+	store := authHandler.GetStore()
+
 	return &models.Handlers{
-		HomeHandler:         NewHomeHandler(logger, services.RecipeService),
-		AuthHandler:         NewAuthHandler(logger, services.AuthService),
-		RecipeHandler:       NewRecipeHandler(logger, services.RecipeService),
+		AuthHandler:         authHandler,
+		HomeHandler:         NewHomeHandler(logger, services.RecipeService, store),
+		RecipeHandler:       NewRecipeHandler(logger, services.RecipeService, store),
 		IngredientHandler:   NewIngredientHandler(logger, services.IngredientService),
 		QuantityUnitHandler: NewQuantityUnitHandler(logger, services.QuantityUnitService),
-		CategoryHandler:     NewCategoryHandler(logger, services.CategoryService),
+		CategoryHandler:     NewCategoryHandler(logger, services.CategoryService, store),
 	}
 }
 

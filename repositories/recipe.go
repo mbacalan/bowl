@@ -31,11 +31,12 @@ func NewRecipeUOW(database *gorm.DB) models.RecipeUnitOfWork {
 	}
 }
 
-func (s *RecipeRepository) Create(name string, prep uint, cook uint) (models.Recipe, error) {
+func (s *RecipeRepository) Create(name string, prep uint, cook uint, user uint) (models.Recipe, error) {
 	entry := models.Recipe{
 		Name:         name,
 		PrepDuration: prep,
 		CookDuration: cook,
+		UserID:       user,
 	}
 
 	error := s.DB.Create(&entry).Error
@@ -43,7 +44,7 @@ func (s *RecipeRepository) Create(name string, prep uint, cook uint) (models.Rec
 	return entry, error
 }
 
-func (s *RecipeRepository) Get(id int) (models.Recipe, error) {
+func (s *RecipeRepository) Get(user uint, id int) (models.Recipe, error) {
 	var recipe models.Recipe
 
 	error := s.DB.Preload("RecipeIngredients").
@@ -51,23 +52,23 @@ func (s *RecipeRepository) Get(id int) (models.Recipe, error) {
 		Preload("RecipeIngredients.QuantityUnit").
 		Preload("Steps").
 		Preload("Categories").
-		First(&recipe, id).Error
+		First(&recipe, "id = ? AND user_id = ?", id, user).Error
 
 	return recipe, error
 }
 
-func (s *RecipeRepository) GetAll() (r []models.Recipe, err error) {
+func (s *RecipeRepository) GetAll(user uint) (r []models.Recipe, err error) {
 	var recipes []models.Recipe
 
-	error := s.DB.Find(&recipes).Error
+	error := s.DB.Find(&recipes, "user_id = ?", user).Error
 
 	return recipes, error
 }
 
-func (s *RecipeRepository) GetRecent(limit int) (r []models.Recipe, err error) {
+func (s *RecipeRepository) GetRecent(user uint, limit int) (r []models.Recipe, err error) {
 	var recipes []models.Recipe
 
-	error := s.DB.Order("id DESC").Limit(limit).Find(&recipes).Error
+	error := s.DB.Order("id DESC").Limit(limit).Find(&recipes, "user_id = ?", user).Error
 
 	return recipes, error
 }
