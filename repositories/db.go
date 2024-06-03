@@ -11,8 +11,8 @@ import (
 func CreateRepositories(db *gorm.DB) *models.Repositories {
 	return &models.Repositories{
 		UserRepository:         NewUserRepository(db, "users"),
+		AdminRepository:        NewAdminRepository(db, "users"),
 		RecipeRepository:       NewRecipeUOW(db),
-		IngredientRepository:   NewIngredientRepository(db, "ingredients"),
 		QuantityUnitRepository: NewQuantityUnitRepository(db, "quantity_units"),
 		CategoryRepository:     NewCategoryRepository(db, "categories"),
 	}

@@ -6,6 +6,7 @@ type User struct {
 	gorm.Model
 	Name     string
 	Password []byte
+	IsAdmin  bool
 }
 
 type Recipe struct {

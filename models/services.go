@@ -2,8 +2,8 @@ package models
 
 type Services struct {
 	AuthService         AuthService
+	AdminService        AdminService
 	RecipeService       RecipeService
-	IngredientService   IngredientService
 	QuantityUnitService QuantityUnitService
 	CategoryService     CategoryService
 }
@@ -13,6 +13,12 @@ type AuthService interface {
 	Login(name string, password string) (User, error)
 }
 
+type AdminService interface {
+	IsAdmin(user uint) bool
+	GetIngredients() ([]Ingredient, error)
+	CreateIngredient(name string) (Ingredient, error)
+}
+
 type CategoryService interface {
 	Get(user uint, id int) (Category, error)
 	GetAll(user uint) ([]Category, error)
@@ -20,10 +26,6 @@ type CategoryService interface {
 
 type HomeService interface {
 	GetRecent(user uint, limit int) ([]Recipe, error)
-}
-
-type IngredientService interface {
-	GetAll() ([]Ingredient, error)
 }
 
 type QuantityUnitService interface {
