@@ -1,0 +1,51 @@
+package admin
+
+import (
+	"github.com/mbacalan/bowl/components/shared"
+	"github.com/mbacalan/bowl/models"
+)
+
+templ QuantityUnitList(units []models.QuantityUnit) {
+	<ul data-testid="quantity-unit-list">
+		for _, unit := range units {
+			<li>
+				{ unit.Name }
+			</li>
+		}
+	</ul>
+}
+
+templ QuantityUnitCreate() {
+	<form
+		id="recipe-form"
+		action="/admin/quantity-units/create"
+		method="post"
+	>
+		<div class="input-group">
+			<input
+				type="text"
+				name="quantity-unit"
+				placeholder="New quantity unit"
+				required
+			/>
+		</div>
+
+		<button type="submit" class="form-button form-button-submit">
+			Create
+		</button>
+	</form>
+}
+
+templ QuantityUnitListPage(units []models.QuantityUnit) {
+	@shared.Page() {
+		<h2>Manage Quantity Units</h2>
+		if len(units) == 0 {
+			<h2>No quantity units found :(</h2>
+		} else {
+			<hr/>
+			@QuantityUnitCreate()
+			<hr/>
+			@QuantityUnitList(units)
+		}
+	}
+}

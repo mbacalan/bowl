@@ -17,6 +17,8 @@ type AdminService interface {
 	IsAdmin(user uint) bool
 	GetIngredients() ([]Ingredient, error)
 	CreateIngredient(name string) (Ingredient, error)
+	GetQuantityUnits() ([]QuantityUnit, error)
+	CreateQuantityUnit(name string) (QuantityUnit, error)
 }
 
 type CategoryService interface {

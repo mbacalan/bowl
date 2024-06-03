@@ -28,8 +28,12 @@ func (h *AdminHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
 	r.Get("/", h.View)
+
 	r.Get("/ingredients", h.ViewIngredients)
 	r.Post("/ingredients/create", h.CreateIngredient)
+
+	r.Get("/quantity-units", h.ViewQuantityUnits)
+	r.Post("/quantity-units/create", h.CreateQuantityUnit)
 
 	return r
 }
@@ -57,4 +61,27 @@ func (h *AdminHandler) CreateIngredient(w http.ResponseWriter, r *http.Request) 
 	}
 
 	http.Redirect(w, r, "/admin/ingredients", http.StatusFound)
+}
+
+func (h *AdminHandler) ViewQuantityUnits(w http.ResponseWriter, r *http.Request) {
+	units, err := h.Service.GetQuantityUnits()
+
+	if err != nil {
+		h.Logger.Error("Error listing quantity units", err)
+		return
+	}
+
+	admin.QuantityUnitListPage(units).Render(r.Context(), w)
+}
+
+func (h *AdminHandler) CreateQuantityUnit(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	quantityUnit := r.Form["quantity-unit"]
+	_, err := h.Service.CreateQuantityUnit(quantityUnit[0])
+	if err != nil {
+		h.Logger.Error("Error creating quantity unit", err)
+	}
+
+	http.Redirect(w, r, "/admin/quantity-units", http.StatusFound)
 }
