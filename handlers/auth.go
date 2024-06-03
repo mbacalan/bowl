@@ -104,6 +104,7 @@ func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user
 	}
 	session.Values["UserID"] = user.ID
 	session.Values["UserName"] = user.Name
+	session.Values["IsAdmin"] = user.IsAdmin
 	err := session.Save(r, w)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)

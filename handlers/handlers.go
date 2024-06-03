@@ -16,9 +16,9 @@ func CreateHandlers(logger *slog.Logger, services *models.Services) *models.Hand
 
 	return &models.Handlers{
 		AuthHandler:         authHandler,
+		AdminHandler:        NewAdminHandler(logger, services.AdminService, store),
 		HomeHandler:         NewHomeHandler(logger, services.RecipeService, store),
 		RecipeHandler:       NewRecipeHandler(logger, services.RecipeService, store),
-		IngredientHandler:   NewIngredientHandler(logger, services.IngredientService),
 		QuantityUnitHandler: NewQuantityUnitHandler(logger, services.QuantityUnitService),
 		CategoryHandler:     NewCategoryHandler(logger, services.CategoryService, store),
 	}
@@ -41,7 +41,15 @@ func MountHandlers(s *models.Server) {
 		r.Mount("/", s.Handlers.HomeHandler.Routes())
 		r.Mount("/recipes", s.Handlers.RecipeHandler.Routes())
 		r.Mount("/categories", s.Handlers.CategoryHandler.Routes())
-		r.Mount("/ingredients", s.Handlers.IngredientHandler.Routes())
 		r.Mount("/quantity-units", s.Handlers.QuantityUnitHandler.Routes())
+	})
+
+	s.Router.Group(func(r chi.Router) {
+		r.Use(middleware.Logger)
+		r.Use(middleware.Compress(5))
+		r.Use(internal.Authenticated(s.Handlers.AuthHandler.GetStore()))
+		r.Use(internal.IsAdmin(s.Handlers.AuthHandler.GetStore()))
+
+		r.Mount("/admin", s.Handlers.AdminHandler.Routes())
 	})
 }

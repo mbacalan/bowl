@@ -6,10 +6,10 @@ import (
 )
 
 type Handlers struct {
-	HomeHandler         HomeHandlerInterface
 	AuthHandler         AuthHandlerInterface
+	AdminHandler        AdminHandlerInterface
+	HomeHandler         HomeHandlerInterface
 	RecipeHandler       RecipeHandlerInterface
-	IngredientHandler   IngredientHandlerInterface
 	QuantityUnitHandler QuantityUnitHandlerInterface
 	CategoryHandler     CategoryHandlerInterface
 }
@@ -19,15 +19,15 @@ type AuthHandlerInterface interface {
 	GetStore() *sessions.CookieStore
 }
 
+type AdminHandlerInterface interface {
+	Routes() chi.Router
+}
+
 type CategoryHandlerInterface interface {
 	Routes() chi.Router
 }
 
 type HomeHandlerInterface interface {
-	Routes() chi.Router
-}
-
-type IngredientHandlerInterface interface {
 	Routes() chi.Router
 }
 

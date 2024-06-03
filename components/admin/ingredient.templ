@@ -1,4 +1,4 @@
-package pages
+package admin
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
@@ -6,8 +6,6 @@ import (
 )
 
 templ IngredientList(ingredients []models.Ingredient) {
-	<h2>All Ingredients</h2>
-	<hr/>
 	<ul data-testid="ingredient-list">
 		for _, ingredient := range ingredients {
 			<li>
@@ -17,12 +15,36 @@ templ IngredientList(ingredients []models.Ingredient) {
 	</ul>
 }
 
+templ IngredientCreate() {
+	<form
+		id="recipe-form"
+		action="/admin/ingredients/create"
+		method="post"
+	>
+		<div class="input-group">
+			<input
+				type="text"
+				name="ingredient"
+				placeholder="New ingredient"
+				required
+			/>
+		</div>
+
+		<button type="submit" class="form-button form-button-submit">
+			Create
+		</button>
+	</form>
+}
+
 templ IngredientListPage(ingredients []models.Ingredient) {
 	@shared.Page() {
 		if len(ingredients) == 0 {
 			<h2>No ingredients found :(</h2>
-			<p>Why don't you <a href="/ingredients/create">create one</a>?</p>
 		} else {
+			<h2>All Ingredients</h2>
+			<hr/>
+			@IngredientCreate()
+			<hr/>
 			@IngredientList(ingredients)
 		}
 	}

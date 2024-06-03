@@ -3,6 +3,7 @@ package models
 import "gorm.io/gorm"
 
 type Repositories struct {
+	AdminRepository        AdminRepository
 	UserRepository         UserRepository
 	RecipeRepository       RecipeUnitOfWork
 	IngredientRepository   IngredientRepository
@@ -34,6 +35,12 @@ type CategoryRepository interface {
 type UserRepository interface {
 	Create(name string, password []byte) (User, error)
 	Get(name string) (User, error)
+}
+
+type AdminRepository interface {
+	Get(user uint) (User, error)
+	GetIngredients() ([]Ingredient, error)
+	CreateIngredient(name string) (Ingredient, error)
 }
 
 type RecipeRepository interface {

@@ -12,8 +12,8 @@ func CreateServices(logger *slog.Logger, repos *models.Repositories) *models.Ser
 
 	return &models.Services{
 		AuthService:         NewAuthService(logger, repos.UserRepository, hash),
+		AdminService:        NewAdminService(logger, repos.AdminRepository),
 		RecipeService:       NewRecipeService(logger, repos.RecipeRepository),
-		IngredientService:   NewIngredientService(logger, repos.IngredientRepository),
 		QuantityUnitService: NewQuantityUnitService(logger, repos.QuantityUnitRepository),
 		CategoryService:     NewCategoryService(logger, repos.CategoryRepository),
 	}
