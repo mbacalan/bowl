@@ -42,3 +42,19 @@ func (s *AdminRepository) CreateIngredient(ingredient string) (models.Ingredient
 
 	return entry, error
 }
+
+func (s *AdminRepository) GetQuantityUnits() ([]models.QuantityUnit, error) {
+	var units []models.QuantityUnit
+
+	error := s.DB.Find(&units).Error
+
+	return units, error
+}
+
+func (s *AdminRepository) CreateQuantityUnit(unit string) (models.QuantityUnit, error) {
+	var entry models.QuantityUnit
+
+	error := s.DB.FirstOrCreate(&entry, models.QuantityUnit{Name: unit}).Error
+
+	return entry, error
+}

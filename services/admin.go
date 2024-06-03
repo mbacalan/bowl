@@ -28,7 +28,7 @@ func (s *AdminService) IsAdmin(user uint) bool {
 	}
 }
 
-func (s *AdminService) GetIngredients() (ingredients []models.Ingredient, error error) {
+func (s *AdminService) GetIngredients() ([]models.Ingredient, error) {
 	result, err := s.Repository.GetIngredients()
 
 	if err != nil {
@@ -39,11 +39,33 @@ func (s *AdminService) GetIngredients() (ingredients []models.Ingredient, error 
 	return result, nil
 }
 
-func (s *AdminService) CreateIngredient(name string) (ingredient models.Ingredient, error error) {
+func (s *AdminService) CreateIngredient(name string) (models.Ingredient, error) {
 	result, err := s.Repository.CreateIngredient(name)
 
 	if err != nil {
 		s.Logger.Error("Error creating ingredient", err)
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (s *AdminService) GetQuantityUnits() ([]models.QuantityUnit, error) {
+	result, err := s.Repository.GetQuantityUnits()
+
+	if err != nil {
+		s.Logger.Error("Error getting all quantity units", err)
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (s *AdminService) CreateQuantityUnit(name string) (models.QuantityUnit, error) {
+	result, err := s.Repository.CreateQuantityUnit(name)
+
+	if err != nil {
+		s.Logger.Error("Error creating quantity unit", err)
 		return result, err
 	}
 

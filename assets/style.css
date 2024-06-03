@@ -73,3 +73,9 @@ form {
     margin-bottom: 1.5rem;
   }
 }
+
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

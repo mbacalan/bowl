@@ -15,7 +15,7 @@ import (
 	"github.com/mbacalan/bowl/models"
 )
 
-func IngredientList(ingredients []models.Ingredient) templ.Component {
+func QuantityUnitList(units []models.QuantityUnit) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -28,19 +28,19 @@ func IngredientList(ingredients []models.Ingredient) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul data-testid=\"ingredient-list\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<ul data-testid=\"quantity-unit-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		for _, ingredient := range ingredients {
+		for _, unit := range units {
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<li>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(ingredient.Name)
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(unit.Name)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/admin/ingredient.templ`, Line: 11, Col: 21}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `components/admin/quantity-unit.templ`, Line: 11, Col: 15}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -62,7 +62,7 @@ func IngredientList(ingredients []models.Ingredient) templ.Component {
 	})
 }
 
-func IngredientCreate() templ.Component {
+func QuantityUnitCreate() templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -75,7 +75,7 @@ func IngredientCreate() templ.Component {
 			templ_7745c5c3_Var3 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/admin/ingredients/create\" method=\"post\"><div class=\"input-group\"><input type=\"text\" name=\"ingredient\" placeholder=\"New ingredient\" required></div><button type=\"submit\" class=\"form-button form-button-submit\">Create</button></form>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<form id=\"recipe-form\" action=\"/admin/quantity-units/create\" method=\"post\"><div class=\"input-group\"><input type=\"text\" name=\"quantity-unit\" placeholder=\"New quantity unit\" required></div><button type=\"submit\" class=\"form-button form-button-submit\">Create</button></form>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -86,7 +86,7 @@ func IngredientCreate() templ.Component {
 	})
 }
 
-func IngredientListPage(ingredients []models.Ingredient) templ.Component {
+func QuantityUnitListPage(units []models.QuantityUnit) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -105,12 +105,12 @@ func IngredientListPage(ingredients []models.Ingredient) templ.Component {
 				templ_7745c5c3_Buffer = templ.GetBuffer()
 				defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Manage Ingredients</h2>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>Manage Quantity Units</h2>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			if len(ingredients) == 0 {
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>No ingredients found :(</h2>")
+			if len(units) == 0 {
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<h2>No quantity units found :(</h2>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -119,7 +119,7 @@ func IngredientListPage(ingredients []models.Ingredient) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = IngredientCreate().Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = QuantityUnitCreate().Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -127,7 +127,7 @@ func IngredientListPage(ingredients []models.Ingredient) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = IngredientList(ingredients).Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = QuantityUnitList(units).Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}

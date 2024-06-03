@@ -4,7 +4,11 @@ import "github.com/mbacalan/bowl/components/shared"
 
 templ Admin() {
 	@shared.Page() {
-		<h1>Admin Dashboard</h1>
-		<a href="/admin/ingredients">Ingredients</a>
+		<h2>Admin Dashboard</h2>
+
+		<div class="admin-menu">
+			<a href="/admin/ingredients">Ingredients</a>
+			<a href="/admin/quantity-units">Quantity Units</a>
+		</div>
 	}
 }

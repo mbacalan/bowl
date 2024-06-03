@@ -38,10 +38,10 @@ templ IngredientCreate() {
 
 templ IngredientListPage(ingredients []models.Ingredient) {
 	@shared.Page() {
+		<h2>Manage Ingredients</h2>
 		if len(ingredients) == 0 {
 			<h2>No ingredients found :(</h2>
 		} else {
-			<h2>All Ingredients</h2>
 			<hr/>
 			@IngredientCreate()
 			<hr/>
