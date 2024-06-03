@@ -10,7 +10,7 @@ function removeInputGroup(event) {
   inputGroup.remove()
 }
 
-window.onload = () => {
+window.addEventListener("load", () => {
   const ingredients = document.getElementById("ingredients")
   const addIngredientButton = document.getElementById("add-ingredient")
 
@@ -78,4 +78,4 @@ window.onload = () => {
       button.addEventListener("click", removeInputGroup)
     })
   })
-}
+})
