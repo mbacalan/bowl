@@ -3,23 +3,39 @@ package admin
 import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
+	"gorm.io/gorm/utils"
 )
 
 templ IngredientList(ingredients []models.Ingredient) {
-	<ul data-testid="ingredient-list">
-		for _, ingredient := range ingredients {
-			<li>
-				{ ingredient.Name }
-			</li>
-		}
-	</ul>
+	if len(ingredients) == 0 {
+		<h3>No ingredients found</h3>
+	} else {
+		<ul data-testid="ingredient-list" role="list">
+			for _, ingredient := range ingredients {
+				<li id={"ingredient-" + utils.ToString(ingredient.ID)} class="admin-list-item">
+					<span>{ ingredient.Name }</span>
+					<span
+						hx-delete={"/admin/ingredients/" + utils.ToString(ingredient.ID)}
+						hx-select="#ingredient-admin"
+						hx-target="#ingredient-admin"
+						hx-swap="outerHTML"
+						class="admin-list-item-delete"
+					>
+						X
+					</span>
+				</li>
+			}
+		</ul>
+	}
 }
 
 templ IngredientCreate() {
 	<form
-		id="recipe-form"
-		action="/admin/ingredients/create"
-		method="post"
+		id="ingredient-create-form"
+		hx-put="/admin/ingredients/create"
+		hx-select="#ingredient-admin"
+		hx-target="#ingredient-admin"
+		hx-swap="outerHTML"
 	>
 		<div class="input-group">
 			<input
@@ -39,13 +55,11 @@ templ IngredientCreate() {
 templ IngredientListPage(ingredients []models.Ingredient) {
 	@shared.Page() {
 		<h2>Manage Ingredients</h2>
-		if len(ingredients) == 0 {
-			<h2>No ingredients found :(</h2>
-		} else {
-			<hr/>
+		<hr/>
+		<div id="ingredient-admin">
 			@IngredientCreate()
 			<hr/>
 			@IngredientList(ingredients)
-		}
+		</div>
 	}
 }

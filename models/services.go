@@ -17,8 +17,10 @@ type AdminService interface {
 	IsAdmin(user uint) bool
 	GetIngredients() ([]Ingredient, error)
 	CreateIngredient(name string) (Ingredient, error)
+	DeleteIngredient(id uint) (bool, error)
 	GetQuantityUnits() ([]QuantityUnit, error)
 	CreateQuantityUnit(name string) (QuantityUnit, error)
+	DeleteQuantityUnit(id uint) (bool, error)
 }
 
 type CategoryService interface {
