@@ -43,6 +43,14 @@ func (s *AdminRepository) CreateIngredient(ingredient string) (models.Ingredient
 	return entry, error
 }
 
+func (s *AdminRepository) DeleteIngredient(id uint) (bool, error) {
+	var entry models.Ingredient
+
+	error := s.DB.Where("id = ?", id).Delete(&entry).Error
+
+	return error == nil, error
+}
+
 func (s *AdminRepository) GetQuantityUnits() ([]models.QuantityUnit, error) {
 	var units []models.QuantityUnit
 
@@ -57,4 +65,12 @@ func (s *AdminRepository) CreateQuantityUnit(unit string) (models.QuantityUnit, 
 	error := s.DB.FirstOrCreate(&entry, models.QuantityUnit{Name: unit}).Error
 
 	return entry, error
+}
+
+func (s *AdminRepository) DeleteQuantityUnit(id uint) (bool, error) {
+	var entry models.QuantityUnit
+
+	error := s.DB.Where("id = ?", id).Delete(&entry).Error
+
+	return error == nil, error
 }

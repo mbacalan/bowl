@@ -3,23 +3,39 @@ package admin
 import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
+	"gorm.io/gorm/utils"
 )
 
 templ QuantityUnitList(units []models.QuantityUnit) {
-	<ul data-testid="quantity-unit-list">
-		for _, unit := range units {
-			<li>
-				{ unit.Name }
-			</li>
-		}
-	</ul>
+	if len(units) == 0 {
+		<h2>No quantity units found :(</h2>
+	} else {
+		<ul data-testid="quantity-unit-list" role="list">
+			for _, unit := range units {
+				<li id={"quantity-unit-" + utils.ToString(unit.ID)} class="admin-list-item">
+					<span>{ unit.Name }</span>
+					<span
+						hx-delete={"/admin/quantity-units/" + utils.ToString(unit.ID)}
+						hx-select="#quantity-unit-admin"
+						hx-target="#quantity-unit-admin"
+						hx-swap="outerHTML"
+						class="admin-list-item-delete"
+					>
+						X
+					</span>
+				</li>
+			}
+		</ul>
+	}
 }
 
 templ QuantityUnitCreate() {
 	<form
 		id="recipe-form"
-		action="/admin/quantity-units/create"
-		method="post"
+		hx-put="/admin/quantity-units/create"
+		hx-select="#quantity-unit-admin"
+		hx-target="#quantity-unit-admin"
+		hx-swap="outerHTML"
 	>
 		<div class="input-group">
 			<input
@@ -39,13 +55,11 @@ templ QuantityUnitCreate() {
 templ QuantityUnitListPage(units []models.QuantityUnit) {
 	@shared.Page() {
 		<h2>Manage Quantity Units</h2>
-		if len(units) == 0 {
-			<h2>No quantity units found :(</h2>
-		} else {
-			<hr/>
+		<hr/>
+		<div id="quantity-unit-admin">
 			@QuantityUnitCreate()
 			<hr/>
 			@QuantityUnitList(units)
-		}
+		</div>
 	}
 }

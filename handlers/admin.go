@@ -3,6 +3,7 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
+	"strconv"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
@@ -30,10 +31,12 @@ func (h *AdminHandler) Routes() chi.Router {
 	r.Get("/", h.View)
 
 	r.Get("/ingredients", h.ViewIngredients)
-	r.Post("/ingredients/create", h.CreateIngredient)
+	r.Put("/ingredients/create", h.CreateIngredient)
+	r.Delete("/ingredients/{id}", h.DeleteIngredient)
 
 	r.Get("/quantity-units", h.ViewQuantityUnits)
-	r.Post("/quantity-units/create", h.CreateQuantityUnit)
+	r.Put("/quantity-units/create", h.CreateQuantityUnit)
+	r.Delete("/quantity-units/{id}", h.DeleteQuantityUnit)
 
 	return r
 }
@@ -60,7 +63,16 @@ func (h *AdminHandler) CreateIngredient(w http.ResponseWriter, r *http.Request) 
 		h.Logger.Error("Error creating ingredient", err)
 	}
 
-	http.Redirect(w, r, "/admin/ingredients", http.StatusFound)
+	h.ViewIngredients(w, r)
+}
+
+func (h *AdminHandler) DeleteIngredient(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(param)
+
+	h.Service.DeleteIngredient(uint(id))
+
+	h.ViewIngredients(w, r)
 }
 
 func (h *AdminHandler) ViewQuantityUnits(w http.ResponseWriter, r *http.Request) {
@@ -83,5 +95,14 @@ func (h *AdminHandler) CreateQuantityUnit(w http.ResponseWriter, r *http.Request
 		h.Logger.Error("Error creating quantity unit", err)
 	}
 
-	http.Redirect(w, r, "/admin/quantity-units", http.StatusFound)
+	h.ViewQuantityUnits(w, r)
+}
+
+func (h *AdminHandler) DeleteQuantityUnit(w http.ResponseWriter, r *http.Request) {
+	param := chi.URLParam(r, "id")
+	id, _ := strconv.Atoi(param)
+
+	h.Service.DeleteQuantityUnit(uint(id))
+
+	h.ViewQuantityUnits(w, r)
 }

@@ -50,6 +50,17 @@ func (s *AdminService) CreateIngredient(name string) (models.Ingredient, error) 
 	return result, nil
 }
 
+func (s *AdminService) DeleteIngredient(id uint) (bool, error) {
+	result, err := s.Repository.DeleteIngredient(id)
+
+	if err != nil {
+		s.Logger.Error("Error deleting ingredient", err)
+		return result, err
+	}
+
+	return result, nil
+}
+
 func (s *AdminService) GetQuantityUnits() ([]models.QuantityUnit, error) {
 	result, err := s.Repository.GetQuantityUnits()
 
@@ -66,6 +77,17 @@ func (s *AdminService) CreateQuantityUnit(name string) (models.QuantityUnit, err
 
 	if err != nil {
 		s.Logger.Error("Error creating quantity unit", err)
+		return result, err
+	}
+
+	return result, nil
+}
+
+func (s *AdminService) DeleteQuantityUnit(id uint) (bool, error) {
+	result, err := s.Repository.DeleteQuantityUnit(id)
+
+	if err != nil {
+		s.Logger.Error("Error deleting quantity unit", err)
 		return result, err
 	}
 
