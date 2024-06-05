@@ -50,6 +50,9 @@ func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		h.Logger.Error("Error signing up in", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
+		return
 	}
 
 	h.createSession(w, r, &user)
@@ -67,6 +70,9 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		h.Logger.Error("Error logging in", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
+		return
 	}
 
 	h.createSession(w, r, &user)
@@ -80,7 +86,9 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 
 	err := session.Save(r, w)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		h.Logger.Error("Error logging out", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 		return
 	}
 
@@ -106,8 +114,9 @@ func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user
 	session.Values["UserName"] = user.Name
 	session.Values["IsAdmin"] = user.IsAdmin
 	err := session.Save(r, w)
+
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		w.WriteHeader(http.StatusInternalServerError)
+		pages.Error(err.Error()).Render(r.Context(), w)
 	}
 }
