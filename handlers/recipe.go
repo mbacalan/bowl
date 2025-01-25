@@ -62,7 +62,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -83,7 +83,7 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if err != nil {
-		h.Logger.Error("Error creating recipe", err)
+		h.Logger.Error("Error creating recipe", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -99,7 +99,7 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(param)
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -108,7 +108,7 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 	user := session.Values["UserID"].(uint)
 	recipe, err := h.Service.Get(user, id)
 	if err != nil {
-		h.Logger.Error("Error getting recipe", err)
+		h.Logger.Error("Error getting recipe", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -122,7 +122,7 @@ func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(param)
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -132,7 +132,7 @@ func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 
 	recipe, err := h.Service.Get(user, id)
 	if err != nil {
-		h.Logger.Error("Error getting recipe", err)
+		h.Logger.Error("Error getting recipe", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -158,7 +158,7 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -181,7 +181,7 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	recipeDetail, err := h.Service.Update(id, data)
 
 	if err != nil {
-		h.Logger.Error("Error editing recipe", err)
+		h.Logger.Error("Error editing recipe", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -194,7 +194,7 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return
@@ -204,7 +204,7 @@ func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 
 	rs, err := h.Service.GetAll(user)
 	if err != nil {
-		h.Logger.Error("Error getting all recipes", err)
+		h.Logger.Error("Error getting all recipes", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 		return

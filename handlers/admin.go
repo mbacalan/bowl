@@ -48,7 +48,7 @@ func (h *AdminHandler) View(w http.ResponseWriter, r *http.Request) {
 func (h *AdminHandler) ViewIngredients(w http.ResponseWriter, r *http.Request) {
 	ingredients, err := h.Service.GetIngredients()
 	if err != nil {
-		h.Logger.Error("Error listing ingredients", err)
+		h.Logger.Error("Error listing ingredients", "error", err)
 	}
 
 	admin.IngredientListPage(ingredients).Render(r.Context(), w)
@@ -60,7 +60,7 @@ func (h *AdminHandler) CreateIngredient(w http.ResponseWriter, r *http.Request) 
 	ingredient := r.Form["ingredient"]
 	_, err := h.Service.CreateIngredient(ingredient[0])
 	if err != nil {
-		h.Logger.Error("Error creating ingredient", err)
+		h.Logger.Error("Error creating ingredient", "error", err)
 	}
 
 	h.ViewIngredients(w, r)
@@ -79,7 +79,7 @@ func (h *AdminHandler) ViewQuantityUnits(w http.ResponseWriter, r *http.Request)
 	units, err := h.Service.GetQuantityUnits()
 
 	if err != nil {
-		h.Logger.Error("Error listing quantity units", err)
+		h.Logger.Error("Error listing quantity units", "error", err)
 		return
 	}
 
@@ -92,7 +92,7 @@ func (h *AdminHandler) CreateQuantityUnit(w http.ResponseWriter, r *http.Request
 	quantityUnit := r.Form["quantity-unit"]
 	_, err := h.Service.CreateQuantityUnit(quantityUnit[0])
 	if err != nil {
-		h.Logger.Error("Error creating quantity unit", err)
+		h.Logger.Error("Error creating quantity unit", "error", err)
 	}
 
 	h.ViewQuantityUnits(w, r)

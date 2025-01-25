@@ -19,7 +19,7 @@ func (s *RecipeIngredientService) GetAll() (ingredients []models.RecipeIngredien
 	result, err := s.Repository.GetAll()
 
 	if err != nil {
-		s.Logger.Error("Error getting all ingredients", err)
+		s.Logger.Error("Error getting all ingredients", "error", err)
 		return result, err
 	}
 
@@ -30,7 +30,7 @@ func (s *RecipeIngredientService) Create(r uint, i uint, qu uint, q string) (ing
 	result, err := s.Repository.Create(r, i, qu, q)
 
 	if err != nil {
-		s.Logger.Error("Error creating ingredient", err)
+		s.Logger.Error("Error creating ingredient", "error", err)
 		return result, err
 	}
 

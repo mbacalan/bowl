@@ -35,7 +35,7 @@ func (h *HomeHandler) Routes() chi.Router {
 func (h *HomeHandler) View(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		return
 	}
 
@@ -43,7 +43,7 @@ func (h *HomeHandler) View(w http.ResponseWriter, r *http.Request) {
 	recipes, err := h.Service.GetRecent(user, 10)
 
 	if err != nil {
-		h.Logger.Error("Error viewing home", err)
+		h.Logger.Error("Error viewing home", "error", err)
 	}
 
 	pages.Home(recipes).Render(r.Context(), w)

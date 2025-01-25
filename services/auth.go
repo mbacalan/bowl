@@ -46,7 +46,7 @@ func (s *AuthService) Login(name string, attempt string) (models.User, error) {
 	user, err := s.Repository.Get(name)
 
 	if err != nil {
-		s.Logger.Error("Error logging in", err)
+		s.Logger.Error("Error logging in", "error", err)
 		return models.User{}, err
 	}
 

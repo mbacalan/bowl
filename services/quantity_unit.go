@@ -19,7 +19,7 @@ func (s *QuantityUnitService) GetAll() (units []models.QuantityUnit, error error
 	result, err := s.Repository.GetAll()
 
 	if err != nil {
-		s.Logger.Error("Error getting all quantity units", err)
+		s.Logger.Error("Error getting all quantity units", "error", err)
 		return result, err
 	}
 
@@ -30,7 +30,7 @@ func (s *QuantityUnitService) Create(i string) (unit models.QuantityUnit, error 
 	result, err := s.Repository.GetOrCreate(i)
 
 	if err != nil {
-		s.Logger.Error("Error creating unit", err)
+		s.Logger.Error("Error creating unit", "error", err)
 		return result, err
 	}
 

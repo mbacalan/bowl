@@ -24,7 +24,7 @@ func (s *RecipeService) Get(user uint, id int) (recipe models.Recipe, error erro
 	result, err := s.UnitOfWork.RecipeRepository.Get(user, id)
 
 	if err != nil {
-		s.Logger.Error("Error getting recipe", err)
+		s.Logger.Error("Error getting recipe", "error", err)
 		return result, err
 	}
 
@@ -35,7 +35,7 @@ func (s *RecipeService) GetAll(user uint) (recipes []models.Recipe, error error)
 	result, err := s.UnitOfWork.RecipeRepository.GetAll(user)
 
 	if err != nil {
-		s.Logger.Error("Error getting all recipes", err)
+		s.Logger.Error("Error getting all recipes", "error", err)
 		return result, err
 	}
 
@@ -46,7 +46,7 @@ func (s *RecipeService) GetRecent(user uint, limit int) (recipes []models.Recipe
 	result, err := s.UnitOfWork.RecipeRepository.GetRecent(user, limit)
 
 	if err != nil {
-		s.Logger.Error("Error getting recent recipes", err)
+		s.Logger.Error("Error getting recent recipes", "error", err)
 		return result, err
 	}
 
@@ -57,7 +57,7 @@ func (s *RecipeService) Create(data models.RecipeData) (models.Recipe, error) {
 	recipe, err := s.UnitOfWork.RecipeRepository.Create(data.Name, data.PrepDuration, data.CookDuration, data.UserID)
 
 	if err != nil {
-		s.Logger.Error("Error creating recipe", err)
+		s.Logger.Error("Error creating recipe", "error", err)
 		return recipe, err
 	}
 
@@ -82,7 +82,7 @@ func (s *RecipeService) Update(id int, data models.RecipeData) (models.Recipe, e
 	recipe, err := s.UnitOfWork.RecipeRepository.Get(data.UserID, id)
 
 	if err != nil {
-		s.Logger.Error("Recipe does not exist", err)
+		s.Logger.Error("Recipe does not exist", "error", err)
 		return models.Recipe{}, err
 	}
 
@@ -90,7 +90,7 @@ func (s *RecipeService) Update(id int, data models.RecipeData) (models.Recipe, e
 		err := s.UnitOfWork.RecipeIngredientRepository.Delete(recipe.RecipeIngredients[i].ID)
 
 		if err != nil {
-			s.Logger.Error("Error deleting recipe ingredient", err)
+			s.Logger.Error("Error deleting recipe ingredient", "error", err)
 			return models.Recipe{}, err
 		}
 	}

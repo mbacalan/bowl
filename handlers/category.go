@@ -39,14 +39,14 @@ func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 	id, _ := strconv.Atoi(param)
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		return
 	}
 
 	user := session.Values["UserID"].(uint)
 	category, err := h.Service.Get(user, id)
 	if err != nil {
-		h.Logger.Error("Error getting category", err)
+		h.Logger.Error("Error getting category", "error", err)
 	}
 
 	pages.Category(category).Render(r.Context(), w)
@@ -55,14 +55,14 @@ func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 func (h *CategoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
 	if err != nil {
-		h.Logger.Error("Error getting user session", err)
+		h.Logger.Error("Error getting user session", "error", err)
 		return
 	}
 
 	user := session.Values["UserID"].(uint)
 	categories, err := h.Service.GetAll(user)
 	if err != nil {
-		h.Logger.Error("Error listing ingredients", err)
+		h.Logger.Error("Error listing ingredients", "error", err)
 	}
 
 	pages.Categories(categories).Render(r.Context(), w)

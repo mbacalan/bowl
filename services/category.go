@@ -22,7 +22,7 @@ func (s *CategoryService) Get(user uint, id int) (models.Category, error) {
 	result, err := s.Repository.Get(user, id)
 
 	if err != nil {
-		s.Logger.Error("Error getting category", err)
+		s.Logger.Error("Error getting category", "error", err)
 		return result, err
 	}
 
@@ -33,7 +33,7 @@ func (s *CategoryService) GetAll(user uint) ([]models.Category, error) {
 	result, err := s.Repository.GetAll(user)
 
 	if err != nil {
-		s.Logger.Error("Error getting all categories", err)
+		s.Logger.Error("Error getting all categories", "error", err)
 		return result, err
 	}
 

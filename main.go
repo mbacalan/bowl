@@ -23,7 +23,7 @@ func main() {
 	fmt.Printf("Listening on %v\n", ":3000")
 
 	if err := http.ListenAndServe(":3000", server.Router); err != nil {
-		server.Logger.Error("Failed to start the server", err)
+		server.Logger.Error("Failed to start the server", "error", err)
 		os.Exit(1)
 	}
 }

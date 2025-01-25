@@ -34,7 +34,7 @@ func (h *QuantityUnitHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	unit, err := h.Service.GetAll()
 
 	if err != nil {
-		h.Logger.Error("", err)
+		h.Logger.Error("", "error", err)
 		return
 	}
 
