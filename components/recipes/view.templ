@@ -50,9 +50,9 @@ templ Recipe(recipe models.Recipe) {
 }
 
 templ RecipeList(recipes []models.Recipe) {
-	<ul>
+	<ul class="recipe-list">
 		for _, recipe := range recipes {
-			<li>
+			<li class="recipe-item">
 				<a href={ "/recipes/" + templ.URL(utils.ToString(recipe.ID)) }>
 					{ recipe.Name }
 				</a>

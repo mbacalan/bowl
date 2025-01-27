@@ -1,8 +1,8 @@
 package pages
 
 import (
-	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/components/recipes"
+	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 )
 
@@ -10,13 +10,19 @@ templ Home(r []models.Recipe) {
 	@shared.Page() {
 		<h2>A database of your own recipes</h2>
 		<hr/>
-		<h3><a href="/recipes">📃 Recipes</a></h3>
-		<h3><a href="/categories">📚 Categories</a></h3>
-
-		<hr />
-
+		<h3>
+			<a href="/recipes" class="recipes-link">
+				📃 Recipes
+			</a>
+		</h3>
+		<h3>
+			<a href="/categories" class="categories-link">
+				📚 Categories
+			</a>
+		</h3>
+		<hr/>
 		if len(r) > 0 {
-			<h4>Recently created:</h4>
+			<h4 class="recents-list">Recently created:</h4>
 		}
 		@recipes.RecipeList(r)
 	}

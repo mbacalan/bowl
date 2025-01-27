@@ -47,12 +47,12 @@ func Home(r []models.Recipe) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>A database of your own recipes</h2><hr><h3><a href=\"/recipes\">📃 Recipes</a></h3><h3><a href=\"/categories\">📚 Categories</a></h3><hr>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>A database of your own recipes</h2><hr><h3><a href=\"/recipes\" class=\"recipes-link\">📃 Recipes</a></h3><h3><a href=\"/categories\" class=\"categories-link\">📚 Categories</a></h3><hr>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			if len(r) > 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<h4>Recently created:</h4>")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<h4 class=\"recents-list\">Recently created:</h4>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
