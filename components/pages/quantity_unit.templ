@@ -1,9 +1,11 @@
 package pages
 
 import "github.com/mbacalan/bowl/models"
+import "fmt"
 
 templ QuantityUnits(units []models.QuantityUnit, selected string) {
 	<option
+		data-testid="quantity-unit-option-default"
 		disabled
 		value=""
 		if selected == "" {
@@ -15,6 +17,7 @@ templ QuantityUnits(units []models.QuantityUnit, selected string) {
 
 	for _, unit := range units {
 		<option
+			data-testid={fmt.Sprintf("quantity-unit-option-%d", unit.ID)}
 			id={ unit.Name }
 			if selected == unit.Name {
 				selected
