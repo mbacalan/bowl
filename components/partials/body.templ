@@ -3,10 +3,10 @@ package partials
 templ Body() {
 	<body>
 		@Header()
-		<main data-testid="main">
+		<main>
 			{ children... }
 		</main>
-		<script src="/assets/index.js"></script>
+		<script src="/assets/index.js" data-testid="js-asset"></script>
 		@Footer()
 	</body>
 }
