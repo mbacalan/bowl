@@ -9,7 +9,7 @@ import (
 templ Categories(categories []models.Category) {
 	@shared.Page() {
 		if len(categories) == 0 {
-			<h2>No categories found :(</h2>
+			<h2 data-testid="no-categories">No categories found :(</h2>
 			<p>You can create categories while creating / editing a recipe</p>
 		} else {
 			<h2>All Categories</h2>
@@ -17,7 +17,7 @@ templ Categories(categories []models.Category) {
 			<ul>
 				for _, category := range categories {
 					<li>
-						<a href={ "/categories/" + templ.URL(utils.ToString(category.ID)) }>
+						<a href={ "/categories/" + templ.URL(utils.ToString(category.ID)) } data-testid="category-link">
 							{ category.Name }
 						</a>
 					</li>
@@ -34,7 +34,7 @@ templ Category(category models.Category) {
 		<ul>
 			for _, recipe := range category.Recipes {
 				<li>
-					<a href={ "/recipes/" + templ.URL(utils.ToString(recipe.ID)) }>
+					<a href={ "/recipes/" + templ.URL(utils.ToString(recipe.ID)) } data-testid="category-recipe-link">
 						{ recipe.Name }
 					</a>
 				</li>

@@ -3,6 +3,7 @@ package pages
 templ Signup() {
 	<form
 		id="signup-form"
+		data-testid="signup-form"
 		method="post"
 		action="/"
 		hx-post="/auth/signup"
@@ -16,6 +17,6 @@ templ Signup() {
 		<label for="password">Password</label>
 		<input type="password" name="password" />
 
-		<input type="submit" value="Sign up" />
+		<button type="submit">Sign up</button>
 	</form>
 }
