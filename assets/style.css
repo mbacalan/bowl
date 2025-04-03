@@ -66,10 +66,11 @@ form {
 
 .recipe-content {
   display: flex;
-  justify-content: space-between;
+  gap: 16em;
 
   @media screen and (max-width: 1024px) {
     flex-direction: column;
+    gap: 0;
   }
 }
 
