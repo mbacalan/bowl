@@ -20,7 +20,7 @@ func main() {
 	server := createServer()
 	handlers.MountHandlers(server)
 
-	fmt.Printf("Listening on %v\n", ":3000")
+	fmt.Printf("Listening on %v\n", "localhost:3000")
 
 	if err := http.ListenAndServe(":3000", server.Router); err != nil {
 		server.Logger.Error("Failed to start the server", "error", err)
