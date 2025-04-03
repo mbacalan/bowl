@@ -9,6 +9,7 @@ body {
   flex-direction: column;
   min-height: 100vh;
   height: 100%;
+  max-width: 75em;
 }
 
 main {
@@ -60,6 +61,15 @@ form {
   .remove {
     margin-bottom: 10px;
     cursor: pointer;
+  }
+}
+
+.recipe-content {
+  display: flex;
+  justify-content: space-between;
+
+  @media screen and (max-width: 1024px) {
+    flex-direction: column;
   }
 }
 

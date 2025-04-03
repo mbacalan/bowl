@@ -19,19 +19,25 @@ templ Recipe(recipe models.Recipe) {
 
 		<p>Prep: { utils.ToString(recipe.PrepDuration) }min - Cooking: { utils.ToString(recipe.CookDuration) }min</p>
 
-		<h3>Ingredients</h3>
-		<ul>
-			for _, ingredient := range recipe.RecipeIngredients {
-				<li>{ ingredient.Ingredient.Name } - { ingredient.Quantity }, { ingredient.QuantityUnit.Name }</li>
-			}
-		</ul>
+		<div class="recipe-content">
+			<div class="recipe-ingredients">
+				<h3>Ingredients</h3>
+				<ul>
+					for _, ingredient := range recipe.RecipeIngredients {
+						<li>{ ingredient.Ingredient.Name } - { ingredient.Quantity }, { ingredient.QuantityUnit.Name }</li>
+					}
+				</ul>
+			</div>
 
-		<h3>Steps</h3>
-		<ol>
-			for _, step := range recipe.Steps {
-				<li>{ step.Step }</li>
-			}
-		</ol>
+			<div class="recipe-steps">
+				<h3>Steps</h3>
+				<ol>
+					for _, step := range recipe.Steps {
+						<li>{ step.Step }</li>
+					}
+				</ol>
+			</div>
+		</div>
 
 		if len(recipe.Categories) > 0 {
 			<h3>Categories</h3>
