@@ -1,13 +1,14 @@
 package pages
 
 import (
+	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 )
 
-templ Home(r []models.Recipe) {
-	@shared.Page() {
+templ Home(s components.Settings, r []models.Recipe) {
+	@shared.Page(s) {
 		<h2>A database of your own recipes</h2>
 		<hr/>
 		<h3>

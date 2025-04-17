@@ -5,6 +5,7 @@ import (
 	"github.com/mbacalan/bowl/components/shared"
 	"gorm.io/gorm/utils"
 	"github.com/mbacalan/bowl/models"
+	"github.com/mbacalan/bowl/components"
 )
 
 templ Recipe(recipe models.Recipe) {
@@ -71,8 +72,8 @@ templ RecipeList(recipes []models.Recipe) {
 	</ul>
 }
 
-templ RecipeListPage(recipes []models.Recipe) {
-	@shared.Page() {
+templ RecipeListPage(s components.Settings, recipes []models.Recipe) {
+	@shared.Page(s) {
 		if len(recipes) == 0 {
 			<h2>No recipes found :(</h2>
 			<p>Why don't you <a href="/recipes/create">create one</a>?</p>
@@ -84,8 +85,8 @@ templ RecipeListPage(recipes []models.Recipe) {
 	}
 }
 
-templ RecipeDetailPage(recipe models.Recipe) {
-	@shared.Page() {
+templ RecipeDetailPage(s components.Settings, recipe models.Recipe) {
+	@shared.Page(s) {
 		@Recipe(recipe)
 	}
 }

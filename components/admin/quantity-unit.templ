@@ -4,6 +4,7 @@ import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm/utils"
+	"github.com/mbacalan/bowl/components"
 )
 
 templ QuantityUnitList(units []models.QuantityUnit) {
@@ -52,8 +53,8 @@ templ QuantityUnitCreate() {
 	</form>
 }
 
-templ QuantityUnitListPage(units []models.QuantityUnit) {
-	@shared.Page() {
+templ QuantityUnitListPage(s components.Settings, units []models.QuantityUnit) {
+	@shared.Page(s) {
 		<h2>Manage Quantity Units</h2>
 		<hr/>
 		<div id="quantity-unit-admin">

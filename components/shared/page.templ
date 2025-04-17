@@ -2,13 +2,14 @@ package shared
 
 import (
 	"github.com/mbacalan/bowl/components/partials"
+	"github.com/mbacalan/bowl/components"
 )
 
-templ Page() {
+templ Page(s components.Settings) {
 	<!DOCTYPE html>
 	<html lang="en">
 		@partials.Head()
-		@partials.Body() {
+		@partials.Body(s) {
 			{ children... }
 		}
 	</html>

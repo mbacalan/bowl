@@ -2,10 +2,11 @@ package pages
 
 import (
 	"github.com/mbacalan/bowl/components/shared"
+	"github.com/mbacalan/bowl/components"
 )
 
-templ Auth() {
-	@shared.Page() {
+templ Auth(s components.Settings) {
+	@shared.Page(s) {
 		@Login()
 
 		<hr />

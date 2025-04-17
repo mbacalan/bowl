@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/admin"
 	"github.com/mbacalan/bowl/models"
 )
@@ -23,6 +24,12 @@ func NewAdminHandler(logger *slog.Logger, service models.AdminService, store *se
 		Service: service,
 		Store:   store,
 	}
+}
+
+func (h *AdminHandler) Settings(r *http.Request) components.Settings {
+	session, _ := h.Store.Get(r, "bowl-session")
+	user := session.Values["UserID"].(uint)
+	return components.Settings{IsAdmin: h.Service.IsAdmin(user)}
 }
 
 func (h *AdminHandler) Routes() chi.Router {
@@ -42,7 +49,7 @@ func (h *AdminHandler) Routes() chi.Router {
 }
 
 func (h *AdminHandler) View(w http.ResponseWriter, r *http.Request) {
-	admin.Admin().Render(r.Context(), w)
+	admin.Admin(h.Settings(r)).Render(r.Context(), w)
 }
 
 func (h *AdminHandler) ViewIngredients(w http.ResponseWriter, r *http.Request) {
@@ -51,7 +58,7 @@ func (h *AdminHandler) ViewIngredients(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("Error listing ingredients", "error", err)
 	}
 
-	admin.IngredientListPage(ingredients).Render(r.Context(), w)
+	admin.IngredientListPage(h.Settings(r), ingredients).Render(r.Context(), w)
 }
 
 func (h *AdminHandler) CreateIngredient(w http.ResponseWriter, r *http.Request) {
@@ -83,7 +90,7 @@ func (h *AdminHandler) ViewQuantityUnits(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
-	admin.QuantityUnitListPage(units).Render(r.Context(), w)
+	admin.QuantityUnitListPage(h.Settings(r), units).Render(r.Context(), w)
 }
 
 func (h *AdminHandler) CreateQuantityUnit(w http.ResponseWriter, r *http.Request) {

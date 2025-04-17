@@ -7,6 +7,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/models"
 )
@@ -23,6 +24,11 @@ func NewCategoryHandler(logger *slog.Logger, service models.CategoryService, sto
 		Service: service,
 		Store:   store,
 	}
+}
+
+func (h *CategoryHandler) Settings(r *http.Request) components.Settings {
+	settings := components.GetSettings(r)
+	return components.Settings{IsAdmin: settings.IsAdmin}
 }
 
 func (h *CategoryHandler) Routes() chi.Router {
@@ -49,7 +55,7 @@ func (h *CategoryHandler) View(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("Error getting category", "error", err)
 	}
 
-	pages.Category(category).Render(r.Context(), w)
+	pages.Category(h.Settings(r), category).Render(r.Context(), w)
 }
 
 func (h *CategoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
@@ -65,5 +71,5 @@ func (h *CategoryHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("Error listing ingredients", "error", err)
 	}
 
-	pages.Categories(categories).Render(r.Context(), w)
+	pages.Categories(h.Settings(r), categories).Render(r.Context(), w)
 }

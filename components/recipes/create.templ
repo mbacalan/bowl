@@ -2,15 +2,16 @@ package recipes
 
 import (
 	"github.com/mbacalan/bowl/components/partials"
+	"github.com/mbacalan/bowl/components"
 )
 
-templ CreateRecipe() {
+templ CreateRecipe(s components.Settings) {
 	<!DOCTYPE html>
 	<html lang="en">
 		@partials.Head() {
 			<script src="/assets/create-recipe.js"></script>
 		}
-		@partials.Body() {
+		@partials.Body(s) {
 			<form
 				id="recipe-form"
 				action="/recipes"

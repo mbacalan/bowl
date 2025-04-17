@@ -1,12 +1,14 @@
 package handlers
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/models"
 )
@@ -25,6 +27,11 @@ func NewAuthHandler(logger *slog.Logger, service models.AuthService) *AuthHandle
 	}
 }
 
+func (h *AuthHandler) Settings(r *http.Request) components.Settings {
+	settings := components.GetSettings(r)
+	return components.Settings{IsAdmin: settings.IsAdmin}
+}
+
 func (h *AuthHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
@@ -37,7 +44,7 @@ func (h *AuthHandler) Routes() chi.Router {
 }
 
 func (h *AuthHandler) Auth(w http.ResponseWriter, r *http.Request) {
-	pages.Auth().Render(r.Context(), w)
+	pages.Auth(h.Settings(r)).Render(r.Context(), w)
 }
 
 func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
@@ -57,7 +64,7 @@ func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
 
 	h.createSession(w, r, &user)
 	w.Header().Set("HX-Push-URL", "/")
-	pages.Home([]models.Recipe{}).Render(r.Context(), w)
+	pages.Home(h.Settings(r), []models.Recipe{}).Render(r.Context(), w)
 }
 
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -75,9 +82,10 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	h.createSession(w, r, &user)
+	session := h.createSession(w, r, &user)
 	w.Header().Set("HX-Push-URL", "/")
-	pages.Home([]models.Recipe{}).Render(r.Context(), w)
+	ctx := context.WithValue(r.Context(), "bowl-session", session)
+	pages.Home(h.Settings(r), []models.Recipe{}).Render(ctx, w)
 }
 
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
@@ -99,7 +107,7 @@ func (h *AuthHandler) GetStore() *sessions.CookieStore {
 	return h.Store
 }
 
-func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user *models.User) {
+func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user *models.User) *sessions.Session {
 	// Get a session. We're ignoring the error resulted from decoding an
 	// existing session: Get() always returns a session, even if empty.
 	session, _ := h.Store.Get(r, "bowl-session")
@@ -119,4 +127,6 @@ func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user
 		w.WriteHeader(http.StatusInternalServerError)
 		pages.Error(err.Error()).Render(r.Context(), w)
 	}
+
+	return session
 }

@@ -1,9 +1,10 @@
 package admin
 
 import "github.com/mbacalan/bowl/components/shared"
+import "github.com/mbacalan/bowl/components"
 
-templ Admin() {
-	@shared.Page() {
+templ Admin(s components.Settings) {
+	@shared.Page(s) {
 		<h2>Admin Dashboard</h2>
 
 		<div class="admin-menu">

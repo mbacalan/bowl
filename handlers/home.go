@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/models"
 )
@@ -22,6 +23,11 @@ func NewHomeHandler(logger *slog.Logger, service models.HomeService, store *sess
 		Service: service,
 		Store:   store,
 	}
+}
+
+func (h *HomeHandler) Settings(r *http.Request) components.Settings {
+	settings := components.GetSettings(r)
+	return components.Settings{IsAdmin: settings.IsAdmin}
 }
 
 func (h *HomeHandler) Routes() chi.Router {
@@ -46,5 +52,5 @@ func (h *HomeHandler) View(w http.ResponseWriter, r *http.Request) {
 		h.Logger.Error("Error viewing home", "error", err)
 	}
 
-	pages.Home(recipes).Render(r.Context(), w)
+	pages.Home(h.Settings(r), recipes).Render(r.Context(), w)
 }

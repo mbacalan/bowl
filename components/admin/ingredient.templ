@@ -4,6 +4,7 @@ import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm/utils"
+	"github.com/mbacalan/bowl/components"
 )
 
 templ IngredientList(ingredients []models.Ingredient) {
@@ -52,8 +53,8 @@ templ IngredientCreate() {
 	</form>
 }
 
-templ IngredientListPage(ingredients []models.Ingredient) {
-	@shared.Page() {
+templ IngredientListPage(s components.Settings ,ingredients []models.Ingredient) {
+	@shared.Page(s) {
 		<h2>Manage Ingredients</h2>
 		<hr/>
 		<div id="ingredient-admin">

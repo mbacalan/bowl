@@ -11,6 +11,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/gorilla/sessions"
+	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/models"
@@ -30,6 +31,11 @@ func NewRecipeHandler(logger *slog.Logger, service models.RecipeService, store *
 	}
 }
 
+func (h *RecipeHandler) Settings(r *http.Request) components.Settings {
+	settings := components.GetSettings(r)
+	return components.Settings{IsAdmin: settings.IsAdmin}
+}
+
 func (h *RecipeHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
@@ -45,7 +51,7 @@ func (h *RecipeHandler) Routes() chi.Router {
 
 func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		recipes.CreateRecipe().Render(r.Context(), w)
+		recipes.CreateRecipe(h.Settings(r)).Render(r.Context(), w)
 		return
 	}
 
@@ -114,7 +120,7 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipes.RecipeDetailPage(recipe).Render(r.Context(), w)
+	recipes.RecipeDetailPage(h.Settings(r), recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
@@ -138,7 +144,7 @@ func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipes.EditRecipe(recipe).Render(r.Context(), w)
+	recipes.EditRecipe(h.Settings(r), recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
@@ -210,5 +216,5 @@ func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipes.RecipeListPage(rs).Render(r.Context(), w)
+	recipes.RecipeListPage(h.Settings(r), rs).Render(r.Context(), w)
 }

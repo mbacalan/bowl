@@ -5,6 +5,7 @@ import (
 	"github.com/mbacalan/bowl/components/partials"
 	"gorm.io/gorm/utils"
 	"github.com/mbacalan/bowl/models"
+	"github.com/mbacalan/bowl/components"
 )
 
 func getCategories(categories []*models.Category) string {
@@ -21,11 +22,11 @@ func getCategories(categories []*models.Category) string {
 	return categoriesString
 }	
 
-templ EditRecipe(recipe models.Recipe) {
+templ EditRecipe(s components.Settings, recipe models.Recipe) {
 	<!DOCTYPE html>
 	<html lang="en">
 		@partials.Head()
-		@partials.Body() {
+		@partials.Body(s) {
 			<form
 				id="recipe-form"
 				action="/recipes"

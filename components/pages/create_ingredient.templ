@@ -1,9 +1,10 @@
 package pages
 
 import "github.com/mbacalan/bowl/components/shared"
+import "github.com/mbacalan/bowl/components"
 
-templ CreateIngredient() {
-	@shared.Page() {
+templ CreateIngredient(s components.Settings) {
+	@shared.Page(s) {
 		<form id="ingredient-form" action="/ingredients" method="post" hx-post="/ingredients/create" hx-swap="outerHTML" hx-select="[data-swap='ingredient']">
 			<label>
 				Name

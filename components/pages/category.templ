@@ -4,10 +4,11 @@ import (
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 	"gorm.io/gorm/utils"
+	"github.com/mbacalan/bowl/components"
 )
 
-templ Categories(categories []models.Category) {
-	@shared.Page() {
+templ Categories(s components.Settings, categories []models.Category) {
+	@shared.Page(s) {
 		if len(categories) == 0 {
 			<h2 data-testid="no-categories">No categories found :(</h2>
 			<p>You can create categories while creating / editing a recipe</p>
@@ -27,8 +28,8 @@ templ Categories(categories []models.Category) {
 	}
 }
 
-templ Category(category models.Category) {
-	@shared.Page() {
+templ Category(s components.Settings, category models.Category) {
+	@shared.Page(s) {
 		<h2>{ category.Name }</h2>
 		<hr/>
 		<ul>

@@ -1,8 +1,10 @@
 package partials
 
-templ Body() {
+import "github.com/mbacalan/bowl/components"
+
+templ Body(s components.Settings) {
 	<body>
-		@Header()
+		@Header(s)
 		<main>
 			{ children... }
 		</main>
