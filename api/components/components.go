@@ -19,6 +19,7 @@ const SessionKey contextKey = "bowl-session"
 func GetSettings(r *http.Request) Settings {
 	store := sessions.NewCookieStore([]byte(os.Getenv("SESSION_SECRET")))
 	session, _ := store.Get(r, "bowl-session")
+	// TODO: this can fail for reasons, add error handling
 	isAdmin := session.Values["IsAdmin"].(bool)
 
 	return Settings{IsAdmin: isAdmin}

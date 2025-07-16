@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	// "fmt"
 	"log/slog"
 	"net/http"
 	"os"
@@ -28,8 +29,14 @@ func NewAuthHandler(logger *slog.Logger, service models.AuthService) *AuthHandle
 }
 
 func (h *AuthHandler) Settings(r *http.Request) components.Settings {
-	settings := components.GetSettings(r)
-	return components.Settings{IsAdmin: settings.IsAdmin}
+	// settings, err := components.GetSettings(r)
+
+	// remove these maybe
+	// if err != nil {
+	// 	fmt.Fprintln(os.Stderr, err)
+	// 	os.Exit(2)
+	// }
+	return components.Settings{IsAdmin: false}
 }
 
 func (h *AuthHandler) Routes() chi.Router {
