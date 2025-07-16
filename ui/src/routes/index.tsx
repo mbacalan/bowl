@@ -1,38 +1,20 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { AppShell, Burger } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
+import { AppShell } from "@mantine/core";
+import { createFileRoute } from "@tanstack/react-router";
 
-
-export const Route = createFileRoute('/')({
-  component: App,
-})
+export const Route = createFileRoute("/")({
+	component: App,
+});
 
 function App() {
-  const [opened, { toggle }] = useDisclosure();
+	return (
+		<AppShell header={{ height: 60 }} padding="md">
+			<AppShell.Header>
+				<div>Bowl</div>
+			</AppShell.Header>
 
-  return (
-    <AppShell
-      header={{ height: 60 }}
-      navbar={{
-        width: 300,
-        breakpoint: 'sm',
-        collapsed: { mobile: !opened },
-      }}
-      padding="md"
-    >
-      <AppShell.Header>
-        <Burger
-          opened={opened}
-          onClick={toggle}
-          hiddenFrom="sm"
-          size="sm"
-        />
-        <div>Logo</div>
-      </AppShell.Header>
+			<AppShell.Main>Main</AppShell.Main>
 
-      <AppShell.Navbar p="md">Navbar</AppShell.Navbar>
-
-      <AppShell.Main>Main</AppShell.Main>
-    </AppShell>
-  );
+			<AppShell.Footer>Bilingual Recipes - 2025</AppShell.Footer>
+		</AppShell>
+	);
 }
