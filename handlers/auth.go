@@ -28,8 +28,9 @@ func NewAuthHandler(logger *slog.Logger, service models.AuthService) *AuthHandle
 }
 
 func (h *AuthHandler) Settings(r *http.Request) components.Settings {
-	settings := components.GetSettings(r)
-	return components.Settings{IsAdmin: settings.IsAdmin}
+	// no authorized user exists at this point but since the page
+	// requires a Settings interface, we just return it with hardcode
+	return components.Settings{IsAdmin: false}
 }
 
 func (h *AuthHandler) Routes() chi.Router {
