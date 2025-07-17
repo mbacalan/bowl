@@ -6,7 +6,7 @@ import {
 	MantineProvider,
 	Title,
 } from "@mantine/core";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query";
 import {
 	createRootRouteWithContext,
 	Outlet,
@@ -14,15 +14,20 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { Link } from "@/components/link";
+import { recipesQueryOptions } from "@/queries";
 import type { RouterContext } from "@/types";
 
 export const Route = createRootRouteWithContext<RouterContext>()({
 	component: App,
+	loader: async ({ context: { queryClient } }) => {
+		await queryClient.ensureQueryData(recipesQueryOptions);
+	},
 });
 
 // fetch user data in a loader
 
 function App() {
+	const { data } = useSuspenseQuery(recipesQueryOptions);
 	const navigate = useNavigate();
 
 	const logoutMutation = useMutation({
@@ -48,11 +53,17 @@ function App() {
 
 						{/* if s.IsAdmin {<a href="/admin">Admin</a>}| */}
 						<Group>
-							<Link to="/recipes/create">+ Recipe</Link>
-							{/* TODO: Add conditional if not logged in */}
-							<Button onClick={() => logoutMutation.mutateAsync()}>
-								Logout
-							</Button>
+							{/* TODO: Add better conditional if not logged in */}
+							{data.length ? (
+								<>
+									<Link to="/recipes/create">+ Recipe</Link>
+									<Button onClick={() => logoutMutation.mutateAsync()}>
+										Logout
+									</Button>
+								</>
+							) : (
+								<Link to="/auth">Login</Link>
+							)}
 						</Group>
 					</Group>
 				</AppShell.Header>

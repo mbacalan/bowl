@@ -18,6 +18,7 @@ export function LoginForm() {
 			fetch("http://localhost:3000/auth/login", {
 				method: "POST",
 				body: new URLSearchParams(value),
+        credentials: "include"
 			});
 		},
 		onSuccess: async () => {
