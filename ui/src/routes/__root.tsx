@@ -1,13 +1,7 @@
-import {
-	Anchor,
-	AppShell,
-	Box,
-	Group,
-	MantineProvider,
-	Title,
-} from "@mantine/core";
+import { AppShell, Box, Group, MantineProvider, Title } from "@mantine/core";
 import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
+import { Link } from "@/components/link";
 import type { RouterContext } from "@/types";
 
 export const Route = createRootRouteWithContext<RouterContext>()({
@@ -23,12 +17,12 @@ function App() {
 				<AppShell.Header>
 					<Group h="100%" px={"md"} align="center" justify="space-between">
 						<Title order={1}>
-							<Anchor href="/">🥗 Bowl</Anchor>
+							<Link to="/">🥗 Bowl</Link>
 						</Title>
 
 						<div>
 							{/* if s.IsAdmin {<a href="/admin">Admin</a>}| */}
-							<Anchor href="/recipes/create">+ Recipe</Anchor>
+							<Link to="/recipes/create">+ Recipe</Link>
 						</div>
 					</Group>
 				</AppShell.Header>

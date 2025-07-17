@@ -1,34 +1,9 @@
-import {
-	Anchor,
-	Container,
-	Divider,
-	List,
-	Stack,
-	Text,
-	Title,
-} from "@mantine/core";
+import { Container, Divider, Stack, Title } from "@mantine/core";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
-
-type RecipeList = {
-	ID: number;
-	Name: string;
-	PrepDuration: number;
-	CookDuration: number;
-};
-
-const recipesQueryOptions = {
-	queryKey: ["recipes"],
-	queryFn: async () => {
-		const resp = await fetch("http://localhost:3000/recipes", {
-			method: "GET",
-			credentials: "include",
-		});
-
-		const data: RecipeList[] = await resp.json();
-		return data;
-	},
-};
+import { Link } from "@/components/link";
+import { recipesQueryOptions } from "@/queries";
+import { RecipesList } from "./-components/recipe-list";
 
 export const Route = createFileRoute("/")({
 	component: App,
@@ -48,11 +23,11 @@ function App() {
 					<Divider />
 
 					<Title order={3}>
-						<Anchor href="/recipes">📃 Recipes</Anchor>
+						<Link to="/recipes">📃 Recipes</Link>
 					</Title>
 
 					<Title order={3}>
-						<Anchor href="/categories">📚 Categories</Anchor>
+						<Link to="/categories">📚 Categories</Link>
 					</Title>
 					<Divider />
 				</Stack>
@@ -61,18 +36,7 @@ function App() {
 					<Stack>
 						<Title order={4}>Recently created:</Title>
 
-						<List>
-							{data.map((recipe) => (
-								<List.Item key={recipe.ID}>
-									<Anchor href={`/recipes/${recipe.ID}`}>{recipe.Name}</Anchor>
-									{" - "}
-									<Text span>
-										Prep: {recipe.PrepDuration}min{" - "}
-										Cooking: {recipe.CookDuration}min
-									</Text>
-								</List.Item>
-							))}
-						</List>
+						<RecipesList recipes={data} />
 					</Stack>
 				) : null}
 			</Stack>
