@@ -73,7 +73,7 @@ func (h *AuthHandler) Routes() chi.Router {
 
 	r.Post("/signup", h.Signup)
 	r.Post("/login", h.Login)
-	r.Get("/logout", h.Logout)
+	r.Post("/logout", h.Logout)
 
 	return r
 }
@@ -131,7 +131,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Redirect(w, r, "/auth", http.StatusFound)
+	render.Render(w, r, NewSuccessResponse())
 }
 
 func (h *AuthHandler) GetStore() *sessions.CookieStore {

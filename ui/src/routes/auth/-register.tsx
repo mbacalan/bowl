@@ -1,5 +1,7 @@
 import { Button, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@tanstack/react-form";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 import { z } from "zod";
 
 const registerSchema = z.object({
@@ -8,13 +10,27 @@ const registerSchema = z.object({
 });
 
 export function RegisterForm() {
+	const navigate = useNavigate();
+
+	const mutation = useMutation({
+		mutationFn: async (value: z.infer<typeof registerSchema>) => {
+			fetch("http://localhost:3000/auth/signup", {
+				method: "POST",
+				body: new URLSearchParams(value),
+			});
+		},
+		onSuccess: async () => {
+			await navigate({ to: "/" });
+		},
+	});
+
 	const { Field, handleSubmit } = useForm({
 		defaultValues: {
 			username: "",
 			password: "",
 		},
 		onSubmit: async ({ value }) => {
-			console.log(value);
+			await mutation.mutateAsync(value);
 		},
 		validators: {
 			onSubmit: registerSchema,
