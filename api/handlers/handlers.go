@@ -5,6 +5,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
 	"github.com/mbacalan/bowl/assets"
 	"github.com/mbacalan/bowl/handlers/internal"
 	"github.com/mbacalan/bowl/models"
@@ -28,6 +29,9 @@ func MountHandlers(s *models.Server) {
 	s.Router.Group(func(r chi.Router) {
 		r.Use(middleware.Logger)
 		r.Use(middleware.Compress(5))
+		r.Use(cors.Handler(cors.Options{
+			AllowedOrigins: []string{"*"},
+		}))
 
 		r.Mount("/assets", assets.Routes())
 		r.Mount("/auth", s.Handlers.AuthHandler.Routes())
@@ -36,6 +40,9 @@ func MountHandlers(s *models.Server) {
 	s.Router.Group(func(r chi.Router) {
 		r.Use(middleware.Logger)
 		r.Use(middleware.Compress(5))
+		r.Use(cors.Handler(cors.Options{
+			AllowedOrigins: []string{"*"},
+		}))
 		r.Use(internal.Authenticated(s.Handlers.AuthHandler.GetStore()))
 
 		r.Mount("/", s.Handlers.HomeHandler.Routes())
@@ -47,6 +54,9 @@ func MountHandlers(s *models.Server) {
 	s.Router.Group(func(r chi.Router) {
 		r.Use(middleware.Logger)
 		r.Use(middleware.Compress(5))
+		r.Use(cors.Handler(cors.Options{
+			AllowedOrigins: []string{"*"},
+		}))
 		r.Use(internal.Authenticated(s.Handlers.AuthHandler.GetStore()))
 		r.Use(internal.IsAdmin(s.Handlers.AuthHandler.GetStore()))
 

@@ -10,6 +10,7 @@ import (
 	"golang.org/x/text/language"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/render"
 	"github.com/gorilla/sessions"
 	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/pages"
@@ -197,8 +198,32 @@ func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
 	recipes.Recipe(recipeDetail).Render(r.Context(), w)
 }
 
+type RecipeResponse struct {
+	models.Recipe
+}
+
+func (rd *RecipeResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}
+
+func NewRecipeResponse(recipe models.Recipe) *RecipeResponse {
+	resp := &RecipeResponse{Recipe: recipe}
+	return resp
+}
+
+func NewRecipeListResponse(recipes []models.Recipe) []render.Renderer {
+	list := []render.Renderer{}
+
+	for _, recipe := range recipes {
+		list = append(list, NewRecipeResponse(recipe))
+	}
+
+	return list
+}
+
 func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 	session, err := h.Store.Get(r, "bowl-session")
+	// TODO: user chi/render like in handlers/auth.go
 	if err != nil {
 		h.Logger.Error("Error getting user session", "error", err)
 		w.WriteHeader(http.StatusInternalServerError)
@@ -216,5 +241,5 @@ func (h *RecipeHandler) ViewList(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipes.RecipeListPage(h.Settings(r), rs).Render(r.Context(), w)
+	render.RenderList(w, r, NewRecipeListResponse(rs))
 }

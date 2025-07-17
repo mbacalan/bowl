@@ -2,17 +2,57 @@ package handlers
 
 import (
 	"context"
-	// "fmt"
 	"log/slog"
 	"net/http"
 	"os"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/render"
 	"github.com/gorilla/sessions"
-	"github.com/mbacalan/bowl/components"
-	"github.com/mbacalan/bowl/components/pages"
 	"github.com/mbacalan/bowl/models"
 )
+
+// Standard API response for success
+type SuccessResponse struct {
+	HTTPStatusCode int `json:"-"`
+}
+
+// Set 200 OK for rendering the response
+func (s *SuccessResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	render.Status(r, http.StatusOK)
+	return nil
+}
+
+// Return a new response with 200 OK, in case you need to access it before Render()
+func NewSuccessResponse() *SuccessResponse {
+	return &SuccessResponse{
+		HTTPStatusCode: http.StatusOK,
+	}
+}
+
+type ErrResponse struct {
+	HTTPStatusCode int    `json:"-"`
+	ErrorMessage   string `json:"error,omitempty"`
+}
+
+func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
+	render.Status(r, e.HTTPStatusCode)
+	return nil
+}
+
+func ErrInvalidRequest(err error) render.Renderer {
+	return &ErrResponse{
+		HTTPStatusCode: http.StatusBadRequest,
+		ErrorMessage:   err.Error(),
+	}
+}
+
+func ErrInternal(err error) render.Renderer {
+	return &ErrResponse{
+		HTTPStatusCode: http.StatusInternalServerError,
+		ErrorMessage:   err.Error(),
+	}
+}
 
 type AuthHandler struct {
 	Logger  *slog.Logger
@@ -28,30 +68,14 @@ func NewAuthHandler(logger *slog.Logger, service models.AuthService) *AuthHandle
 	}
 }
 
-func (h *AuthHandler) Settings(r *http.Request) components.Settings {
-	// settings, err := components.GetSettings(r)
-
-	// remove these maybe
-	// if err != nil {
-	// 	fmt.Fprintln(os.Stderr, err)
-	// 	os.Exit(2)
-	// }
-	return components.Settings{IsAdmin: false}
-}
-
 func (h *AuthHandler) Routes() chi.Router {
 	r := chi.NewRouter()
 
-	r.Get("/", h.Auth)
 	r.Post("/signup", h.Signup)
 	r.Post("/login", h.Login)
 	r.Get("/logout", h.Logout)
 
 	return r
-}
-
-func (h *AuthHandler) Auth(w http.ResponseWriter, r *http.Request) {
-	pages.Auth(h.Settings(r)).Render(r.Context(), w)
 }
 
 func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
@@ -63,15 +87,16 @@ func (h *AuthHandler) Signup(w http.ResponseWriter, r *http.Request) {
 	user, err := h.Service.Signup(username, password)
 
 	if err != nil {
-		h.Logger.Error("Error signing up in", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
+		h.Logger.Error("Error signing up", "error", err)
+		render.Render(w, r, ErrInvalidRequest(err))
 		return
 	}
 
-	h.createSession(w, r, &user)
-	w.Header().Set("HX-Push-URL", "/")
-	pages.Home(h.Settings(r), []models.Recipe{}).Render(r.Context(), w)
+	session := h.createSession(w, r, &user)
+	ctx := context.WithValue(r.Context(), "bowl-session", session)
+	if err := render.Render(w, r.WithContext(ctx), NewSuccessResponse()); err != nil {
+		render.Render(w, r, ErrInternal(err))
+	}
 }
 
 func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
@@ -84,15 +109,15 @@ func (h *AuthHandler) Login(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		h.Logger.Error("Error logging in", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
+		render.Render(w, r, ErrInvalidRequest(err))
 		return
 	}
 
 	session := h.createSession(w, r, &user)
-	w.Header().Set("HX-Push-URL", "/")
 	ctx := context.WithValue(r.Context(), "bowl-session", session)
-	pages.Home(h.Settings(r), []models.Recipe{}).Render(ctx, w)
+	if err := render.Render(w, r.WithContext(ctx), NewSuccessResponse()); err != nil {
+		render.Render(w, r, ErrInternal(err))
+	}
 }
 
 func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
@@ -102,8 +127,7 @@ func (h *AuthHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	err := session.Save(r, w)
 	if err != nil {
 		h.Logger.Error("Error logging out", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
+		render.Render(w, r, ErrInternal(err))
 		return
 	}
 
@@ -131,8 +155,7 @@ func (h *AuthHandler) createSession(w http.ResponseWriter, r *http.Request, user
 	err := session.Save(r, w)
 
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
+		render.Render(w, r, ErrInternal(err))
 	}
 
 	return session
