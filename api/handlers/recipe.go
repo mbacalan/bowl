@@ -14,7 +14,6 @@ import (
 	"github.com/gorilla/sessions"
 	"github.com/mbacalan/bowl/components"
 	"github.com/mbacalan/bowl/components/pages"
-	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/models"
 )
 
@@ -52,7 +51,7 @@ func (h *RecipeHandler) Routes() chi.Router {
 
 func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
-		recipes.CreateRecipe(h.Settings(r)).Render(r.Context(), w)
+		// recipes.CreateRecipe(h.Settings(r)).Render(r.Context(), w)
 		return
 	}
 
@@ -97,8 +96,8 @@ func (h *RecipeHandler) Create(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("HX-Push-URL", strconv.FormatUint(uint64(recipe.ID), 10))
-	recipeDetail, _ := h.Service.Get(user, int(recipe.ID))
-	recipes.Recipe(recipeDetail).Render(r.Context(), w)
+	// recipeDetail, _ := h.Service.Get(user, int(recipe.ID))
+	// recipes.Recipe(recipeDetail).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
@@ -121,81 +120,81 @@ func (h *RecipeHandler) View(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	recipes.RecipeDetailPage(h.Settings(r), recipe).Render(r.Context(), w)
+	render.Render(w, r, NewRecipeResponse(recipe))
 }
 
 func (h *RecipeHandler) Edit(w http.ResponseWriter, r *http.Request) {
-	param := chi.URLParam(r, "id")
-	id, _ := strconv.Atoi(param)
-	session, err := h.Store.Get(r, "bowl-session")
-	if err != nil {
-		h.Logger.Error("Error getting user session", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
-		return
-	}
+	// param := chi.URLParam(r, "id")
+	// id, _ := strconv.Atoi(param)
+	// session, err := h.Store.Get(r, "bowl-session")
+	// if err != nil {
+	// 	h.Logger.Error("Error getting user session", "error", err)
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	pages.Error(err.Error()).Render(r.Context(), w)
+	// 	return
+	// }
 
-	user := session.Values["UserID"].(uint)
+	// user := session.Values["UserID"].(uint)
 
-	recipe, err := h.Service.Get(user, id)
-	if err != nil {
-		h.Logger.Error("Error getting recipe", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
-		return
-	}
+	// recipe, err := h.Service.Get(user, id)
+	// if err != nil {
+	// 	h.Logger.Error("Error getting recipe", "error", err)
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	pages.Error(err.Error()).Render(r.Context(), w)
+	// 	return
+	// }
 
-	recipes.EditRecipe(h.Settings(r), recipe).Render(r.Context(), w)
+	// recipes.EditRecipe(h.Settings(r), recipe).Render(r.Context(), w)
 }
 
 func (h *RecipeHandler) Update(w http.ResponseWriter, r *http.Request) {
-	param := chi.URLParam(r, "id")
-	id, _ := strconv.Atoi(param)
+	// param := chi.URLParam(r, "id")
+	// id, _ := strconv.Atoi(param)
+	//
+	// r.ParseForm()
+	//
+	// name := r.Form.Get("name")
+	// prepDuration, _ := strconv.ParseUint(r.Form.Get("prep-duration"), 10, 32)
+	// cookDuration, _ := strconv.ParseUint(r.Form.Get("cook-duration"), 10, 32)
+	// steps := r.Form["step"]
+	// categories := r.Form.Get("categories")
+	// ingredients := r.Form["ingredient"]
+	// quantities := r.Form["quantity"]
+	// quantityUnits := r.Form["quantity-unit"]
 
-	r.ParseForm()
+	// session, err := h.Store.Get(r, "bowl-session")
+	// if err != nil {
+	// 	h.Logger.Error("Error getting user session", "error", err)
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	pages.Error(err.Error()).Render(r.Context(), w)
+	// 	return
+	// }
+	//
+	// user := session.Values["UserID"].(uint)
 
-	name := r.Form.Get("name")
-	prepDuration, _ := strconv.ParseUint(r.Form.Get("prep-duration"), 10, 32)
-	cookDuration, _ := strconv.ParseUint(r.Form.Get("cook-duration"), 10, 32)
-	steps := r.Form["step"]
-	categories := r.Form.Get("categories")
-	ingredients := r.Form["ingredient"]
-	quantities := r.Form["quantity"]
-	quantityUnits := r.Form["quantity-unit"]
+	// data := models.RecipeData{
+	// 	Name:          name,
+	// 	PrepDuration:  uint(prepDuration),
+	// 	CookDuration:  uint(cookDuration),
+	// 	Steps:         steps,
+	// 	Categories:    strings.Split(categories, ", "),
+	// 	Ingredients:   ingredients,
+	// 	Quantities:    quantities,
+	// 	QuantityUnits: quantityUnits,
+	// 	UserID:        user,
+	// }
 
-	session, err := h.Store.Get(r, "bowl-session")
-	if err != nil {
-		h.Logger.Error("Error getting user session", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
-		return
-	}
+	// recipeDetail, err := h.Service.Update(id, data)
 
-	user := session.Values["UserID"].(uint)
-
-	data := models.RecipeData{
-		Name:          name,
-		PrepDuration:  uint(prepDuration),
-		CookDuration:  uint(cookDuration),
-		Steps:         steps,
-		Categories:    strings.Split(categories, ", "),
-		Ingredients:   ingredients,
-		Quantities:    quantities,
-		QuantityUnits: quantityUnits,
-		UserID:        user,
-	}
-
-	recipeDetail, err := h.Service.Update(id, data)
-
-	if err != nil {
-		h.Logger.Error("Error editing recipe", "error", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		pages.Error(err.Error()).Render(r.Context(), w)
-		return
-	}
-
-	w.Header().Set("HX-Push-URL", "/recipes/"+strconv.FormatUint(uint64(id), 10))
-	recipes.Recipe(recipeDetail).Render(r.Context(), w)
+	// if err != nil {
+	// 	h.Logger.Error("Error editing recipe", "error", err)
+	// 	w.WriteHeader(http.StatusInternalServerError)
+	// 	pages.Error(err.Error()).Render(r.Context(), w)
+	// 	return
+	// }
+	//
+	// w.Header().Set("HX-Push-URL", "/recipes/"+strconv.FormatUint(uint64(id), 10))
+	// recipes.Recipe(recipeDetail).Render(r.Context(), w)
 }
 
 type RecipeResponse struct {

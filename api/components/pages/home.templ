@@ -2,7 +2,6 @@ package pages
 
 import (
 	"github.com/mbacalan/bowl/components"
-	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 )
@@ -22,9 +21,5 @@ templ Home(s components.Settings, r []models.Recipe) {
 			</a>
 		</h3>
 		<hr/>
-		if len(r) > 0 {
-			<h4 class="recents-list">Recently created:</h4>
-		}
-		@recipes.RecipeList(r)
 	}
 }

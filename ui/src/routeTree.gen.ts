@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as RecipesIndexRouteImport } from './routes/recipes/index'
 import { Route as AuthIndexRouteImport } from './routes/auth/index'
+import { Route as RecipesIdRouteImport } from './routes/recipes/$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +29,42 @@ const AuthIndexRoute = AuthIndexRouteImport.update({
   path: '/auth/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecipesIdRoute = RecipesIdRouteImport.update({
+  id: '/recipes/$id',
+  path: '/recipes/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/recipes/$id': typeof RecipesIdRoute
   '/auth': typeof AuthIndexRoute
   '/recipes': typeof RecipesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/recipes/$id': typeof RecipesIdRoute
   '/auth': typeof AuthIndexRoute
   '/recipes': typeof RecipesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/recipes/$id': typeof RecipesIdRoute
   '/auth/': typeof AuthIndexRoute
   '/recipes/': typeof RecipesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/recipes'
+  fullPaths: '/' | '/recipes/$id' | '/auth' | '/recipes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/recipes'
-  id: '__root__' | '/' | '/auth/' | '/recipes/'
+  to: '/' | '/recipes/$id' | '/auth' | '/recipes'
+  id: '__root__' | '/' | '/recipes/$id' | '/auth/' | '/recipes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  RecipesIdRoute: typeof RecipesIdRoute
   AuthIndexRoute: typeof AuthIndexRoute
   RecipesIndexRoute: typeof RecipesIndexRoute
 }
@@ -82,11 +92,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recipes/$id': {
+      id: '/recipes/$id'
+      path: '/recipes/$id'
+      fullPath: '/recipes/$id'
+      preLoaderRoute: typeof RecipesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  RecipesIdRoute: RecipesIdRoute,
   AuthIndexRoute: AuthIndexRoute,
   RecipesIndexRoute: RecipesIndexRoute,
 }

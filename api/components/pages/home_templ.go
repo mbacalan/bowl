@@ -10,7 +10,6 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"github.com/mbacalan/bowl/components"
-	"github.com/mbacalan/bowl/components/recipes"
 	"github.com/mbacalan/bowl/components/shared"
 	"github.com/mbacalan/bowl/models"
 )
@@ -49,20 +48,6 @@ func Home(s components.Settings, r []models.Recipe) templ.Component {
 			}
 			ctx = templ.InitializeContext(ctx)
 			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<h2>A database of your own recipes</h2><hr><h3><a href=\"/recipes\" class=\"recipes-link\">📃 Recipes</a></h3><h3><a href=\"/categories\" class=\"categories-link\">📚 Categories</a></h3><hr>")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			if len(r) > 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<h4 class=\"recents-list\">Recently created:</h4>")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, " ")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = recipes.RecipeList(r).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
